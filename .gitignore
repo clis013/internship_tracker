@@ -1,0 +1,5 @@
+#Ignore the entire uploads folder and all its contents
+uploads/*
+
+#but keep the folder alive on Github
+!uploads/.gitkeep

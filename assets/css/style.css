@@ -1,0 +1,12 @@
+/* Custom styles — written after Bootstrap so these override it */
+
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Add more as you build each page */
