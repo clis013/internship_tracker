@@ -10,8 +10,9 @@ git clone https://github.com/yourteam/internship_tracker.git
 cd internship_tracker
 git checkout -b feature/student-pages   # each person uses their own name
 
-### 3. Run the project
+### 3. Run the project and phpadmin
 Open http://localhost/internship_tracker/
+Open http://localhost/phpmyadmin/
 
 ## Test Login Credentials
 | Role    | Email                  | Password  |
