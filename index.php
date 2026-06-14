@@ -3,124 +3,112 @@ session_start();
 include 'config/db_connect.php';
 include 'includes/header.php';
 include 'includes/navbar.php';
+
+// If logged in, redirect to their dashboard
+if (isset($_SESSION['role'])) {
+    if ($_SESSION['role'] === 'student') {
+        header("Location: /internship_tracker/student/dashboard.php");
+    } elseif ($_SESSION['role'] === 'company') {
+        header("Location: /internship_tracker/company/dashboard.php");
+    } elseif ($_SESSION['role'] === 'admin') {
+        header("Location: /internship_tracker/admin/dashboard.php");
+    }
+    exit();
+}
+
+// Quick stats for landing page
+$jobs = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM jobs WHERE status = 'active'"));
+$companies = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM users WHERE role = 'company'"));
+
+// Latest active internships
+$latest_jobs = mysqli_query($conn, "SELECT j.title, j.location, j.field, u.name AS company_name
+    FROM jobs j
+    JOIN users u ON j.company_id = u.id
+    WHERE j.status = 'active'
+    ORDER BY j.created_at DESC LIMIT 6");
 ?>
 
 <!-- Hero Section -->
-<div class="bg-primary text-white py-5">
-  <div class="container text-center">
-    <h1 class="display-5 fw-bold mb-3">Find Your Internship</h1>
-    <p class="lead mb-4">
-      Connecting students with companies for meaningful internship experiences.
-    </p>
-    <?php if (!isset($_SESSION['role'])): ?>
-      <a href="auth/register.php" class="btn btn-light btn-lg me-2">Get Started</a>
-      <a href="auth/login.php" class="btn btn-outline-light btn-lg">Login</a>
-    <?php elseif ($_SESSION['role'] === 'student'): ?>
-      <a href="student/browse.php" class="btn btn-light btn-lg">Browse Internships</a>
-    <?php elseif ($_SESSION['role'] === 'company'): ?>
-      <a href="company/manage_jobs.php" class="btn btn-light btn-lg">Manage Your Listings</a>
-    <?php elseif ($_SESSION['role'] === 'admin'): ?>
-      <a href="admin/dashboard.php" class="btn btn-light btn-lg">Go to Dashboard</a>
-    <?php endif; ?>
-  </div>
-</div>
-
-<!-- Stats Bar -->
-<?php
-$total_jobs     = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as c FROM jobs WHERE status='active'"))['c'];
-$total_students = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as c FROM users WHERE role='student'"))['c'];
-$total_companies= mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as c FROM users WHERE role='company'"))['c'];
-?>
-<div class="bg-light border-bottom py-3">
-  <div class="container">
-    <div class="row text-center">
-      <div class="col-4">
-        <div class="fs-4 fw-bold text-primary"><?= $total_jobs ?></div>
-        <div class="text-muted small">Active listings</div>
-      </div>
-      <div class="col-4">
-        <div class="fs-4 fw-bold text-primary"><?= $total_students ?></div>
-        <div class="text-muted small">Students</div>
-      </div>
-      <div class="col-4">
-        <div class="fs-4 fw-bold text-primary"><?= $total_companies ?></div>
-        <div class="text-muted small">Companies</div>
-      </div>
+<div class="bg-dark text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-5 fw-bold mb-3">Find Your Next Internship</h1>
+        <p class="lead mb-4">Connecting students with companies offering real-world internship opportunities.</p>
+        <a href="auth/register.php" class="btn btn-primary btn-lg me-2">Get Started</a>
+        <a href="auth/login.php" class="btn btn-outline-light btn-lg">Login</a>
     </div>
-  </div>
 </div>
 
-<!-- Featured Listings -->
+<!-- Stats -->
 <div class="container py-5">
-  <h4 class="mb-4">Latest Internships</h4>
-  <div class="row g-3">
-    <?php
-    $jobs = mysqli_query($conn,
-      "SELECT j.*, u.name AS company_name
-       FROM jobs j
-       JOIN users u ON j.company_id = u.id
-       WHERE j.status = 'active'
-       ORDER BY j.created_at DESC
-       LIMIT 6"
-    );
-
-    if (mysqli_num_rows($jobs) === 0):
-    ?>
-      <div class="col-12">
-        <p class="text-muted">No internship listings yet. Check back soon.</p>
-      </div>
-    <?php else: ?>
-      <?php while ($job = mysqli_fetch_assoc($jobs)): ?>
-        <div class="col-md-4">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
-              <h6 class="card-title fw-bold"><?= htmlspecialchars($job['title']) ?></h6>
-              <p class="text-muted small mb-1">
-                <?= htmlspecialchars($job['company_name']) ?>
-              </p>
-              <p class="text-muted small mb-2">
-                <?= htmlspecialchars($job['location']) ?> &middot; <?= htmlspecialchars($job['field']) ?>
-              </p>
-              <p class="card-text small">
-                <?= htmlspecialchars(substr($job['description'], 0, 100)) ?>...
-              </p>
+    <div class="row text-center g-4 mb-5">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="fw-bold text-primary"><?= (int)$jobs['total'] ?></h2>
+                    <p class="text-muted mb-0">Active Internship Openings</p>
+                </div>
             </div>
-            <div class="card-footer bg-transparent border-0">
-              <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'student'): ?>
-                <a href="student/apply.php?job_id=<?= $job['id'] ?>" class="btn btn-primary btn-sm">Apply Now</a>
-              <?php else: ?>
-                <a href="auth/register.php" class="btn btn-outline-primary btn-sm">Register to Apply</a>
-              <?php endif; ?>
-            </div>
-          </div>
         </div>
-      <?php endwhile; ?>
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="fw-bold text-primary"><?= (int)$companies['total'] ?></h2>
+                    <p class="text-muted mb-0">Registered Companies</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest Internships -->
+    <h3 class="mb-4">Latest Internship Opportunities</h3>
+    <?php if (mysqli_num_rows($latest_jobs) === 0): ?>
+        <div class="alert alert-info">No internships posted yet. Check back soon!</div>
+    <?php else: ?>
+        <div class="row g-3 mb-4">
+            <?php while ($job = mysqli_fetch_assoc($latest_jobs)): ?>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= htmlspecialchars($job['title']) ?></h5>
+                            <h6 class="card-subtitle mb-2 text-muted"><?= htmlspecialchars($job['company_name']) ?></h6>
+                            <ul class="list-unstyled small text-muted mb-0">
+                                <?php if ($job['location']): ?>
+                                    <li>📍 <?= htmlspecialchars($job['location']) ?></li>
+                                <?php endif; ?>
+                                <?php if ($job['field']): ?>
+                                    <li>🏷️ <?= htmlspecialchars($job['field']) ?></li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        </div>
+        <div class="text-center">
+            <a href="auth/login.php" class="btn btn-primary">Login to Apply</a>
+        </div>
     <?php endif; ?>
-  </div>
 </div>
 
-<!-- How It Works -->
+<!-- How it works -->
 <div class="bg-light py-5">
-  <div class="container">
-    <h4 class="text-center mb-5">How it works</h4>
-    <div class="row text-center g-4">
-      <div class="col-md-4">
-        <div class="fs-1 mb-3">📝</div>
-        <h6 class="fw-bold">1. Register</h6>
-        <p class="text-muted small">Create a student or company account in minutes.</p>
-      </div>
-      <div class="col-md-4">
-        <div class="fs-1 mb-3">🔍</div>
-        <h6 class="fw-bold">2. Browse or Post</h6>
-        <p class="text-muted small">Students browse listings. Companies post opportunities.</p>
-      </div>
-      <div class="col-md-4">
-        <div class="fs-1 mb-3">✅</div>
-        <h6 class="fw-bold">3. Apply and Connect</h6>
-        <p class="text-muted small">Students apply, companies review and respond.</p>
-      </div>
+    <div class="container">
+        <h3 class="text-center mb-4">How It Works</h3>
+        <div class="row text-center g-4">
+            <div class="col-md-4">
+                <h5>1. Create an Account</h5>
+                <p class="text-muted">Register as a student looking for internships or a company offering them.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>2. Browse or Post</h5>
+                <p class="text-muted">Students browse available internships. Companies post and manage listings.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>3. Apply & Track</h5>
+                <p class="text-muted">Students apply with a cover letter and track application status in real time.</p>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>

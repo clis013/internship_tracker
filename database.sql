@@ -4,6 +4,11 @@ CREATE TABLE users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role ENUM('student', 'company', 'admin') NOT NULL,
+    phone VARCHAR(20) DEFAULT NULL,
+    bio TEXT DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    website VARCHAR(150) DEFAULT NULL,
+    resume VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -24,6 +29,7 @@ CREATE TABLE applications (
     student_id INT NOT NULL,
     job_id INT NOT NULL,
     cover_letter TEXT,
+    resume VARCHAR(255) DEFAULT NULL,
     status ENUM('pending', 'reviewed', 'accepted', 'rejected') DEFAULT 'pending',
     applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
