@@ -1,4 +1,0 @@
-现在有两个branch了
-如果我像现在这样edit file
-可以选要commit to 哪里 (commit to 自己的branch先比较好, 避免conflict)
-现在按commit
