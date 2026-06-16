@@ -1,5 +1,13 @@
 /* Custom styles — written after Bootstrap so these override it */
-
+/*share styling for there components
+body
+navbar
+footer
+buttons
+forms
+tables
+modals
+*/
 body {
     background-color: #f8f9fa;
 }

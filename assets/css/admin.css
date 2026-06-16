@@ -1,0 +1,95 @@
+/* ── Dashboard design tokens ── */
+.stat-card {
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow .15s, transform .15s;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+}
+.stat-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,.10);
+    transform: translateY(-2px);
+    color: inherit;
+}
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.3rem;
+}
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+}
+.stat-label {
+    font-size: .78rem;
+    color: #6c757d;
+    margin-top: .2rem;
+}
+
+/* ── Mini metric strip ── */
+.metric-strip {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+.metric-chip {
+    flex: 1;
+    min-width: 80px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: .55rem .75rem;
+    text-align: center;
+}
+.metric-chip .mc-val  { font-size: 1.15rem; font-weight: 700; }
+.metric-chip .mc-lbl  { font-size: .72rem; color: #6c757d; }
+
+/* ── Section card ── */
+.dash-card {
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    overflow: hidden;
+}
+.dash-card .card-head {
+    padding: .75rem 1.1rem;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fafafa;
+}
+.dash-card .card-head span { font-weight: 600; font-size: .88rem; }
+
+/* ── Activity list ── */
+.act-item {
+    padding: .65rem 1.1rem;
+    border-bottom: 1px solid #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+}
+.act-item:last-child { border-bottom: none; }
+.act-name  { font-size: .85rem; font-weight: 600; }
+.act-sub   { font-size: .75rem; color: #6c757d; }
+.act-time  { font-size: .7rem; color: #adb5bd; white-space: nowrap; }
+
+/* ── Progress bars ── */
+.prog-row { margin-bottom: .75rem; }
+.prog-row:last-child { margin-bottom: 0; }
+.prog-label { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .3rem; }
+.progress { border-radius: 99px; }
