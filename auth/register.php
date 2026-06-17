@@ -12,10 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email    = trim($_POST['email']);
     $password = $_POST['password'];
     $confirm  = $_POST['confirm_password'];
-    $role     = $_POST['role'];
+    $role     = $_POST['role'] ?? '';
 
     // Server-side validation
-    if (empty($name) || empty($email) || empty($password)) {
+    if (empty($name) || empty($email) || empty($password) || empty($role)) {
         $error = 'All fields are required.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Invalid email format.';
@@ -23,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Passwords do not match.';
     } elseif (strlen($password) < 6) {
         $error = 'Password must be at least 6 characters.';
+    } elseif (!in_array($role, ['student', 'company'])) {
+        $error = 'Invalid role selected.';
     } else {
         // Check if email already exists
         $check = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ?");

@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($name)) {
             $error = 'Name cannot be empty.';
         } else {
+<<<<<<< Updated upstream
             // Handle resume upload (optional)
             $upload = handle_resume_upload('resume', dirname(__DIR__) . '/uploads/resumes');
             if ($upload['error']) {
@@ -39,6 +40,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $old_path = dirname(__DIR__) . '/' . $user['resume'];
                         if (file_exists($old_path)) {
                             @unlink($old_path);
+=======
+            // 1. Pre-validate resume upload (optional)
+            if (!empty($_FILES['resume']['name'])) {
+                $resume_file = $_FILES['resume'];
+                if ($resume_file['error'] !== UPLOAD_ERR_OK) {
+                    $error = 'Error uploading resume.';
+                } else {
+                    $ext = strtolower(pathinfo($resume_file['name'], PATHINFO_EXTENSION));
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mime  = finfo_file($finfo, $resume_file['tmp_name']);
+                    finfo_close($finfo);
+                    if ($ext !== 'pdf' || $mime !== 'application/pdf') {
+                        $error = 'Resume must be a PDF file.';
+                    } elseif ($resume_file['size'] > 5 * 1024 * 1024) {
+                        $error = 'Resume file must be under 5MB.';
+                    }
+                }
+            }
+
+            // 2. Pre-validate profile picture upload (optional)
+            if (empty($error) && !empty($_FILES['profile_picture']['name'])) {
+                $pic_file = $_FILES['profile_picture'];
+                if ($pic_file['error'] !== UPLOAD_ERR_OK) {
+                    $error = 'Error uploading profile picture.';
+                } else {
+                    $allowed_ext = ['jpg', 'jpeg', 'png', 'gif'];
+                    $allowed_mime = ['image/jpeg', 'image/png', 'image/gif'];
+                    $ext = strtolower(pathinfo($pic_file['name'], PATHINFO_EXTENSION));
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mime  = finfo_file($finfo, $pic_file['tmp_name']);
+                    finfo_close($finfo);
+                    if (!in_array($ext, $allowed_ext) || !in_array($mime, $allowed_mime)) {
+                        $error = 'Only JPG, JPEG, PNG, and GIF images are allowed for profile picture.';
+                    } elseif ($pic_file['size'] > 10 * 1024 * 1024) {
+                        $error = 'Profile picture must be under 10MB.';
+                    }
+                }
+            }
+
+            // 3. Process uploads and database update if no errors
+            if (empty($error)) {
+                $resume_path = $user['resume'];
+                $profile_picture_path = $user['profile_picture'];
+
+                // Handle resume upload
+                if (!empty($_FILES['resume']['name'])) {
+                    $upload = handle_resume_upload('resume', dirname(__DIR__) . '/uploads/resumes');
+                    if ($upload['error']) {
+                        $error = $upload['error'];
+                    } else {
+                        $resume_path = $upload['path'];
+                        if (!empty($user['resume'])) {
+                            $old_path = dirname(__DIR__) . '/' . $user['resume'];
+                            if (file_exists($old_path)) {
+                                @unlink($old_path);
+                            }
+>>>>>>> Stashed changes
                         }
                     }
                     $stmt = mysqli_prepare($conn, "UPDATE users SET name = ?, phone = ?, bio = ?, resume = ? WHERE id = ?");
@@ -49,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     mysqli_stmt_bind_param($stmt, "sssi", $name, $phone, $bio, $user_id);
                 }
 
+<<<<<<< Updated upstream
                 if (mysqli_stmt_execute($stmt)) {
                     $_SESSION['name'] = $name;
                     $success = 'Profile updated successfully.';
@@ -57,6 +116,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $user['bio']   = $bio;
                 } else {
                     $error = 'Failed to update profile.';
+=======
+                // Handle profile picture upload
+                if (empty($error) && !empty($_FILES['profile_picture']['name'])) {
+                    $file = $_FILES['profile_picture'];
+                    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                    $upload_dir = dirname(__DIR__) . '/uploads/profile_pics';
+                    if (!is_dir($upload_dir)) {
+                        mkdir($upload_dir, 0755, true);
+                    }
+                    $unique_name = 'avatar_' . uniqid() . '_' . time() . '.' . $ext;
+                    $destination = $upload_dir . '/' . $unique_name;
+                    
+                    if (move_uploaded_file($file['tmp_name'], $destination)) {
+                        if (!empty($user['profile_picture'])) {
+                            $old_pic = dirname(__DIR__) . '/' . $user['profile_picture'];
+                            if (file_exists($old_pic)) {
+                                @unlink($old_pic);
+                            }
+                        }
+                        $profile_picture_path = 'uploads/profile_pics/' . $unique_name;
+                    } else {
+                        $error = 'Failed to save uploaded profile picture.';
+                    }
+                }
+
+                // Update database
+                if (empty($error)) {
+                    $stmt = mysqli_prepare($conn, "UPDATE users SET name = ?, phone = ?, bio = ?, resume = ?, profile_picture = ? WHERE id = ?");
+                    mysqli_stmt_bind_param($stmt, "sssssi", $name, $phone, $bio, $resume_path, $profile_picture_path, $user_id);
+                    
+                    if (mysqli_stmt_execute($stmt)) {
+                        $_SESSION['name'] = $name;
+                        $success = 'Profile updated successfully.';
+                        $user['name']  = $name;
+                        $user['phone'] = $phone;
+                        $user['bio']   = $bio;
+                        $user['resume'] = $resume_path;
+                        $user['profile_picture'] = $profile_picture_path;
+                    } else {
+                        $error = 'Failed to update profile.';
+                    }
+>>>>>>> Stashed changes
                 }
             }
         }
@@ -126,15 +227,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-text">Email cannot be changed.</div>
                         </div>
                         <div class="mb-3">
+<<<<<<< Updated upstream
                             <label class="form-label">Phone Number</label>
                             <input type="text" name="phone" class="form-control" value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
+=======
+                            <label class="form-label small fw-bold">Profile Picture</label>
+                            <input type="file" name="profile_picture" id="profilePicInput" class="form-control" accept="image/*">
+                            <div class="form-text small">Click your avatar above or choose an image file from your laptop (JPG, JPEG, PNG, GIF, max 10MB).</div>
+>>>>>>> Stashed changes
                         </div>
                         <div class="mb-3">
                             <label class="form-label">About Me / Skills</label>
                             <textarea name="bio" class="form-control" rows="4" placeholder="e.g. Skills, interests, achievements..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
                         </div>
+<<<<<<< Updated upstream
                         <div class="mb-3">
                             <label class="form-label">Resume (PDF, DOC, or DOCX)</label>
+=======
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">Resume (PDF only)</label>
+>>>>>>> Stashed changes
                             <?php if (!empty($user['resume'])): ?>
                                 <div class="mb-2">
                                     <a href="/internship_tracker/<?= htmlspecialchars($user['resume']) ?>" target="_blank" class="btn btn-sm btn-outline-secondary">
@@ -142,8 +255,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </a>
                                 </div>
                             <?php endif; ?>
+<<<<<<< Updated upstream
                             <input type="file" name="resume" class="form-control" accept=".pdf,.doc,.docx">
                             <div class="form-text">This resume will be used as your default for applications. Uploading a new file replaces the old one.</div>
+=======
+                            <input type="file" name="resume" class="form-control" accept=".pdf">
+                            <div class="form-text small">This resume is used as your default for applications.</div>
+>>>>>>> Stashed changes
                         </div>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>

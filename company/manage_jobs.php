@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status      = $_POST['status'];
     $job_id      = (int)($_POST['job_id'] ?? 0);
 
-    if (empty($title)) {
-        $error = 'Job title is required.';
+    if (empty($title) || empty($description) || empty($location) || empty($field)) {
+        $error = 'All fields (Title, Description, Location, and Field) are required.';
     } elseif (!in_array($status, ['active', 'closed'])) {
         $error = 'Invalid status.';
     } else {
@@ -100,17 +100,17 @@ $jobs = mysqli_stmt_get_result($stmt);
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Location</label>
-                        <input type="text" name="location" class="form-control"
+                        <input type="text" name="location" class="form-control" required
                                value="<?= htmlspecialchars($edit_job['location'] ?? '') ?>">
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Field</label>
-                        <input type="text" name="field" class="form-control" placeholder="e.g. IT, Marketing"
+                        <input type="text" name="field" class="form-control" placeholder="e.g. IT, Marketing" required
                                value="<?= htmlspecialchars($edit_job['field'] ?? '') ?>">
                     </div>
                     <div class="col-12">
                         <label class="form-label">Description</label>
-                        <textarea name="description" class="form-control" rows="4"><?= htmlspecialchars($edit_job['description'] ?? '') ?></textarea>
+                        <textarea name="description" class="form-control" rows="4" required><?= htmlspecialchars($edit_job['description'] ?? '') ?></textarea>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Status</label>

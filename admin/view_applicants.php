@@ -9,8 +9,8 @@ include '../includes/navbar.php';
 $status_filter = $_GET['status'] ?? '';
 $search = trim($_GET['search'] ?? '');
 
-$sql = "SELECT a.id, a.status, a.applied_at, a.cover_letter,
-        s.name AS student_name, s.email AS student_email,
+$sql = "SELECT a.id, a.status, a.applied_at, a.cover_letter, a.resume AS app_resume,
+        s.name AS student_name, s.email AS student_email, s.resume AS profile_resume,
         j.title AS job_title, c.name AS company_name
     FROM applications a
     JOIN users s ON a.student_id = s.id
@@ -210,6 +210,22 @@ function status_badge($status) {
                     <tr>
                         <th>Email</th>
                         <td><?= htmlspecialchars($app['student_email']) ?></td>
+                    </tr>
+
+                    <tr>
+                        <th>Resume</th>
+                        <td>
+                            <?php 
+                            $resume_path = $app['app_resume'] ?: $app['profile_resume'];
+                            if ($resume_path): 
+                            ?>
+                                <a href="/internship_tracker/<?= htmlspecialchars($resume_path) ?>" target="_blank" class="btn btn-sm btn-outline-primary py-0 px-2" style="font-size: 0.75rem;">
+                                    📄 View Resume
+                                </a>
+                            <?php else: ?>
+                                <span class="text-muted small">Not provided</span>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 </table>
 
