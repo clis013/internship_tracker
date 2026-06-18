@@ -31,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status      = $_POST['status'];
     $job_id      = (int)($_POST['job_id'] ?? 0);
 
-    if (empty($title) || empty($description) || empty($location) || empty($field)) {
-        $error = 'All fields (Title, Description, Location, and Field) are required.';
+    if (empty($title) || empty($description) || empty($location) || empty($field) || empty($allowance)) {
+        $error = 'All fields (Title, Description, Location, Allowance, and Field) are required.';
     } elseif (!in_array($status, ['active', 'closed'])) {
         $error = 'Invalid status.';
     } else {
@@ -111,7 +111,7 @@ $jobs = mysqli_stmt_get_result($stmt);
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Allowance (USD/month)</label>
-                        <input type="text" name="allowance" class="form-control" placeholder="e.g. 500 or Unpaid"
+                        <input type="text" name="allowance" class="form-control" placeholder="e.g. 500 or Unpaid" required
                                value="<?= htmlspecialchars($edit_job['allowance'] ?? '') ?>">
                     </div>
                     <div class="col-12">
