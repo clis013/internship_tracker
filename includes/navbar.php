@@ -26,6 +26,7 @@
         <?php elseif ($_SESSION['role'] === 'admin'): ?>
           <li class="nav-item"><a class="nav-link" href="/internship_tracker/admin/dashboard.php">Dashboard</a></li>
           <li class="nav-item"><a class="nav-link" href="/internship_tracker/admin/view_users.php">Users</a></li>
+          <li class="nav-item"><a class="nav-link" href="/internship_tracker/admin/manage_companies.php">Companies</a></li>
           <li class="nav-item"><a class="nav-link" href="/internship_tracker/admin/manage_internships.php">Internships</a></li>
           <li class="nav-item"><a class="nav-link" href="/internship_tracker/admin/view_applicants.php">Applications</a></li>
 

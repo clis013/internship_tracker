@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title       = trim($_POST['title']);
     $description = trim($_POST['description']);
     $location    = trim($_POST['location']);
+    $allowance   = trim($_POST['allowance'] ?? '');
     $field       = trim($_POST['field']);
     $status      = $_POST['status'];
     $job_id      = (int)($_POST['job_id'] ?? 0);
@@ -37,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         if ($job_id > 0) {
             // Update existing job (only if it belongs to this company)
-            $stmt = mysqli_prepare($conn, "UPDATE jobs SET title=?, description=?, location=?, field=?, status=? WHERE id=? AND company_id=?");
-            mysqli_stmt_bind_param($stmt, "sssssii", $title, $description, $location, $field, $status, $job_id, $company_id);
+            $stmt = mysqli_prepare($conn, "UPDATE jobs SET title=?, description=?, location=?, allowance=?, field=?, status=? WHERE id=? AND company_id=?");
+            mysqli_stmt_bind_param($stmt, "ssssssii", $title, $description, $location, $allowance, $field, $status, $job_id, $company_id);
             if (mysqli_stmt_execute($stmt)) {
                 $success = 'Internship updated successfully.';
             } else {
@@ -46,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } else {
             // Insert new job
-            $stmt = mysqli_prepare($conn, "INSERT INTO jobs (company_id, title, description, location, field, status) VALUES (?, ?, ?, ?, ?, ?)");
-            mysqli_stmt_bind_param($stmt, "isssss", $company_id, $title, $description, $location, $field, $status);
+            $stmt = mysqli_prepare($conn, "INSERT INTO jobs (company_id, title, description, location, allowance, field, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            mysqli_stmt_bind_param($stmt, "issssss", $company_id, $title, $description, $location, $allowance, $field, $status);
             if (mysqli_stmt_execute($stmt)) {
                 $success = 'Internship posted successfully.';
             } else {
@@ -108,6 +109,11 @@ $jobs = mysqli_stmt_get_result($stmt);
                         <input type="text" name="field" class="form-control" placeholder="e.g. IT, Marketing" required
                                value="<?= htmlspecialchars($edit_job['field'] ?? '') ?>">
                     </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Allowance (USD/month)</label>
+                        <input type="text" name="allowance" class="form-control" placeholder="e.g. 500 or Unpaid"
+                               value="<?= htmlspecialchars($edit_job['allowance'] ?? '') ?>">
+                    </div>
                     <div class="col-12">
                         <label class="form-label">Description</label>
                         <textarea name="description" class="form-control" rows="4" required><?= htmlspecialchars($edit_job['description'] ?? '') ?></textarea>
@@ -140,6 +146,7 @@ $jobs = mysqli_stmt_get_result($stmt);
                     <tr>
                         <th>Title</th>
                         <th>Location</th>
+                        <th>Allowance</th>
                         <th>Field</th>
                         <th>Status</th>
                         <th>Applicants</th>
@@ -151,6 +158,7 @@ $jobs = mysqli_stmt_get_result($stmt);
                         <tr>
                             <td><?= htmlspecialchars($job['title']) ?></td>
                             <td><?= htmlspecialchars($job['location'] ?? '-') ?></td>
+                            <td><?= htmlspecialchars($job['allowance'] ? '$' . $job['allowance'] : '-') ?></td>
                             <td><?= htmlspecialchars($job['field'] ?? '-') ?></td>
                             <td>
                                 <span class="badge bg-<?= $job['status'] === 'active' ? 'success' : 'secondary' ?>">

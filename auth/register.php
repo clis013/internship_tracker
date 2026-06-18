@@ -38,11 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Hash the password — never store plain text
             $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-            $stmt = mysqli_prepare($conn, "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
-            mysqli_stmt_bind_param($stmt, "ssss", $name, $email, $hashed, $role);
+            $approval_status = ($role === 'company') ? 'pending' : 'approved';
+            $stmt = mysqli_prepare($conn, "INSERT INTO users (name, email, password, role, approval_status) VALUES (?, ?, ?, ?, ?)");
+            mysqli_stmt_bind_param($stmt, "sssss", $name, $email, $hashed, $role, $approval_status);
 
             if (mysqli_stmt_execute($stmt)) {
-                $success = 'Account created! You can now log in.';
+                if ($role === 'company') {
+                    $success = 'Account created! Company accounts require administrator approval before logging in.';
+                } else {
+                    $success = 'Account created! You can now log in.';
+                }
             } else {
                 $error = 'Something went wrong. Please try again.';
             }

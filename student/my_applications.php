@@ -7,17 +7,10 @@ include '../includes/header.php';
 include '../includes/navbar.php';
 
 $student_id = $_SESSION['user_id'];
+$error = '';
+$success = '';
+$open_id = 0;
 
-<<<<<<< Updated upstream
-$stmt = mysqli_prepare($conn, "SELECT a.id, a.status, a.applied_at, a.cover_letter,
-        j.title, j.location, j.field, u.name AS company_name
-    FROM applications a
-    JOIN jobs j ON a.job_id = j.id
-    JOIN users u ON j.company_id = u.id
-    WHERE a.student_id = ?
-    ORDER BY a.applied_at DESC");
-mysqli_stmt_bind_param($stmt, "i", $student_id);
-=======
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action']) && $_POST['action'] === 'update_notes') {
         $app_id = (int)($_POST['app_id'] ?? 0);
@@ -67,7 +60,7 @@ $search = trim($_GET['search'] ?? '');
 $status = trim($_GET['status'] ?? '');
 $sort   = trim($_GET['sort'] ?? 'newest');
 
-$sql = "SELECT a.id, a.status, a.applied_at, a.cover_letter, a.notes, a.resume,
+$sql = "SELECT a.id, a.status, a.applied_at, a.cover_letter, a.notes,
                j.id AS job_id, j.title, j.location, j.field, j.description AS job_description,
                u.name AS company_name, u.email AS company_email, u.phone AS company_phone
         FROM applications a
@@ -104,7 +97,6 @@ $stmt = mysqli_prepare($conn, $sql);
 if ($params) {
     mysqli_stmt_bind_param($stmt, $types, ...$params);
 }
->>>>>>> Stashed changes
 mysqli_stmt_execute($stmt);
 $apps = mysqli_stmt_get_result($stmt);
 
@@ -123,38 +115,135 @@ function status_badge($status) {
 <div class="container mt-4">
     <h3 class="mb-4">My Applications</h3>
 
+    <?php if ($error): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($error) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+    <?php if ($success): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($success) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+    <!-- Search, Filter, and Sort Bar -->
+    <form method="GET" class="card shadow-sm border-0 p-3 mb-4 bg-white">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                    <input type="text" name="search" class="form-control border-start-0 ps-0" placeholder="Search Company or Job Title..." value="<?= htmlspecialchars($search) ?>">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="pending" <?= $status === 'pending' ? 'selected' : '' ?>>Pending</option>
+                    <option value="reviewed" <?= $status === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
+                    <option value="accepted" <?= $status === 'accepted' ? 'selected' : '' ?>>Accepted</option>
+                    <option value="rejected" <?= $status === 'rejected' ? 'selected' : '' ?>>Rejected</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="sort" class="form-select">
+                    <option value="newest" <?= $sort === 'newest' ? 'selected' : '' ?>>Newest Applied</option>
+                    <option value="oldest" <?= $sort === 'oldest' ? 'selected' : '' ?>>Oldest Applied</option>
+                    <option value="company" <?= $sort === 'company' ? 'selected' : '' ?>>Company (A-Z)</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-fill">Apply</button>
+                <a href="my_applications.php" class="btn btn-light" title="Reset Filters"><i class="bi bi-arrow-counterclockwise"></i></a>
+            </div>
+        </div>
+    </form>
+
     <?php if (mysqli_num_rows($apps) === 0): ?>
-        <div class="alert alert-info">
-            You haven't applied to any internships yet.
-            <a href="browse.php">Browse internships</a> to get started.
+        <div class="alert alert-info border-0 shadow-sm text-center py-5">
+            <i class="bi bi-info-circle fs-2 mb-3 d-block text-secondary"></i>
+            No applications found matching your criteria.
+            <a href="browse.php" class="d-block mt-2 fw-semibold">Browse internships to get started</a>
         </div>
     <?php else: ?>
         <div class="accordion" id="appAccordion">
             <?php $i = 0; while ($app = mysqli_fetch_assoc($apps)): $i++; ?>
-                <div class="accordion-item mb-2">
+                <?php 
+                    $isExpanded = ($app['id'] == $open_id || ($open_id == 0 && $i === 1 && empty($search) && empty($status)));
+                ?>
+                <div class="accordion-item border-0 mb-3 shadow-sm rounded overflow-hidden">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#app<?= $i ?>">
-                            <div class="d-flex justify-content-between w-100 me-3">
-                                <span><?= htmlspecialchars($app['title']) ?> — <?= htmlspecialchars($app['company_name']) ?></span>
+                        <button class="accordion-button <?= $isExpanded ? '' : 'collapsed' ?> bg-white py-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#app<?= $i ?>" aria-expanded="<?= $isExpanded ? 'true' : 'false' ?>">
+                            <div class="d-flex justify-content-between w-100 me-3 align-items-center flex-wrap gap-2">
+                                <span class="fw-bold text-dark"><?= htmlspecialchars($app['title']) ?> — <span class="text-secondary fw-semibold"><?= htmlspecialchars($app['company_name']) ?></span></span>
                                 <span><?= status_badge($app['status']) ?></span>
                             </div>
                         </button>
                     </h2>
-                    <div id="app<?= $i ?>" class="accordion-collapse collapse" data-bs-parent="#appAccordion">
-                        <div class="accordion-body">
-                            <p class="mb-1"><strong>Applied on:</strong> <?= htmlspecialchars(date('d M Y, H:i', strtotime($app['applied_at']))) ?></p>
-                            <?php if ($app['location']): ?>
-                                <p class="mb-1"><strong>Location:</strong> <?= htmlspecialchars($app['location']) ?></p>
-                            <?php endif; ?>
-                            <?php if ($app['field']): ?>
-                                <p class="mb-1"><strong>Field:</strong> <?= htmlspecialchars($app['field']) ?></p>
-                            <?php endif; ?>
+                    <div id="app<?= $i ?>" class="accordion-collapse collapse <?= $isExpanded ? 'show' : '' ?>" data-bs-parent="#appAccordion">
+                        <div class="accordion-body bg-white border-top">
+                            <!-- Stepper Progress Tracker -->
+                            <h6 class="fw-bold text-dark mb-3">Application Progress</h6>
+                            <div class="stepper-wrapper d-flex justify-content-between mb-4 mt-2">
+                                <?php
+                                $appStatus = $app['status'];
+                                if ($appStatus === 'rejected') {
+                                    $steps = [
+                                        ['label' => 'Applied', 'state' => 'completed'],
+                                        ['label' => 'Resume Screen', 'state' => 'completed'],
+                                        ['label' => 'Rejected', 'state' => 'rejected']
+                                    ];
+                                } elseif ($appStatus === 'accepted') {
+                                    $steps = [
+                                        ['label' => 'Applied', 'state' => 'completed'],
+                                        ['label' => 'Resume Screen', 'state' => 'completed'],
+                                        ['label' => 'Technical Interview', 'state' => 'completed'],
+                                        ['label' => 'HR Interview', 'state' => 'completed'],
+                                        ['label' => 'Accepted', 'state' => 'accepted']
+                                    ];
+                                } elseif ($appStatus === 'reviewed') {
+                                    $steps = [
+                                        ['label' => 'Applied', 'state' => 'completed'],
+                                        ['label' => 'Resume Screen', 'state' => 'completed'],
+                                        ['label' => 'Technical Interview', 'state' => 'active'],
+                                        ['label' => 'HR Interview', 'state' => 'pending'],
+                                        ['label' => 'Decision', 'state' => 'pending']
+                                    ];
+                                } else { // pending
+                                    $steps = [
+                                        ['label' => 'Applied', 'state' => 'completed'],
+                                        ['label' => 'Resume Screen', 'state' => 'active'],
+                                        ['label' => 'Technical Interview', 'state' => 'pending'],
+                                        ['label' => 'HR Interview', 'state' => 'pending'],
+                                        ['label' => 'Decision', 'state' => 'pending']
+                                    ];
+                                }
+                                
+                                foreach ($steps as $step):
+                                    $badgeClass = 'bg-secondary';
+                                    if ($step['state'] === 'completed') $badgeClass = 'bg-success';
+                                    elseif ($step['state'] === 'active') $badgeClass = 'bg-primary';
+                                    elseif ($step['state'] === 'rejected') $badgeClass = 'bg-danger';
+                                    elseif ($step['state'] === 'accepted') $badgeClass = 'bg-success';
+                                ?>
+                                    <div class="step-item text-center flex-fill">
+                                        <div class="step-counter rounded-circle text-white <?= $badgeClass ?> mx-auto mb-1 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; font-size: 0.85rem;">
+                                            <?php if ($step['state'] === 'completed' || $step['state'] === 'accepted'): ?>
+                                                ✓
+                                            <?php elseif ($step['state'] === 'rejected'): ?>
+                                                ✗
+                                            <?php else: ?>
+                                                •
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="step-name small text-muted"><?= htmlspecialchars($step['label']) ?></div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+
                             <hr>
-<<<<<<< Updated upstream
-                            <p class="mb-1"><strong>Your Cover Letter:</strong></p>
-                            <p class="text-muted"><?= nl2br(htmlspecialchars($app['cover_letter'])) ?></p>
-=======
 
                             <div class="row g-3">
                                 <!-- Details & Cover Letter (Left Column) -->
@@ -194,17 +283,6 @@ function status_badge($status) {
                                         <h6 class="fw-bold text-dark small mb-1">Your Cover Letter:</h6>
                                         <p class="text-muted small mb-0 lh-sm"><?= nl2br(htmlspecialchars($app['cover_letter'])) ?></p>
                                     </div>
-
-                                    <div class="mt-3">
-                                        <h6 class="fw-bold text-dark small mb-1">Submitted Resume:</h6>
-                                        <?php if (!empty($app['resume'])): ?>
-                                            <a href="/internship_tracker/<?= htmlspecialchars($app['resume']) ?>" target="_blank" class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.75rem;">
-                                                <i class="bi bi-file-earmark-pdf"></i> View Submitted Resume
-                                            </a>
-                                        <?php else: ?>
-                                            <span class="text-muted small">No resume provided</span>
-                                        <?php endif; ?>
-                                    </div>
                                 </div>
 
                                 <!-- Notes Section (Right Column) -->
@@ -229,7 +307,6 @@ function status_badge($status) {
                                     <i class="bi bi-x-circle"></i> Withdraw Application
                                 </button>
                             </form>
->>>>>>> Stashed changes
                         </div>
                     </div>
                 </div>
