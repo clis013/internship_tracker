@@ -9,10 +9,14 @@ include '../includes/navbar.php';
 $student_id = $_SESSION['user_id'];
 
 // Search / filter
-$search = trim($_GET['search'] ?? '');
-$field  = trim($_GET['field'] ?? '');
+$search        = trim($_GET['search'] ?? '');
+$field         = trim($_GET['field'] ?? '');
+$location      = trim($_GET['location'] ?? '');
+$industry      = trim($_GET['industry'] ?? '');
+$min_allowance = trim($_GET['min_allowance'] ?? '');
 
-$sql = "SELECT j.id, j.company_id, j.title, j.description, j.location, j.field, j.created_at, u.name AS company_name
+$sql = "SELECT j.id, j.company_id, j.title, j.description, j.location, j.allowance, j.field, j.created_at, 
+               u.name AS company_name, u.industry AS company_industry
         FROM jobs j
         JOIN users u ON j.company_id = u.id
         WHERE j.status = 'active'";
@@ -31,6 +35,22 @@ if ($field !== '') {
     $params[] = $field;
     $types .= 's';
 }
+if ($location !== '') {
+    $sql .= " AND j.location = ?";
+    $params[] = $location;
+    $types .= 's';
+}
+if ($industry !== '') {
+    $sql .= " AND u.industry = ?";
+    $params[] = $industry;
+    $types .= 's';
+}
+if ($min_allowance !== '') {
+    $sql .= " AND j.allowance IS NOT NULL AND j.allowance != '' AND CAST(j.allowance AS UNSIGNED) >= ?";
+    $params[] = (int)$min_allowance;
+    $types .= 'i';
+}
+
 $sql .= " ORDER BY j.created_at DESC";
 
 $stmt = mysqli_prepare($conn, $sql);
@@ -74,6 +94,12 @@ if ($selected_job) {
 // distinct fields for filter dropdown
 $field_list = mysqli_query($conn, "SELECT DISTINCT field FROM jobs WHERE field IS NOT NULL AND field != '' ORDER BY field");
 
+// distinct locations for filter dropdown
+$location_list = mysqli_query($conn, "SELECT DISTINCT location FROM jobs WHERE location IS NOT NULL AND location != '' ORDER BY location");
+
+// distinct industries for filter dropdown
+$industry_list = mysqli_query($conn, "SELECT DISTINCT industry FROM users WHERE role = 'company' AND industry IS NOT NULL AND industry != '' ORDER BY industry");
+
 // jobs the student already applied to
 $applied_ids = [];
 $stmt2 = mysqli_prepare($conn, "SELECT job_id FROM applications WHERE student_id = ?");
@@ -87,36 +113,103 @@ while ($r = mysqli_fetch_assoc($res2)) {
 // Search parameters query string for side links
 $search_query = http_build_query([
     'search' => $search,
-    'field' => $field
+    'field' => $field,
+    'location' => $location,
+    'industry' => $industry,
+    'min_allowance' => $min_allowance
 ]);
 ?>
 
-<div class="container mt-4">
-    <h3 class="mb-4">Browse Internships</h3>
+<style>
+.job-card {
+    transition: all 0.2s ease-in-out;
+    border: 1px solid rgba(0,0,0,.125);
+    cursor: pointer;
+}
+.job-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.08)!important;
+}
+.active-job {
+    border-left: 4px solid #0d6efd!important;
+}
+.job-list-scroll {
+    max-height: 650px;
+    overflow-y: auto;
+}
+</style>
 
-    <!-- Search and Filter Form -->
-    <form method="GET" class="row g-2 mb-4">
-        <div class="col-md-6">
-            <input type="text" name="search" class="form-control" placeholder="Search by title or keyword..."
-                   value="<?= htmlspecialchars($search) ?>">
-        </div>
-        <div class="col-md-4">
-            <select name="field" class="form-select">
-                <option value="">All Fields</option>
-                <?php while ($f = mysqli_fetch_assoc($field_list)): ?>
-                    <option value="<?= htmlspecialchars($f['field']) ?>" <?= $field === $f['field'] ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($f['field']) ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Search</button>
+<div class="container mt-4 pb-5">
+    <h3 class="fw-bold text-dark mb-4">Browse Internships</h3>
+
+    <!-- Filters Panel -->
+    <form method="GET" class="card p-4 shadow-sm border-0 mb-4 bg-white">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label small fw-bold text-secondary">Search Keywords</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-search"></i></span>
+                    <input type="text" name="search" class="form-control border-start-0 ps-0" placeholder="Search by title or keyword..."
+                           value="<?= htmlspecialchars($search) ?>">
+                </div>
+            </div>
+            
+            <div class="col-md-2">
+                <label class="form-label small fw-bold text-secondary">Field</label>
+                <select name="field" class="form-select">
+                    <option value="">All Fields</option>
+                    <?php 
+                    mysqli_data_seek($field_list, 0);
+                    while ($f = mysqli_fetch_assoc($field_list)): 
+                    ?>
+                        <option value="<?= htmlspecialchars($f['field']) ?>" <?= $field === $f['field'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($f['field']) ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label small fw-bold text-secondary">Location</label>
+                <select name="location" class="form-select">
+                    <option value="">All Locations</option>
+                    <?php mysqli_data_seek($location_list, 0); ?>
+                    <?php while ($loc = mysqli_fetch_assoc($location_list)): ?>
+                        <option value="<?= htmlspecialchars($loc['location']) ?>" <?= $location === $loc['location'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($loc['location']) ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label small fw-bold text-secondary">Industry</label>
+                <select name="industry" class="form-select">
+                    <option value="">All Industries</option>
+                    <?php mysqli_data_seek($industry_list, 0); ?>
+                    <?php while ($ind = mysqli_fetch_assoc($industry_list)): ?>
+                        <option value="<?= htmlspecialchars($ind['industry']) ?>" <?= $industry === $ind['industry'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($ind['industry']) ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label small fw-bold text-secondary">Min Allowance ($)</label>
+                <input type="number" name="min_allowance" class="form-control" placeholder="e.g. 500"
+                       value="<?= htmlspecialchars($min_allowance) ?>">
+            </div>
+
+            <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+                <a href="browse.php" class="btn btn-outline-secondary px-3">Reset Filters</a>
+                <button type="submit" class="btn btn-primary px-4 fw-bold">Search & Filter</button>
+            </div>
         </div>
     </form>
 
     <?php if (empty($jobs_list)): ?>
-        <div class="alert alert-info">No internships found matching your criteria.</div>
+        <div class="alert alert-info py-3 shadow-sm border-0"><i class="bi bi-info-circle me-2"></i>No internships found matching your criteria.</div>
     <?php else: ?>
         <div class="row g-4">
             <!-- Left Column: Scrollable Internship List -->
@@ -125,12 +218,18 @@ $search_query = http_build_query([
                     <?php foreach ($jobs_list as $job): ?>
                         <?php 
                             $isActive = $selected_job && ($job['id'] == $selected_job['id']);
-                            $cardClass = $isActive ? 'border-primary bg-white active-job' : 'bg-white';
+                            $cardClass = $isActive ? 'border-primary bg-white active-job shadow-sm' : 'bg-white shadow-sm';
                         ?>
-                        <div class="card mb-3 job-card shadow-sm <?= $cardClass ?>" onclick="location.href='browse.php?id=<?= $job['id'] ?>&<?= $search_query ?>'">
+                        <div class="card mb-3 job-card <?= $cardClass ?>" onclick="location.href='browse.php?id=<?= $job['id'] ?>&<?= $search_query ?>'">
                             <div class="card-body p-3">
-                                <h6 class="card-title fw-bold mb-1 text-truncate"><?= htmlspecialchars($job['title']) ?></h6>
-                                <div class="text-muted small mb-2 text-truncate"><?= htmlspecialchars($job['company_name']) ?></div>
+                                <h6 class="card-title fw-bold mb-1 text-truncate text-dark"><?= htmlspecialchars($job['title']) ?></h6>
+                                <div class="text-muted small mb-2 text-truncate fw-semibold"><?= htmlspecialchars($job['company_name']) ?></div>
+                                
+                                <?php if (!empty($job['company_industry'])): ?>
+                                    <span class="badge bg-light text-dark border mb-2 small fw-semibold" style="font-size: 0.7rem;">
+                                        <i class="bi bi-building me-1"></i><?= htmlspecialchars($job['company_industry']) ?>
+                                    </span>
+                                <?php endif; ?>
                                 
                                 <div class="d-flex flex-wrap gap-2 mb-2 small text-muted">
                                     <?php if ($job['location']): ?>
@@ -141,9 +240,9 @@ $search_query = http_build_query([
                                     <?php endif; ?>
                                 </div>
                                 
-                                <p class="card-text small text-muted mb-0 text-truncate-2">
-                                    <?= htmlspecialchars(mb_strimwidth($job['description'] ?? '', 0, 100, '...')) ?>
-                                </p>
+                                <div class="small text-success fw-bold">
+                                    <i class="bi bi-cash-stack me-1"></i><?= $job['allowance'] ? '$' . htmlspecialchars($job['allowance']) : 'Not specified' ?>
+                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -157,15 +256,20 @@ $search_query = http_build_query([
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
                             <div>
                                 <h4 class="fw-bold mb-1 text-primary"><?= htmlspecialchars($selected_job['title']) ?></h4>
-                                <h5 class="text-secondary"><?= htmlspecialchars($selected_job['company_name']) ?></h5>
+                                <h5 class="text-secondary fw-semibold"><?= htmlspecialchars($selected_job['company_name']) ?></h5>
+                                <?php if (!empty($selected_job['company_industry'])): ?>
+                                    <span class="badge bg-light text-dark border small fw-semibold py-1 px-2">
+                                        <i class="bi bi-building me-1"></i><?= htmlspecialchars($selected_job['company_industry']) ?>
+                                    </span>
+                                <?php endif; ?>
                             </div>
                             <div>
                                 <?php if (in_array($selected_job['id'], $applied_ids)): ?>
-                                    <button class="btn btn-secondary px-4 py-2" disabled>
+                                    <button class="btn btn-secondary px-4 py-2 fw-bold" disabled>
                                         <i class="bi bi-check-circle-fill"></i> Already Applied
                                     </button>
                                 <?php else: ?>
-                                    <a href="apply.php?job_id=<?= (int)$selected_job['id'] ?>" class="btn btn-primary px-4 py-2">
+                                    <a href="apply.php?job_id=<?= (int)$selected_job['id'] ?>" class="btn btn-primary px-4 py-2 fw-bold">
                                         Apply Now <i class="bi bi-arrow-right-short"></i>
                                     </a>
                                 <?php endif; ?>
@@ -174,12 +278,16 @@ $search_query = http_build_query([
 
                         <div class="d-flex flex-wrap gap-3 mb-4 text-muted small border-bottom pb-3">
                             <?php if ($selected_job['location']): ?>
-                                <div><i class="bi bi-geo-alt"></i> <?= htmlspecialchars($selected_job['location']) ?></div>
+                                <div><i class="bi bi-geo-alt-fill text-danger me-1"></i> <?= htmlspecialchars($selected_job['location']) ?></div>
                             <?php endif; ?>
                             <?php if ($selected_job['field']): ?>
-                                <div><i class="bi bi-tag"></i> <?= htmlspecialchars($selected_job['field']) ?></div>
+                                <div><i class="bi bi-tag-fill text-primary me-1"></i> <?= htmlspecialchars($selected_job['field']) ?></div>
                             <?php endif; ?>
-                            <div><i class="bi bi-calendar3"></i> Posted <?= htmlspecialchars(date('d M Y', strtotime($selected_job['created_at']))) ?></div>
+                            <div>
+                                <i class="bi bi-cash-stack text-success me-1"></i> 
+                                Allowance: <strong><?= $selected_job['allowance'] ? '$' . htmlspecialchars($selected_job['allowance']) : 'Not specified' ?></strong>
+                            </div>
+                            <div><i class="bi bi-calendar3 me-1"></i> Posted <?= htmlspecialchars(date('d M Y', strtotime($selected_job['created_at']))) ?></div>
                         </div>
 
                         <div class="mb-4">
@@ -211,13 +319,13 @@ $search_query = http_build_query([
                                         </a>
                                     <?php endwhile; ?>
                                 </div>
-                              <?php endif; ?>
-                          </div>
-                      </div>
-                  <?php endif; ?>
-              </div>
-          </div>
-      <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
 </div>
 
 <?php include '../includes/footer.php'; ?>

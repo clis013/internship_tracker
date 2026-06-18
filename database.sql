@@ -4,11 +4,16 @@ CREATE TABLE users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role ENUM('student', 'company', 'admin') NOT NULL,
+    approval_status ENUM('pending', 'approved', 'suspended') DEFAULT 'approved',
     phone VARCHAR(20) DEFAULT NULL,
     bio TEXT DEFAULT NULL,
+    academic_info TEXT DEFAULT NULL,
+    skills TEXT DEFAULT NULL,
     description TEXT DEFAULT NULL,
+    industry VARCHAR(100) DEFAULT NULL,
     website VARCHAR(150) DEFAULT NULL,
     resume VARCHAR(255) DEFAULT NULL,
+    profile_picture VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -18,6 +23,7 @@ CREATE TABLE jobs (
     title VARCHAR(150) NOT NULL,
     description TEXT,
     location VARCHAR(100),
+    allowance VARCHAR(50) DEFAULT NULL,
     field VARCHAR(100),
     status ENUM('active', 'closed') DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

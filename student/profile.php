@@ -12,7 +12,7 @@ $error = '';
 $success = '';
 
 // Fetch current user data
-$stmt = mysqli_prepare($conn, "SELECT name, email, phone, bio, resume, profile_picture FROM users WHERE id = ?");
+$stmt = mysqli_prepare($conn, "SELECT name, email, phone, bio, academic_info, skills, resume, profile_picture FROM users WHERE id = ?");
 mysqli_stmt_bind_param($stmt, "i", $user_id);
 mysqli_stmt_execute($stmt);
 $user = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
@@ -24,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name  = trim($_POST['name']);
         $phone = trim($_POST['phone']);
         $bio   = trim($_POST['bio']);
+        $academic_info = trim($_POST['academic_info'] ?? '');
+        $skills        = trim($_POST['skills'] ?? '');
 
         if (empty($name)) {
             $error = 'Name cannot be empty.';
@@ -83,8 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 if (empty($error)) {
-                    $stmt = mysqli_prepare($conn, "UPDATE users SET name = ?, phone = ?, bio = ?, resume = ?, profile_picture = ? WHERE id = ?");
-                    mysqli_stmt_bind_param($stmt, "sssssi", $name, $phone, $bio, $resume_path, $profile_picture_path, $user_id);
+                    $stmt = mysqli_prepare($conn, "UPDATE users SET name = ?, phone = ?, bio = ?, academic_info = ?, skills = ?, resume = ?, profile_picture = ? WHERE id = ?");
+                    mysqli_stmt_bind_param($stmt, "sssssssi", $name, $phone, $bio, $academic_info, $skills, $resume_path, $profile_picture_path, $user_id);
                     
                     if (mysqli_stmt_execute($stmt)) {
                         $_SESSION['name'] = $name;
@@ -92,6 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $user['name']  = $name;
                         $user['phone'] = $phone;
                         $user['bio']   = $bio;
+                        $user['academic_info'] = $academic_info;
+                        $user['skills'] = $skills;
                         $user['resume'] = $resume_path;
                         $user['profile_picture'] = $profile_picture_path;
                     } else {
@@ -290,7 +294,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <div class="mb-3">
                             <label class="form-label small fw-bold">About Me / Bio</label>
-                            <textarea name="bio" class="form-control" rows="4" placeholder="Describe your skills, projects, and interests..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+                            <textarea name="bio" class="form-control" rows="3" placeholder="Describe your background and interests..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Academic Information</label>
+                            <textarea name="academic_info" class="form-control" rows="3" placeholder="e.g. Bachelor of Computer Science, University of Malaya (CGPA: 3.8, Graduation Year: 2027)"><?= htmlspecialchars($user['academic_info'] ?? '') ?></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Skills</label>
+                            <input type="text" name="skills" class="form-control" placeholder="e.g. PHP, JavaScript, Python, SQL, Git (comma-separated)" value="<?= htmlspecialchars($user['skills'] ?? '') ?>">
                         </div>
 
                         <div class="mb-4">

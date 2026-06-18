@@ -11,7 +11,7 @@ $error = '';
 $success = '';
 
 // Fetch current company data
-$stmt = mysqli_prepare($conn, "SELECT name, email, phone, description, website FROM users WHERE id = ?");
+$stmt = mysqli_prepare($conn, "SELECT name, email, phone, description, industry, website FROM users WHERE id = ?");
 mysqli_stmt_bind_param($stmt, "i", $user_id);
 mysqli_stmt_execute($stmt);
 $user = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
@@ -23,19 +23,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name        = trim($_POST['name']);
         $phone       = trim($_POST['phone']);
         $description = trim($_POST['description']);
+        $industry    = trim($_POST['industry'] ?? '');
         $website     = trim($_POST['website']);
 
         if (empty($name)) {
             $error = 'Company name cannot be empty.';
         } else {
-            $stmt = mysqli_prepare($conn, "UPDATE users SET name = ?, phone = ?, description = ?, website = ? WHERE id = ?");
-            mysqli_stmt_bind_param($stmt, "ssssi", $name, $phone, $description, $website, $user_id);
+            $stmt = mysqli_prepare($conn, "UPDATE users SET name = ?, phone = ?, description = ?, industry = ?, website = ? WHERE id = ?");
+            mysqli_stmt_bind_param($stmt, "sssssi", $name, $phone, $description, $industry, $website, $user_id);
             if (mysqli_stmt_execute($stmt)) {
                 $_SESSION['name'] = $name;
                 $success = 'Profile updated successfully.';
                 $user['name']        = $name;
                 $user['phone']       = $phone;
                 $user['description'] = $description;
+                $user['industry']    = $industry;
                 $user['website']     = $website;
             } else {
                 $error = 'Failed to update profile.';
@@ -97,6 +99,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="mb-3">
                             <label class="form-label">Phone Number</label>
                             <input type="text" name="phone" class="form-control" value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Industry Category</label>
+                            <select name="industry" class="form-select" required>
+                                <option value="">Select Industry</option>
+                                <option value="Technology / IT" <?= ($user['industry'] ?? '') === 'Technology / IT' ? 'selected' : '' ?>>Technology / IT</option>
+                                <option value="Finance / Banking" <?= ($user['industry'] ?? '') === 'Finance / Banking' ? 'selected' : '' ?>>Finance / Banking</option>
+                                <option value="Healthcare / Medical" <?= ($user['industry'] ?? '') === 'Healthcare / Medical' ? 'selected' : '' ?>>Healthcare / Medical</option>
+                                <option value="Education" <?= ($user['industry'] ?? '') === 'Education' ? 'selected' : '' ?>>Education</option>
+                                <option value="Marketing / Advertising" <?= ($user['industry'] ?? '') === 'Marketing / Advertising' ? 'selected' : '' ?>>Marketing / Advertising</option>
+                                <option value="Engineering" <?= ($user['industry'] ?? '') === 'Engineering' ? 'selected' : '' ?>>Engineering</option>
+                                <option value="Other" <?= ($user['industry'] ?? '') === 'Other' ? 'selected' : '' ?>>Other</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Website</label>

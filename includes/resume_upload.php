@@ -22,11 +22,9 @@ function handle_resume_upload($field_name, $upload_dir = null) {
     }
 
     // Validate file type by extension + mime
-    $allowed_ext = ['pdf', 'doc', 'docx'];
+    $allowed_ext = ['pdf'];
     $allowed_mime = [
         'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     ];
 
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
@@ -35,7 +33,7 @@ function handle_resume_upload($field_name, $upload_dir = null) {
     finfo_close($finfo);
 
     if (!in_array($ext, $allowed_ext) || !in_array($mime, $allowed_mime)) {
-        return ['path' => null, 'error' => 'Resume must be a PDF, DOC, or DOCX file.'];
+        return ['path' => null, 'error' => 'Resume must be a PDF file.'];
     }
 
     // Max 5MB

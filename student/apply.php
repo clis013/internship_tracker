@@ -55,7 +55,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$already_applied) {
         } elseif (!$upload['path'] && !$default_resume) {
             $error = 'Please upload a resume (you have no default resume on your profile).';
         } else {
-            $resume_path = $upload['path']; // null = use default resume from users table
+            if ($upload['path']) {
+                $resume_path = $upload['path'];
+            } else {
+                // Copy the default resume so that the application has its own independent copy
+                $ext = pathinfo($default_resume, PATHINFO_EXTENSION);
+                $unique_name = 'resume_copy_' . uniqid() . '_' . time() . '.' . $ext;
+                $source_file = dirname(__DIR__) . '/' . $default_resume;
+                $dest_dir = dirname(__DIR__) . '/uploads/resumes';
+                $dest_file = $dest_dir . '/' . $unique_name;
+                
+                if (file_exists($source_file)) {
+                    if (!is_dir($dest_dir)) {
+                        mkdir($dest_dir, 0755, true);
+                    }
+                    if (copy($source_file, $dest_file)) {
+                        $resume_path = 'uploads/resumes/' . $unique_name;
+                    } else {
+                        $resume_path = $default_resume; // fallback if copy fails
+                    }
+                } else {
+                    $resume_path = null;
+                }
+            }
 
             $stmt = mysqli_prepare($conn, "INSERT INTO applications (student_id, job_id, cover_letter, resume) VALUES (?, ?, ?, ?)");
             mysqli_stmt_bind_param($stmt, "iiss", $student_id, $job_id, $cover_letter, $resume_path);
@@ -99,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$already_applied) {
 
                     <?php if ($already_applied): ?>
                         <div class="alert alert-info mb-0">You have already applied for this internship.</div>
-                        <a href="my_application.php" class="btn btn-outline-primary mt-3">View My Applications</a>
+                        <a href="my_applications.php" class="btn btn-outline-primary mt-3">View My Applications</a>
                     <?php else: ?>
                         <form method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="job_id" value="<?= (int)$job_id ?>">
@@ -122,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$already_applied) {
                                         <a href="profile.php">add one to your profile</a> for future applications.
                                     </div>
                                 <?php endif; ?>
-                                <input type="file" name="resume" class="form-control" accept=".pdf,.doc,.docx">
+                                <input type="file" name="resume" class="form-control" accept=".pdf">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit Application</button>
                             <a href="browse.php" class="btn btn-link">Cancel</a>

@@ -12,10 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email    = trim($_POST['email']);
     $password = $_POST['password'];
     $confirm  = $_POST['confirm_password'];
-    $role     = $_POST['role'];
+    $role     = $_POST['role'] ?? '';
 
     // Server-side validation
-    if (empty($name) || empty($email) || empty($password)) {
+    if (empty($name) || empty($email) || empty($password) || empty($role)) {
         $error = 'All fields are required.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Invalid email format.';
@@ -23,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Passwords do not match.';
     } elseif (strlen($password) < 6) {
         $error = 'Password must be at least 6 characters.';
+    } elseif (!in_array($role, ['student', 'company'])) {
+        $error = 'Invalid role selected.';
     } else {
         // Check if email already exists
         $check = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ?");
@@ -36,11 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Hash the password — never store plain text
             $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-            $stmt = mysqli_prepare($conn, "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
-            mysqli_stmt_bind_param($stmt, "ssss", $name, $email, $hashed, $role);
+            $approval_status = ($role === 'company') ? 'pending' : 'approved';
+            $stmt = mysqli_prepare($conn, "INSERT INTO users (name, email, password, role, approval_status) VALUES (?, ?, ?, ?, ?)");
+            mysqli_stmt_bind_param($stmt, "sssss", $name, $email, $hashed, $role, $approval_status);
 
             if (mysqli_stmt_execute($stmt)) {
-                $success = 'Account created! You can now log in.';
+                if ($role === 'company') {
+                    $success = 'Account created! Company accounts require administrator approval before logging in.';
+                } else {
+                    $success = 'Account created! You can now log in.';
+                }
             } else {
                 $error = 'Something went wrong. Please try again.';
             }

@@ -10,7 +10,8 @@ include '../includes/navbar.php';
 $users = mysqli_fetch_assoc(mysqli_query($conn,
     "SELECT COUNT(*) AS total,
             SUM(role='student')  AS students,
-            SUM(role='company')  AS companies
+            SUM(role='company')  AS companies,
+            SUM(role='company' AND approval_status='pending') AS pending_companies
      FROM users"));
 
 $jobs = mysqli_fetch_assoc(mysqli_query($conn,
@@ -84,7 +85,7 @@ function app_badge($status) {
     <!-- ── Primary stat cards ── -->
     <div class="row g-3 mb-4">
 
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-md-4 col-lg">
             <a href="view_users.php?role=student" class="stat-card">
                 <div class="stat-icon" style="background:#e8f0fe">
                     <i class="bi bi-mortarboard-fill" style="color:#1a73e8"></i>
@@ -96,7 +97,7 @@ function app_badge($status) {
             </a>
         </div>
 
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-md-4 col-lg">
             <a href="view_users.php?role=company" class="stat-card">
                 <div class="stat-icon" style="background:#e6f4ea">
                     <i class="bi bi-building-fill" style="color:#1e8e3e"></i>
@@ -108,26 +109,38 @@ function app_badge($status) {
             </a>
         </div>
 
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-md-4 col-lg">
+            <a href="manage_companies.php?status=pending" class="stat-card">
+                <div class="stat-icon" style="background:#fef7e0">
+                    <i class="bi bi-hourglass-split" style="color:#b06000"></i>
+                </div>
+                <div>
+                    <div class="stat-value" style="color:#b06000"><?= (int)$users['pending_companies'] ?></div>
+                    <div class="stat-label">Pending Companies</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-6 col-md-4 col-lg">
             <a href="manage_internships.php" class="stat-card">
                 <div class="stat-icon" style="background:#fef3e2">
                     <i class="bi bi-briefcase-fill" style="color:#e37400"></i>
                 </div>
                 <div>
                     <div class="stat-value" style="color:#e37400"><?= (int)$jobs['total'] ?></div>
-                    <div class="stat-label">Internship Postings</div>
+                    <div class="stat-label">Internships</div>
                 </div>
             </a>
         </div>
 
-        <div class="col-6 col-lg-3">
+        <div class="col-6 col-md-4 col-lg">
             <a href="view_applicants.php" class="stat-card">
                 <div class="stat-icon" style="background:#fce8e6">
                     <i class="bi bi-file-earmark-person-fill" style="color:#c5221f"></i>
                 </div>
                 <div>
                     <div class="stat-value" style="color:#c5221f"><?= (int)$apps['total'] ?></div>
-                    <div class="stat-label">Total Applications</div>
+                    <div class="stat-label">Applications</div>
                 </div>
             </a>
         </div>
