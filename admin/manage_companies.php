@@ -63,7 +63,6 @@ while ($row = mysqli_fetch_assoc($companies_res)) {
 }
 ?>
 
-<!-- Light Glassmorphism Overrides for Sub-Pages -->
 <script>document.body.classList.add('light-theme');</script>
 
 <div class="container mt-4">
@@ -77,25 +76,26 @@ while ($row = mysqli_fetch_assoc($companies_res)) {
         </div>
     <?php endif; ?>
 
-    <form method="GET" class="row g-2 mb-4">
-        <div class="col-md-5">
-            <input type="text" name="search" class="form-control glass-input" placeholder="Search by corporate name or email..."
-                   value="<?= htmlspecialchars($search) ?>">
-        </div>
-        <div class="col-md-3">
-            <select name="status" class="form-select glass-select">
-                <option value="">All Verification Statuses</option>
-                <option value="pending" <?= $status_filter === 'pending' ? 'selected' : '' ?>>Pending Verification</option>
-                <option value="approved" <?= $status_filter === 'approved' ? 'selected' : '' ?>>Approved</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-glass-primary w-100" title="Search">
-                <i class="bi bi-search"></i>
-            </button>
-        </div>
-        <div class="col-md-2">
-            <a href="manage_companies.php" class="btn btn-glass-secondary w-100">Reset</a>
+    <form method="GET" class="mb-4">
+        <div class="row g-2">
+            <div class="col-md-6">
+                <div class="input-group shadow-sm">
+                    <button type="submit" class="btn input-group-text glass-input border-end-0 text-white m-0 px-3" style="cursor: pointer;">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <input type="text" name="search" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Search by corporate name or email..." value="<?= htmlspecialchars($search) ?>">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select name="status" class="form-select glass-input text-white shadow-sm" onchange="this.form.submit()">
+                    <option value="" class="bg-dark text-white">All Verification Statuses</option>
+                    <option value="pending" class="bg-dark text-white" <?= $status_filter === 'pending' ? 'selected' : '' ?>>Pending Verification</option>
+                    <option value="approved" class="bg-dark text-white" <?= $status_filter === 'approved' ? 'selected' : '' ?>>Approved</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <a href="manage_companies.php" class="btn btn-glass-secondary w-100 shadow-sm">Reset</a>
+            </div>
         </div>
     </form>
 

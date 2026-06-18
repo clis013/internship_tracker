@@ -203,30 +203,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="container mt-4">
     <div class="row g-4">
-        <!-- Left Column: Avatar & Account Actions -->
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 text-center p-4">
+            <div class="glass-card shadow-sm text-center p-4">
                 <div class="card-body">
-                    <!-- Profile Picture display -->
                     <div class="profile-avatar-container position-relative mx-auto mb-3" style="width: 150px; height: 150px; cursor: pointer;" onclick="document.getElementById('profilePicInput').click();">
                         <?php if (!empty($user['profile_picture'])): ?>
                             <img src="/internship_tracker/<?= htmlspecialchars($user['profile_picture']) ?>" class="profile-avatar w-100 h-100 rounded-circle object-fit-cover" alt="Profile Picture">
                         <?php else: ?>
-                            <div class="profile-avatar-placeholder w-100 h-100 rounded-circle bg-light d-flex align-items-center justify-content-center border border-2">
-                                <i class="bi bi-camera-fill fs-2 text-secondary"></i>
+                            <div class="profile-avatar-placeholder w-100 h-100 rounded-circle bg-dark bg-opacity-50 d-flex align-items-center justify-content-center border border-2 border-secondary">
+                                <i class="bi bi-camera-fill fs-2 text-white-50"></i>
                             </div>
                         <?php endif; ?>
                         
-                        <!-- Hover Overlay -->
-                        <div class="avatar-hover-overlay position-absolute top-0 start-0 w-100 h-100 rounded-circle d-flex align-items-center justify-content-center bg-dark bg-opacity-50 text-white opacity-0 transition-opacity">
+                        <div class="avatar-hover-overlay position-absolute top-0 start-0 w-100 h-100 rounded-circle d-flex align-items-center justify-content-center bg-dark bg-opacity-75 text-white opacity-0 transition-opacity">
                             <span class="small"><i class="bi bi-camera-fill me-1"></i> Upload</span>
                         </div>
                     </div>
                     
-                    <h5 class="fw-bold mb-1 text-dark"><?= htmlspecialchars($user['name']) ?></h5>
-                    <p class="text-muted small mb-3"><?= htmlspecialchars($user['email']) ?></p>
+                    <h5 class="fw-bold mb-1 text-white"><?= htmlspecialchars($user['name']) ?></h5>
+                    <p class="text-white-50 small mb-3"><?= htmlspecialchars($user['email']) ?></p>
                     
-                    <!-- Profile Picture Actions -->
                     <?php if (!empty($user['profile_picture'])): ?>
                         <form method="POST" class="mb-3" onsubmit="return confirm('Remove your profile picture?')">
                             <input type="hidden" name="form" value="delete_profile_picture">
@@ -234,11 +230,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </form>
                     <?php endif; ?>
 
-                    <hr class="my-4">
+                    <hr class="my-4 border-secondary border-opacity-50">
 
-                    <!-- Settings Actions (triggered via Modals) -->
                     <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                        <button type="button" class="btn btn-glass-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                             <i class="bi bi-key-fill me-1"></i> Change Password
                         </button>
                         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
@@ -249,22 +244,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-        <!-- Right Column: Personal Info & Resume -->
         <div class="col-md-8">
-            <div class="card shadow-sm border-0 p-4">
+            <div class="glass-card shadow-sm p-4">
                 <div class="card-body">
-                    <h4 class="fw-bold mb-4 text-dark">Profile Information</h4>
+                    <h4 class="fw-bold mb-4 text-white">Profile Information</h4>
                     
                     <?php if ($error): ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert alert-danger alert-dismissible fade show bg-transparent border-danger text-danger" role="alert">
                             <?= htmlspecialchars($error) ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php endif; ?>
                     <?php if ($success): ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div class="alert alert-success alert-dismissible fade show bg-transparent border-success text-success" role="alert">
                             <?= htmlspecialchars($success) ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php endif; ?>
 
@@ -273,62 +267,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold">Full Name</label>
-                                <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($user['name']) ?>" required>
+                                <label class="form-label small fw-bold text-white">Full Name</label>
+                                <input type="text" name="name" class="form-control glass-input text-white" value="<?= htmlspecialchars($user['name']) ?>" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold">Phone Number</label>
-                                <input type="text" name="phone" class="form-control" value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
+                                <label class="form-label small fw-bold text-white">Phone Number</label>
+                                <input type="text" name="phone" class="form-control glass-input text-white" value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">Email Address</label>
-                            <input type="email" class="form-control" value="<?= htmlspecialchars($user['email']) ?>" disabled>
-                            <div class="form-text small">Your email address cannot be changed.</div>
+                            <label class="form-label small fw-bold text-white">Email Address</label>
+                            <input type="email" class="form-control glass-input text-white-50" value="<?= htmlspecialchars($user['email']) ?>" disabled>
+                            <div class="form-text small text-white-50">Your email address cannot be changed.</div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">Profile Picture</label>
-                            <input type="file" name="profile_picture" id="profilePicInput" class="form-control" accept="image/*">
-                            <div class="form-text small">Click your avatar above or choose an image file from your laptop (JPG, JPEG, PNG, GIF, max 2MB).</div>
+                            <label class="form-label small fw-bold text-white">Profile Picture</label>
+                            <input type="file" name="profile_picture" id="profilePicInput" class="form-control glass-input text-white" accept="image/*">
+                            <div class="form-text small text-white-50">Click your avatar above or choose an image file from your laptop (JPG, JPEG, PNG, GIF, max 2MB).</div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">About Me / Bio</label>
-                            <textarea name="bio" class="form-control" rows="3" placeholder="Describe your background and interests..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+                            <label class="form-label small fw-bold text-white">About Me / Bio</label>
+                            <textarea name="bio" class="form-control glass-input text-white" rows="3" placeholder="Describe your background and interests..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">Academic Information</label>
-                            <textarea name="academic_info" class="form-control" rows="3" placeholder="e.g. Bachelor of Computer Science, University of Malaya (CGPA: 3.8, Graduation Year: 2027)"><?= htmlspecialchars($user['academic_info'] ?? '') ?></textarea>
+                            <label class="form-label small fw-bold text-white">Academic Information</label>
+                            <textarea name="academic_info" class="form-control glass-input text-white" rows="3" placeholder="e.g. Bachelor of Computer Science, University of Malaya (CGPA: 3.8, Graduation Year: 2027)"><?= htmlspecialchars($user['academic_info'] ?? '') ?></textarea>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">Skills</label>
-                            <input type="text" name="skills" class="form-control" placeholder="e.g. PHP, JavaScript, Python, SQL, Git (comma-separated)" value="<?= htmlspecialchars($user['skills'] ?? '') ?>">
+                            <label class="form-label small fw-bold text-white">Skills</label>
+                            <input type="text" name="skills" class="form-control glass-input text-white" placeholder="e.g. PHP, JavaScript, Python, SQL, Git (comma-separated)" value="<?= htmlspecialchars($user['skills'] ?? '') ?>">
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label small fw-bold">Resume (PDF, DOC, or DOCX)</label>
+                            <label class="form-label small fw-bold text-white">Resume (PDF, DOC, or DOCX)</label>
                             <?php if (!empty($user['resume'])): ?>
                                 <div class="mb-2">
-                                    <a href="/internship_tracker/<?= htmlspecialchars($user['resume']) ?>" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                    <a href="/internship_tracker/<?= htmlspecialchars($user['resume']) ?>" target="_blank" class="btn btn-sm btn-glass-secondary">
                                         📄 View Current Resume
                                     </a>
                                 </div>
                             <?php endif; ?>
-                            <input type="file" name="resume" class="form-control" accept=".pdf,.doc,.docx">
-                            <div class="form-text small">This resume is used as your default for applications.</div>
+                            <input type="file" name="resume" class="form-control glass-input text-white" accept=".pdf,.doc,.docx">
+                            <div class="form-text small text-white-50">This resume is used as your default for applications.</div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary px-4 py-2">Save Changes</button>
+                        <button type="submit" class="btn btn-glass-primary px-4 py-2">Save Changes</button>
                     </form>
 
                     <?php if (!empty($user['resume'])): ?>
                         <form method="POST" class="mt-2" onsubmit="return confirm('Remove your resume?')">
                             <input type="hidden" name="form" value="delete_resume">
-                            <button type="submit" class="btn btn-sm btn-link text-danger ps-0">Remove Resume</button>
+                            <button type="submit" class="btn btn-sm btn-link text-danger border-0 ps-0">Remove Resume</button>
                         </form>
                     <?php endif; ?>
                 </div>
@@ -337,62 +331,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<!-- Change Password Modal -->
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow text-start">
+        <div class="modal-content glass-card text-start" style="background: rgba(15, 15, 15, 0.85) !important;">
             <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold" id="changePasswordModalLabel">Change Password</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title text-white fw-bold" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="POST">
                 <input type="hidden" name="form" value="password">
                 <div class="modal-body py-4">
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Current Password</label>
-                        <input type="password" name="current_password" class="form-control" required>
+                        <label class="form-label small fw-bold text-white">Current Password</label>
+                        <input type="password" name="current_password" class="form-control glass-input text-white" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">New Password</label>
-                        <input type="password" name="new_password" class="form-control" required>
+                        <label class="form-label small fw-bold text-white">New Password</label>
+                        <input type="password" name="new_password" class="form-control glass-input text-white" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Confirm New Password</label>
-                        <input type="password" name="confirm_password" class="form-control" required>
+                        <label class="form-label small fw-bold text-white">Confirm New Password</label>
+                        <input type="password" name="confirm_password" class="form-control glass-input text-white" required>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update Password</button>
+                    <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-glass-primary">Update Password</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Delete Account Modal -->
 <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow text-start">
+        <div class="modal-content glass-card text-start" style="background: rgba(15, 15, 15, 0.85) !important;">
             <div class="modal-header border-0 pb-0">
                 <h5 class="modal-title text-danger fw-bold" id="deleteAccountModalLabel">Delete Account</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="POST" onsubmit="return confirm('Are you sure you want to permanently delete your account? This action cannot be undone.')">
                 <input type="hidden" name="form" value="delete_account">
                 <div class="modal-body py-4">
-                    <p class="text-muted small mb-3">
+                    <p class="text-white-50 small mb-3">
                         Warning: This action is permanent and cannot be undone. Deleting your account will remove your profile details, default resume, and all submitted applications.
                     </p>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="confirmDeleteModalCheck" required>
-                        <label class="form-check-label text-muted small" for="confirmDeleteModalCheck">
+                        <label class="form-check-label text-white-50 small" for="confirmDeleteModalCheck">
                             I understand that deleting my account is irreversible and all my data will be permanently removed.
                         </label>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger">Delete My Account</button>
                 </div>
             </form>

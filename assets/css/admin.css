@@ -322,6 +322,29 @@ h6.text-uppercase, .dash-card p.text-uppercase { color: rgba(255, 255, 255, 0.5)
     outline: none;
 }
 
+/* ── 3. DROPDOWN MENU (OPENED STATE) ── */
+/* Browsers require this to be a solid color. We use dark grey to match the theme. */
+.glass-input option, .glass-select option {
+    background-color: #1a1a1a !important; 
+    color: #ffffff !important;
+}
+
+/* ── 2. FIX SELECT BOX (CLOSED STATE) & STOP REPEATING ARROWS ── */
+select.glass-input, select.glass-select {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    background-image: var(--bs-form-select-bg-img, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e")) !important;
+    
+    /* These three lines stop the arrow from duplicating and position it perfectly */
+    background-repeat: no-repeat !important;
+    background-position: right 0.75rem center !important;
+    background-size: 16px 12px !important;
+    
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+
 /* ── Main Outer 3D Glass Card Container ── */
 .glass-card {
     background: rgba(15, 15, 15, 0.45) !important;
@@ -362,14 +385,25 @@ h6.text-uppercase, .dash-card p.text-uppercase { color: rgba(255, 255, 255, 0.5)
 .glass-row-text-secondary { color: rgba(255, 255, 255, 0.95) !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important; }
 .glass-row-text-muted { color: rgba(255, 255, 255, 0.85) !important; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important; }
 
-/* ── Button Styles ── */
-.btn-glass-secondary {
+/* ── RESTORED: Original Lightweight Glass Button Style ── */
+.btn-glass-light-secondary {
+    background: rgba(255, 255, 255, 0.08) !important;
     color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: none !important; /* Removes the heavy bottom shadow */
+    transition: all 0.2s ease-in-out !important;
 }
-.btn-glass-secondary:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
+
+/* Snappy flat white color fill on hover */
+.btn-glass-light-secondary:hover {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: #ffffff !important;
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 /* =========================================================================

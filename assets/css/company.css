@@ -102,29 +102,125 @@ body {
     color: #ffffff;
 }
 
-/* --------------------------------------
-   Restyling Dashboard Cards & Tables
---------------------------------------- */
-.glass-card {
-    background: rgba(255, 255, 255, 0.05) !important;
+/* =========================================================================
+   UNIFIED DARK GLASSMORPHISM (Applied to all sub-pages)
+========================================================================== */
+
+/* ── Form Controls (Search, Select, and Buttons) ── */
+.glass-input, .glass-select, .btn-glass-primary, .btn-glass-secondary {
+    background: rgba(255, 255, 255, 0.15) !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    color: #ffffff;
-    transition: transform 0.2s ease, background 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 8px;
 }
 
-.glass-card-hover:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.08) !important;
-    cursor: pointer;
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-weight: 500;
 }
 
-.glass-card .text-muted { color: rgba(255, 255, 255, 0.6) !important; }
-.glass-card h5, .glass-card h6, .glass-card p { color: #ffffff !important; }
+.btn-glass-primary {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+.btn-glass-primary:hover { background: rgba(255, 255, 255, 0.25) !important; }
+
+.glass-input:focus, .glass-select:focus {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    outline: none;
+}
+
+/* ── Main Outer 3D Glass Card Container ── */
+.glass-card {
+    background: rgba(15, 15, 15, 0.45) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    outline: 1px solid rgba(0, 0, 0, 0.2) !important;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* ── Modular Glass Rows (Updated to match Dark Glass Cards) ── */
+.glass-row-item {
+    background: rgba(15, 15, 15, 0.4) !important; /* Changed from white to matching dark tint */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    outline: 1px solid rgba(0, 0, 0, 0.2) !important;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    transition: all 0.2s ease;
+}
+
+.glass-row-item:hover {
+    background: rgba(15, 15, 15, 0.55) !important; /* Slightly darker on hover */
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    transform: scale(1.002) translateY(-1px);
+}
+
+/* ── Fix for Accordions inside Glass Rows ── */
+.glass-row-item .accordion-button {
+    background: transparent !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+}
+
+.glass-row-item .accordion-body {
+    background: rgba(0, 0, 0, 0.15) !important; /* Deepens the expanded area to show depth */
+    color: #ffffff !important;
+}
+
+.glass-row-item .accordion-button::after {
+    filter: invert(1) grayscale(100%) brightness(200%); /* Makes the dropdown arrow white */
+}
+
+/* ── Text Styling & Tables ── */
+.glass-table-header {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+.glass-row-text-primary, .glass-card h5, .glass-card h6 { color: #ffffff !important; font-weight: 600; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8) !important; }
+.glass-row-text-secondary { color: rgba(255, 255, 255, 0.95) !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important; }
+.glass-row-text-muted, .glass-card .text-muted { color: rgba(255, 255, 255, 0.85) !important; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important; }
+
+/* Fixing Bootstrap tables inside glass cards */
 .table { color: #ffffff; border-color: rgba(255,255,255,0.1); }
 .table-hover tbody tr:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.05); }
 .table thead th { background: rgba(255, 255, 255, 0.1) !important; color: #fff; border-bottom: none; }
 .table td { border-bottom: 1px solid rgba(255,255,255,0.05); color: #fff !important; }
+
+/* ── Button Styles ── */
+.btn-glass-secondary {
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+.btn-glass-secondary:hover { background: rgba(255, 255, 255, 0.15) !important; }
+
+/* ── SUB-PAGE THEME ACTIVATOR ── */
+body.light-theme {
+    background-image: url('../images/Page_bg.JPG.jpeg') !important;
+    background-color: #050505 !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+}
+
+/* Force All Typography to Crisp White with Depth Shadows */
+body.light-theme .text-white, body.light-theme h3, body.light-theme h4, 
+body.light-theme h5, body.light-theme .modal-title, body.light-theme p, 
+body.light-theme label, body.light-theme span:not(.badge) {
+    color: #ffffff !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7) !important;
+}
