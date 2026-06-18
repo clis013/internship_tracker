@@ -80,7 +80,7 @@ $recent_jobs = mysqli_stmt_get_result($stmt);
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card text-center shadow-sm glass-card glass-card-hover" onclick="location.href='view_applicants.php'">
+            <div class="card text-center shadow-sm glass-card glass-card-hover" onclick="location.href='applicants.php'">
                 <div class="card-body py-4">
                     <h3 class="card-title fw-bold text-primary"><?= (int)$app_stats['total_applicants'] ?></h3>
                     <p class="card-text text-muted small mb-0">Total Applicants</p>
@@ -88,7 +88,7 @@ $recent_jobs = mysqli_stmt_get_result($stmt);
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card text-center shadow-sm glass-card glass-card-hover" onclick="location.href='view_applicants.php'">
+            <div class="card text-center shadow-sm glass-card glass-card-hover" onclick="location.href='applicants.php?status=pending'">
                 <div class="card-body py-4">
                     <h3 class="card-title fw-bold text-warning"><?= (int)$app_stats['pending'] ?></h3>
                     <p class="card-text text-muted small mb-0">Pending Review</p>

@@ -32,8 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Optional job filter
-$job_id_filter = isset($_GET['job_id']) ? (int)$_GET['job_id'] : 0;
+// Optional filters
+$job_id_filter   = isset($_GET['job_id']) ? (int)$_GET['job_id'] : 0;
+$status_filter   = isset($_GET['status']) && in_array($_GET['status'], ['pending','reviewed','accepted','rejected'])
+                   ? $_GET['status'] : '';
 
 // Get this company's jobs for the filter dropdown
 $stmt = mysqli_prepare($conn, "SELECT id, title FROM jobs WHERE company_id = ? ORDER BY created_at DESC");
@@ -60,6 +62,11 @@ if ($job_id_filter > 0) {
     $sql .= " AND j.id = ?";
     $params[] = $job_id_filter;
     $types .= 'i';
+}
+if ($status_filter !== '') {
+    $sql .= " AND a.status = ?";
+    $params[] = $status_filter;
+    $types .= 's';
 }
 $sql .= " ORDER BY a.applied_at DESC";
 
@@ -212,7 +219,7 @@ function status_badge($status) {
 
     <form method="GET" class="row g-2 mb-4">
         <div class="col-md-4">
-            <select name="job_id" class="form-select" onchange="this.form.submit()">
+            <select name="job_id" class="form-select glass-select" onchange="this.form.submit()">
                 <option value="0">All Internships</option>
                 <?php foreach ($job_options as $j): ?>
                     <option value="<?= (int)$j['id'] ?>" <?= $job_id_filter === (int)$j['id'] ? 'selected' : '' ?>>
@@ -221,6 +228,20 @@ function status_badge($status) {
                 <?php endforeach; ?>
             </select>
         </div>
+        <div class="col-md-3">
+            <select name="status" class="form-select glass-select" onchange="this.form.submit()">
+                <option value="">All Statuses</option>
+                <option value="pending"   <?= $status_filter === 'pending'  ? 'selected' : '' ?>>Pending Review</option>
+                <option value="reviewed"  <?= $status_filter === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
+                <option value="accepted"  <?= $status_filter === 'accepted' ? 'selected' : '' ?>>Accepted</option>
+                <option value="rejected"  <?= $status_filter === 'rejected' ? 'selected' : '' ?>>Rejected</option>
+            </select>
+        </div>
+        <?php if ($job_id_filter || $status_filter): ?>
+        <div class="col-md-2">
+            <a href="applicants.php" class="btn btn-glass-secondary w-100">Reset</a>
+        </div>
+        <?php endif; ?>
     </form>
 
     <?php if (mysqli_num_rows($applicants) === 0): ?>

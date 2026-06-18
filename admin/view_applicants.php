@@ -7,13 +7,28 @@ include '../includes/header.php';
 include '../includes/navbar.php';
 
 // ── Handle Global Application Record Deletion ──────────────────────────────
+$job_id = isset($_GET['job_id']) ? (int)$_GET['job_id'] : 0;
+
 if (isset($_GET['delete_app'])) {
     $app_id = (int)$_GET['delete_app'];
     $stmt = mysqli_prepare($conn, "DELETE FROM applications WHERE id = ?");
     mysqli_stmt_bind_param($stmt, "i", $app_id);
     mysqli_stmt_execute($stmt);
-    header("Location: view_applicants.php?deleted=1");
+    $redirect = $job_id ? "view_applicants.php?job_id={$job_id}&deleted=1" : "view_applicants.php?deleted=1";
+    header("Location: $redirect");
     exit();
+}
+
+// ── Fetch job title if filtering by job ────────────────────────────────────
+$job_title_label = '';
+if ($job_id > 0) {
+    $jstmt = mysqli_prepare($conn, "SELECT title FROM jobs WHERE id = ?");
+    mysqli_stmt_bind_param($jstmt, "i", $job_id);
+    mysqli_stmt_execute($jstmt);
+    $jres = mysqli_stmt_get_result($jstmt);
+    if ($jrow = mysqli_fetch_assoc($jres)) {
+        $job_title_label = $jrow['title'];
+    }
 }
 
 // ── Search Engine & Status Pipeline ────────────────────────────────────────
@@ -31,6 +46,13 @@ $sql = "SELECT a.id, a.status, a.applied_at,
         WHERE 1=1";
 $params = [];
 $types  = '';
+
+// Filter by specific job if job_id is provided
+if ($job_id > 0) {
+    $sql     .= " AND a.job_id = ?";
+    $params[] = $job_id;
+    $types   .= 'i';
+}
 
 if (in_array($status_filter, ['pending', 'reviewed', 'accepted', 'rejected'])) {
     $sql     .= " AND a.status = ?";
@@ -73,8 +95,20 @@ function get_status_badge_class($status) {
 <script>document.body.classList.add('light-theme');</script>
 
 <div class="container mt-4">
-    <h3 class="mb-1 text-white">Global Applications Tracker</h3>
-    <p class="text-white-50 mb-4">Audit running submissions, monitor placement conversion routes, and moderate system tracking channels.</p>
+    <h3 class="mb-1 text-white">
+        <?php if ($job_id > 0 && $job_title_label): ?>
+            Applicants — <span style="opacity:0.75;"><?= htmlspecialchars($job_title_label) ?></span>
+        <?php else: ?>
+            Global Applications Tracker
+        <?php endif; ?>
+    </h3>
+    <p class="text-white-50 mb-4">
+        <?php if ($job_id > 0): ?>
+            Showing all applicants for this internship posting. <a href="view_applicants.php" class="text-white-50">View all applications →</a>
+        <?php else: ?>
+            Audit all submissions across every internship posting.
+        <?php endif; ?>
+    </p>
 
     <?php if (isset($_GET['deleted'])): ?>
         <div class="alert alert-success alert-dismissible fade show bg-transparent border-success text-success">
@@ -103,7 +137,7 @@ function get_status_badge_class($status) {
             </button>
         </div>
         <div class="col-md-2">
-            <a href="view_applicants.php" class="btn btn-glass-secondary w-100">Reset</a>
+            <a href="view_applicants.php<?= $job_id ? '?job_id='.$job_id : '' ?>" class="btn btn-glass-secondary w-100">Reset</a>
         </div>
     </form>
 
@@ -153,10 +187,10 @@ function get_status_badge_class($status) {
                         </div>
                         
                         <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
-                            <a href="view_applicants.php?delete_app=<?= (int)$a['id'] ?>"
+                            <a href="view_applicants.php?delete_app=<?= (int)$a['id'] ?><?= $job_id ? '&job_id='.$job_id : '' ?>"
                                class="btn btn-sm btn-outline-danger rounded-pill px-3"
-                               onclick="return confirm('Completely delete and strike out this candidate application route description tracking logs from system memory?')">
-                                Delete Route
+                               onclick="return confirm('Delete this application record?')">
+                                Delete
                             </a>
                         </div>
 
