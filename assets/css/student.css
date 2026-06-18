@@ -6,13 +6,14 @@ body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    color: #ffffff; /* Default text color to white for dark theme */
+    color: #ffffff;
+    /* Default text color to white for dark theme */
     min-height: 100vh;
 }
 
 /* Ensure this is in your assets/css/admin.css */
 .btn-glass-white {
-    background: #ffffff !important; 
+    background: #ffffff !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border: 1px solid #ffffff !important;
@@ -27,7 +28,7 @@ body {
     background: #f0f0f0 !important;
     border-color: #f0f0f0 !important;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     color: #000000 !important;
 }
 
@@ -54,7 +55,7 @@ body {
     left: -10%;
     width: 60%;
     height: 150%;
-    background: radial-gradient(circle, rgba(180, 160, 100, 0.15) 0%, rgba(0,0,0,0) 70%);
+    background: radial-gradient(circle, rgba(180, 160, 100, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
     z-index: 0;
     pointer-events: none;
 }
@@ -65,14 +66,17 @@ body {
 }
 
 .hero-puzzle-img {
-    width: 300px; /* Controls the size of the puzzle so it doesn't overpower the keys */
+    width: 300px;
+    /* Controls the size of the puzzle so it doesn't overpower the keys */
     height: auto;
-    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4)); /* Adds a matching shadow */
+    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.4));
+    /* Adds a matching shadow */
     transition: transform 0.3s ease;
 }
 
 .hero-puzzle-img:hover {
-    transform: scale(1.05); /* Slight pop effect when hovered */
+    transform: scale(1.05);
+    /* Slight pop effect when hovered */
 }
 
 .hero-title {
@@ -91,13 +95,14 @@ body {
 
 .hero-stacked-keys {
     max-height: 380px;
-    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
-    transition: transform 0.3s ease; /* Added to make the animation smooth */
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s ease;
+    /* Added to make the animation smooth */
 }
 
 /* Added to create the enlarge animation on hover */
 .hero-stacked-keys:hover {
-    transform: scale(1.05); 
+    transform: scale(1.05);
 }
 
 /* Custom Buttons matching your design */
@@ -148,10 +153,39 @@ body {
 }
 
 /* Fixing bootstrap table and text colors for dark theme */
-.glass-card .text-muted { color: rgba(255, 255, 255, 0.6) !important; }
-.glass-card h5, .glass-card h6, .glass-card p { color: #ffffff !important; }
-.list-group-item { background: transparent !important; color: #fff; border-color: rgba(255,255,255,0.1) !important; }
-.table { color: #ffffff; border-color: rgba(255,255,255,0.1); }
-.table-hover tbody tr:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.05); }
-.table thead th { background: rgba(255, 255, 255, 0.1) !important; color: #fff; border-bottom: none; }
-.table td { border-bottom: 1px solid rgba(255,255,255,0.05); color: #fff !important; }
+.glass-card .text-muted {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.glass-card h5,
+.glass-card h6,
+.glass-card p {
+    color: #ffffff !important;
+}
+
+.list-group-item {
+    background: transparent !important;
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.table {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.table-hover tbody tr:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table thead th {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff;
+    border-bottom: none;
+}
+
+.table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #fff !important;
+}

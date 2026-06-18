@@ -8,6 +8,52 @@ include '../includes/navbar.php';
 
 $student_id = $_SESSION['user_id'];
 
+$error = '';
+$success = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action']) && $_POST['action'] === 'add_reminder') {
+        $task = trim($_POST['task'] ?? '');
+        $due_date = trim($_POST['due_date'] ?? '');
+        
+        if (empty($task) || empty($due_date)) {
+            $error = "Task description and due date are required.";
+        } else {
+            $formatted_due_date = date('Y-m-d H:i:s', strtotime($due_date));
+            $stmt_ins = mysqli_prepare($conn, "INSERT INTO reminders (student_id, task, due_date) VALUES (?, ?, ?)");
+            mysqli_stmt_bind_param($stmt_ins, "iss", $student_id, $task, $formatted_due_date);
+            if (mysqli_stmt_execute($stmt_ins)) {
+                $success = "Reminder added successfully.";
+            } else {
+                $error = "Failed to add reminder.";
+            }
+        }
+    } elseif (isset($_POST['action']) && $_POST['action'] === 'delete_reminder') {
+        $reminder_id = (int)($_POST['reminder_id'] ?? 0);
+        // Verify ownership
+        $stmt_del = mysqli_prepare($conn, "DELETE FROM reminders WHERE id = ? AND student_id = ?");
+        mysqli_stmt_bind_param($stmt_del, "ii", $reminder_id, $student_id);
+        if (mysqli_stmt_execute($stmt_del)) {
+            $success = "Reminder completed/removed.";
+        } else {
+            $error = "Failed to remove reminder.";
+        }
+    }
+}
+
+// Fetch reminders sorted by due_date ASC (closer due dates first)
+$sql_reminders = "SELECT r.id, r.task, r.due_date, r.app_id, j.title AS job_title, u.name AS company_name
+                  FROM reminders r
+                  LEFT JOIN applications a ON r.app_id = a.id
+                  LEFT JOIN jobs j ON a.job_id = j.id
+                  LEFT JOIN users u ON j.company_id = u.id
+                  WHERE r.student_id = ?
+                  ORDER BY r.due_date ASC";
+$stmt_reminders = mysqli_prepare($conn, $sql_reminders);
+mysqli_stmt_bind_param($stmt_reminders, "i", $student_id);
+mysqli_stmt_execute($stmt_reminders);
+$reminders = mysqli_stmt_get_result($stmt_reminders);
+
 // Stats
 $stmt = mysqli_prepare($conn, "SELECT 
     COUNT(*) AS total,
@@ -58,6 +104,19 @@ function status_badge($status) {
 <div class="container mt-4">
     <h3 class="mb-4 text-white">Welcome, <?= htmlspecialchars($_SESSION['name']) ?> 👋</h3>
 
+    <?php if ($error): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($error) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+    <?php if ($success): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($success) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
     <div class="glass-hero mb-5">
         <div class="glass-hero-content row align-items-center justify-content-between">
         <!-- Added style="padding-left: 40px;" to push the text inward -->
@@ -66,7 +125,6 @@ function status_badge($status) {
             <p class="hero-subtitle mt-3">Empowering your internship journey with cutting-edge opportunities and streamlined application tracking. Build your future today.</p>
             <div class="d-flex gap-3 mt-4">
                 <a href="browse.php" class="btn btn-glass-white rounded-pill">Explore Solutions</a>
-                <a href="profile.php" class="btn btn-glass-secondary rounded-pill px-4 py-2"><i class="bi bi-asterisk"></i> Update Profile</a>
             </div>
         </div>
 
@@ -81,36 +139,64 @@ function status_badge($status) {
     </div>
     </div>
 
-    <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3">
-            <div class="card text-center shadow-sm glass-card" onclick="location.href='my_applications.php'">
-                <div class="card-body py-4">
-                    <h3 class="card-title fw-bold text-info"><?= (int)$stats['total'] ?></h3>
-                    <p class="card-text text-muted small mb-0">Total Applications</p>
+    <!-- Stats and Profile Completeness Row -->
+    <div class="row g-4 mb-5">
+        <!-- Application Overview (Left column) -->
+        <div class="col-lg-8">
+            <div class="card glass-card p-4 h-100" style="cursor: default;">
+                <h5 class="fw-bold text-white mb-4"><i class="bi bi-bar-chart-fill text-info me-2"></i> Application Overview</h5>
+                <div class="row g-3">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="card text-center bg-transparent border border-secondary border-opacity-25 rounded-3 py-3 dashboard-card hover-lift" onclick="location.href='my_applications.php'" style="cursor: pointer;">
+                            <div class="card-body py-2">
+                                <div class="fs-4 text-info fw-bold mb-1"><?= (int)$stats['total'] ?></div>
+                                <div class="small text-white-50">Total Applications</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="card text-center bg-transparent border border-secondary border-opacity-25 rounded-3 py-3 dashboard-card hover-lift" onclick="location.href='my_applications.php?status=pending'" style="cursor: pointer;">
+                            <div class="card-body py-2">
+                                <div class="fs-4 text-warning fw-bold mb-1"><?= (int)($stats['pending'] + $stats['reviewed']) ?></div>
+                                <div class="small text-white-50">Pending Review</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="card text-center bg-transparent border border-secondary border-opacity-25 rounded-3 py-3 dashboard-card hover-lift" onclick="location.href='my_applications.php?status=accepted'" style="cursor: pointer;">
+                            <div class="card-body py-2">
+                                <div class="fs-4 text-success fw-bold mb-1"><?= (int)$stats['accepted'] ?></div>
+                                <div class="small text-white-50">Accepted Offers</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="card text-center bg-transparent border border-secondary border-opacity-25 rounded-3 py-3 dashboard-card hover-lift" onclick="location.href='my_applications.php?status=rejected'" style="cursor: pointer;">
+                            <div class="card-body py-2">
+                                <div class="fs-4 text-danger fw-bold mb-1"><?= (int)$stats['rejected'] ?></div>
+                                <div class="small text-white-50">Rejected Applications</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-6 col-md-3">
-            <div class="card text-center shadow-sm glass-card" onclick="location.href='my_applications.php?status=pending'">
-                <div class="card-body py-4">
-                    <h3 class="card-title fw-bold text-warning"><?= (int)($stats['pending'] + $stats['reviewed']) ?></h3>
-                    <p class="card-text text-muted small mb-0">Pending Review</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card text-center shadow-sm glass-card" onclick="location.href='my_applications.php?status=accepted'">
-                <div class="card-body py-4">
-                    <h3 class="card-title fw-bold text-success"><?= (int)$stats['accepted'] ?></h3>
-                    <p class="card-text text-muted small mb-0">Accepted Offers</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card text-center shadow-sm glass-card" onclick="location.href='my_applications.php?status=rejected'">
-                <div class="card-body py-4">
-                    <h3 class="card-title fw-bold text-danger"><?= (int)$stats['rejected'] ?></h3>
-                    <p class="card-text text-muted small mb-0">Rejected Applications</p>
+
+        <!-- Profile Completeness (Right column) -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm glass-card h-100" style="cursor: default;">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="fw-bold mb-2 text-white">Profile Completeness</h5>
+                        <p class="small text-white-50 mb-4">Keep your details fresh to attract top companies.</p>
+                        <div class="progress mb-3 bg-dark" style="height: 8px;">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center small mt-auto">
+                        <span class="text-white-50">85% Completed</span>
+                        <a href="profile.php" class="text-info fw-bold text-decoration-none">Update Profile <i class="bi bi-chevron-right"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -186,46 +272,82 @@ function status_badge($status) {
         <div class="col-lg-4">
             <div class="card shadow-sm glass-card mb-4">
                 <div class="card-body p-4">
-                    <h5 class="fw-bold mb-3 text-white"><i class="bi bi-bell-fill text-warning me-1"></i> Reminders & Tasks</h5>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-bell-fill text-warning me-1"></i> Reminders & Tasks</h5>
+                        <button type="button" class="btn btn-sm btn-link text-info p-0" data-bs-toggle="modal" data-bs-target="#addReminderModal" title="Add Reminder">
+                            <i class="bi bi-plus-circle-fill fs-5 text-info"></i>
+                        </button>
+                    </div>
+                    
                     <div class="list-group list-group-flush">
-                        <div class="list-group-item px-0 py-3 border-0 border-bottom">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1 fw-bold text-white"><i class="bi bi-calendar-event text-info me-2"></i>Technical Interview</h6>
-                                <small class="text-danger">June 22</small>
-                            </div>
-                            <p class="mb-1 small text-white-50">Interview with TechCorp Solutions scheduled at 10:00 AM.</p>
-                        </div>
-                        <div class="list-group-item px-0 py-3 border-0 border-bottom">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1 fw-bold text-white"><i class="bi bi-file-earmark-person text-success me-2"></i>Update Resume</h6>
-                                <small class="text-warning">Friday</small>
-                            </div>
-                            <p class="mb-1 small text-white-50">Submit your updated project summaries on your resume file.</p>
-                        </div>
-                        <div class="list-group-item px-0 py-3 border-0">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1 fw-bold text-white"><i class="bi bi-send text-info me-2"></i>Follow up on Meta</h6>
-                                <small class="text-white-50">Next Week</small>
-                            </div>
-                            <p class="mb-1 small text-white-50">Send follow-up email regarding application status to Recruiter.</p>
-                        </div>
+                        <?php if (mysqli_num_rows($reminders) === 0): ?>
+                            <div class="text-white-50 small text-center py-3">No pending reminders. Click the + icon to add one!</div>
+                        <?php else: ?>
+                            <?php while ($rem = mysqli_fetch_assoc($reminders)): 
+                                $is_overdue = strtotime($rem['due_date']) < time();
+                                $due_color = $is_overdue ? 'text-danger fw-semibold' : 'text-white-50';
+                                $formatted_due = date('d M Y, H:i', strtotime($rem['due_date']));
+                            ?>
+                                <div class="list-group-item px-0 py-3 border-0 border-bottom d-flex align-items-start justify-content-between gap-2">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                                            <h6 class="mb-0 fw-bold text-white">
+                                                <i class="bi bi-calendar-event text-info me-2"></i><?= htmlspecialchars($rem['task']) ?>
+                                            </h6>
+                                            <small class="<?= $due_color ?>" style="font-size: 0.75rem;"><?= $formatted_due ?></small>
+                                        </div>
+                                        <?php if ($rem['app_id']): ?>
+                                            <span class="badge bg-secondary bg-opacity-50 text-white small" style="font-size: 0.7rem; cursor: pointer;" onclick="location.href='my_applications.php'">
+                                                <i class="bi bi-briefcase-fill me-1"></i><?= htmlspecialchars($rem['job_title']) ?> (<?= htmlspecialchars($rem['company_name']) ?>)
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="badge bg-info bg-opacity-25 text-info small" style="font-size: 0.7rem;">
+                                                <i class="bi bi-pin-angle-fill me-1"></i>Personal Task
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <form method="POST" style="margin: 0;" onsubmit="return confirm('Mark this task as completed?')">
+                                        <input type="hidden" name="action" value="delete_reminder">
+                                        <input type="hidden" name="reminder_id" value="<?= (int)$rem['id'] ?>">
+                                        <button type="submit" class="btn btn-sm btn-link p-0 border-0" title="Complete/Delete">
+                                            <i class="bi bi-check2-circle fs-5 text-success"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            <?php endwhile; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
 
-            <div class="card shadow-sm glass-card">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-2 text-white">Profile Completeness</h5>
-                    <p class="small text-white-50">Keep your details fresh to attract top companies.</p>
-                    <div class="progress mb-3 bg-dark" style="height: 8px;">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+</div>
+
+<!-- Add Reminder Modal -->
+<div class="modal fade" id="addReminderModal" tabindex="-1" aria-labelledby="addReminderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-card text-start" style="transform: none !important; cursor: default !important; background: rgba(15, 15, 15, 0.85) !important;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-white" id="addReminderModalLabel"><i class="bi bi-bell-fill text-warning me-2"></i>Add Reminder</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST">
+                <input type="hidden" name="action" value="add_reminder">
+                <div class="modal-body py-3">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-white mb-1">Task / Description</label>
+                        <textarea name="task" class="form-control small text-dark" rows="3" placeholder="Write reminder description here (e.g. follow up on internship)..." required></textarea>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center small">
-                        <span class="text-white-50">85% Completed</span>
-                        <a href="profile.php" class="text-info fw-bold text-decoration-none">Update Profile <i class="bi bi-chevron-right"></i></a>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-white mb-1">Due Date</label>
+                        <input type="datetime-local" name="due_date" class="form-control small text-dark" required>
                     </div>
                 </div>
-            </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary px-4">Add Reminder</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
