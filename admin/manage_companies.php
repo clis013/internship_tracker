@@ -6,193 +6,163 @@ check_role('admin');
 include '../includes/header.php';
 include '../includes/navbar.php';
 
+$error   = '';
 $success = '';
-$error = '';
 
-// Handle actions
-if (isset($_GET['action']) && isset($_GET['id'])) {
-    $id = (int)$_GET['id'];
-    $action = $_GET['action'];
-
-    if ($action === 'approve') {
-        $stmt = mysqli_prepare($conn, "UPDATE users SET approval_status = 'approved' WHERE id = ? AND role = 'company'");
-        mysqli_stmt_bind_param($stmt, "i", $id);
-        if (mysqli_stmt_execute($stmt)) {
-            $success = 'Company account approved successfully.';
-        } else {
-            $error = 'Failed to approve company account.';
-        }
-    } elseif ($action === 'suspend') {
-        $stmt = mysqli_prepare($conn, "UPDATE users SET approval_status = 'suspended' WHERE id = ? AND role = 'company'");
-        mysqli_stmt_bind_param($stmt, "i", $id);
-        if (mysqli_stmt_execute($stmt)) {
-            $success = 'Company account suspended successfully.';
-        } else {
-            $error = 'Failed to suspend company account.';
-        }
-    }
-    // Redirect to clear URL parameters
-    header("Location: manage_companies.php?msg_success=" . urlencode($success) . "&msg_error=" . urlencode($error));
+// ── Handle Approval Action ─────────────────────────────────────────────────
+if (isset($_GET['approve'])) {
+    $comp_id = (int)$_GET['approve'];
+    $stmt = mysqli_prepare($conn, "UPDATE users SET approval_status = 'approved' WHERE id = ? AND role = 'company'");
+    mysqli_stmt_bind_param($stmt, "i", $comp_id);
+    mysqli_stmt_execute($stmt);
+    header("Location: manage_companies.php?action_success=approved");
     exit();
 }
 
-// Retrieve redirect messages
-if (isset($_GET['msg_success']) && $_GET['msg_success'] !== '') {
-    $success = $_GET['msg_success'];
-}
-if (isset($_GET['msg_error']) && $_GET['msg_error'] !== '') {
-    $error = $_GET['msg_error'];
+// ── Handle Delete Action ───────────────────────────────────────────────────
+if (isset($_GET['delete'])) {
+    $comp_id = (int)$_GET['delete'];
+    $stmt = mysqli_prepare($conn, "DELETE FROM users WHERE id = ? AND role = 'company'");
+    mysqli_stmt_bind_param($stmt, "i", $comp_id);
+    mysqli_stmt_execute($stmt);
+    header("Location: manage_companies.php?action_success=deleted");
+    exit();
 }
 
-// Search and filter inputs
-$search = trim($_GET['search'] ?? '');
+// ── Filters & Search Engine ────────────────────────────────────────────────
 $status_filter = $_GET['status'] ?? '';
+$search        = trim($_GET['search'] ?? '');
 
-$sql = "SELECT id, name, email, phone, website, industry, approval_status, created_at,
-               (SELECT COUNT(*) FROM jobs j WHERE j.company_id = users.id) AS job_count
-        FROM users 
-        WHERE role = 'company'";
+$sql = "SELECT id, name, email, approval_status, created_at FROM users WHERE role = 'company'";
 $params = [];
-$types = '';
+$types  = '';
 
-if ($status_filter !== '') {
-    $sql .= " AND approval_status = ?";
+if (in_array($status_filter, ['approved', 'pending'])) {
+    $sql     .= " AND approval_status = ?";
     $params[] = $status_filter;
-    $types .= 's';
+    $types   .= 's';
 }
+
 if ($search !== '') {
-    $sql .= " AND (name LIKE ? OR email LIKE ? OR industry LIKE ?)";
-    $like = "%$search%";
+    $sql     .= " AND (name LIKE ? OR email LIKE ?)";
+    $like     = "%$search%";
     $params[] = $like;
     $params[] = $like;
-    $params[] = $like;
-    $types .= 'sss';
+    $types   .= 'ss';
 }
 $sql .= " ORDER BY created_at DESC";
 
 $stmt = mysqli_prepare($conn, $sql);
-if ($params) {
-    mysqli_stmt_bind_param($stmt, $types, ...$params);
-}
+if ($params) mysqli_stmt_bind_param($stmt, $types, ...$params);
 mysqli_stmt_execute($stmt);
-$companies = mysqli_stmt_get_result($stmt);
+$companies_res = mysqli_stmt_get_result($stmt);
 
-function status_badge($status) {
-    if ($status === 'approved') {
-        return '<span class="badge bg-success"><i class="bi bi-patch-check-fill me-1"></i>Approved</span>';
-    } elseif ($status === 'suspended') {
-        return '<span class="badge bg-danger"><i class="bi bi-x-circle-fill me-1"></i>Suspended</span>';
-    } else {
-        return '<span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pending</span>';
-    }
+$company_rows = [];
+while ($row = mysqli_fetch_assoc($companies_res)) {
+    $company_rows[] = $row;
 }
 ?>
 
-<div class="container mt-4 pb-5">
-    <h3 class="mb-1 fw-bold text-dark">Manage Companies</h3>
-    <p class="text-muted mb-4">Approve new company registrations or suspend existing accounts to restrict access.</p>
+<!-- Light Glassmorphism Overrides for Sub-Pages -->
+<script>document.body.classList.add('light-theme');</script>
 
-    <?php if ($success): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i><?= htmlspecialchars($success) ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    <?php endif; ?>
-    <?php if ($error): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i><?= htmlspecialchars($error) ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="container mt-4">
+    <h3 class="mb-1 text-white">Manage Companies</h3>
+    <p class="text-white-50 mb-4">Verify company registrations, review approval statuses, and manage corporate accounts.</p>
+
+    <?php if (isset($_GET['action_success'])): ?>
+        <div class="alert alert-success alert-dismissible fade show bg-transparent border-success text-success">
+            Company account updated successfully.
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
         </div>
     <?php endif; ?>
 
-    <!-- Search & Filter Form -->
     <form method="GET" class="row g-2 mb-4">
         <div class="col-md-5">
-            <input type="text" name="search" class="form-control" placeholder="Search by company name, email, or industry..."
+            <input type="text" name="search" class="form-control glass-input" placeholder="Search by corporate name or email..."
                    value="<?= htmlspecialchars($search) ?>">
         </div>
         <div class="col-md-3">
-            <select name="status" class="form-select">
-                <option value="">All Statuses</option>
-                <option value="pending" <?= $status_filter === 'pending' ? 'selected' : '' ?>>Pending Approval</option>
+            <select name="status" class="form-select glass-select">
+                <option value="">All Verification Statuses</option>
+                <option value="pending" <?= $status_filter === 'pending' ? 'selected' : '' ?>>Pending Verification</option>
                 <option value="approved" <?= $status_filter === 'approved' ? 'selected' : '' ?>>Approved</option>
-                <option value="suspended" <?= $status_filter === 'suspended' ? 'selected' : '' ?>>Suspended</option>
             </select>
         </div>
         <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search me-1"></i>Search</button>
+            <button type="submit" class="btn btn-glass-primary w-100" title="Search">
+                <i class="bi bi-search"></i>
+            </button>
         </div>
         <div class="col-md-2">
-            <a href="manage_companies.php" class="btn btn-outline-secondary w-100">Reset</a>
+            <a href="manage_companies.php" class="btn btn-glass-secondary w-100">Reset</a>
         </div>
     </form>
 
-    <!-- Table -->
-    <?php if (mysqli_num_rows($companies) === 0): ?>
-        <div class="alert alert-info border-0 shadow-sm"><i class="bi bi-info-circle me-2"></i>No company accounts found.</div>
-    <?php else: ?>
-        <div class="card border-0 shadow-sm">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="ps-4">Company Details</th>
-                            <th>Industry</th>
-                            <th>Contact info</th>
-                            <th>Jobs Posted</th>
-                            <th>Status</th>
-                            <th class="pe-4 text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($company = mysqli_fetch_assoc($companies)): ?>
-                            <tr>
-                                <td class="ps-4">
-                                    <div class="fw-bold text-dark"><?= htmlspecialchars($company['name']) ?></div>
-                                    <div class="text-muted small"><?= htmlspecialchars($company['email']) ?></div>
-                                    <div class="text-muted small" style="font-size:0.75rem;">Registered: <?= date('d M Y', strtotime($company['created_at'])) ?></div>
-                                </td>
-                                <td>
-                                    <?= htmlspecialchars($company['industry'] ?: '—') ?>
-                                </td>
-                                <td>
-                                    <div class="small">Phone: <?= htmlspecialchars($company['phone'] ?: '—') ?></div>
-                                    <?php if ($company['website']): ?>
-                                        <div class="small"><a href="<?= htmlspecialchars($company['website']) ?>" target="_blank" class="text-decoration-none"><i class="bi bi-link-45deg"></i> Website</a></div>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <span class="badge bg-light text-dark border"><?= (int)$company['job_count'] ?> jobs</span>
-                                </td>
-                                <td>
-                                    <?= status_badge($company['approval_status']) ?>
-                                </td>
-                                <td class="pe-4 text-end">
-                                    <div class="d-inline-flex gap-1">
-                                        <?php if ($company['approval_status'] !== 'approved'): ?>
-                                            <a href="manage_companies.php?action=approve&id=<?= (int)$company['id'] ?>" 
-                                               class="btn btn-sm btn-success fw-bold" 
-                                               onclick="return confirm('Approve access for <?= htmlspecialchars(addslashes($company['name'])) ?>?')">
-                                                Approve
-                                            </a>
-                                        <?php endif; ?>
-                                        
-                                        <?php if ($company['approval_status'] !== 'suspended'): ?>
-                                            <a href="manage_companies.php?action=suspend&id=<?= (int)$company['id'] ?>" 
-                                               class="btn btn-sm btn-outline-danger fw-bold" 
-                                               onclick="return confirm('Suspend access for <?= htmlspecialchars(addslashes($company['name'])) ?>? This blocks them from logging in.')">
-                                                Suspend
-                                            </a>
-                                        <?php endif; ?>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
+    <p class="text-white-50 small mb-2"><?= count($company_rows) ?> company verified or pending record(s) found.</p>
+
+    <div class="card shadow-sm glass-card mb-5">
+        <div class="card-body p-4">
+            
+            <div class="row glass-table-header d-none d-md-flex mb-2 px-3">
+                <div class="col-md-1">#</div>
+                <div class="col-md-3">Company Name</div>
+                <div class="col-md-3">Corporate Email</div>
+                <div class="col-md-2">Status</div>
+                <div class="col-md-1">Joined</div>
+                <div class="col-md-2 text-end">Actions</div>
             </div>
+
+            <?php if (empty($company_rows)): ?>
+                <div class="text-center text-white-50 py-4">No corporate accounts found matching options.</div>
+            <?php endif; ?>
+
+            <div class="d-flex flex-column">
+                <?php foreach ($company_rows as $c): ?>
+                    <div class="row glass-row-item align-items-center py-3 px-3 mx-0">
+                        
+                        <div class="col-md-1 glass-row-text-muted small">
+                            <span class="d-md-none fw-bold me-1">ID:</span><?= (int)$c['id'] ?>
+                        </div>
+                        
+                        <div class="col-md-3 glass-row-text-primary text-truncate">
+                            <?= htmlspecialchars($c['name']) ?>
+                        </div>
+                        
+                        <div class="col-md-3 glass-row-text-secondary text-truncate">
+                            <?= htmlspecialchars($c['email']) ?>
+                        </div>
+                        
+                        <div class="col-md-2 my-1 my-md-0">
+                            <span class="badge bg-<?= $c['approval_status'] === 'approved' ? 'success' : 'warning text-dark' ?>">
+                                <?= htmlspecialchars(ucfirst($c['approval_status'])) ?>
+                            </span>
+                        </div>
+                        
+                        <div class="col-md-1 glass-row-text-secondary small">
+                            <?= date('d M Y', strtotime($c['created_at'])) ?>
+                        </div>
+                        
+                        <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
+                            <?php if ($c['approval_status'] === 'pending'): ?>
+                                <a href="manage_companies.php?approve=<?= (int)$c['id'] ?>" 
+                                   class="btn btn-sm btn-glass-primary rounded-pill px-3">
+                                    Approve
+                                </a>
+                            <?php endif; ?>
+                            <a href="manage_companies.php?delete=<?= (int)$c['id'] ?>"
+                               class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                               onclick="return confirm('Completely purge corporate listing registration for <?= htmlspecialchars(addslashes($c['name'])) ?>? This deletes all postings associated with them.')">
+                                Delete
+                            </a>
+                        </div>
+
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
         </div>
-    <?php endif; ?>
+    </div>
 </div>
 
 <?php include '../includes/footer.php'; ?>

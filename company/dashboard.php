@@ -40,83 +40,108 @@ $recent_jobs = mysqli_stmt_get_result($stmt);
 ?>
 
 <div class="container mt-4">
-    <h3 class="mb-4">Welcome, <?= htmlspecialchars($_SESSION['name']) ?> 👋</h3>
+    <h3 class="mb-4 text-white">Welcome, <?= htmlspecialchars($_SESSION['name']) ?> 👋</h3>
+
+    <div class="glass-hero mb-5">
+        <div class="glass-hero-content row align-items-center justify-content-between">
+            <div class="col-md-6 mb-4 mb-md-0" style="padding-left: 40px;">
+                <h1 class="hero-title">Innovate.<br>Elevate.<br>Transform.</h1>
+                <p class="hero-subtitle mt-3">Empowering your recruitment process with cutting-edge tools and streamlined applicant tracking. Build your dream team today.</p>
+                <div class="d-flex gap-3 mt-4">
+                    <a href="manage_jobs.php" class="btn btn-glass-primary rounded-pill px-4 py-2">Post a Job</a>
+                    <a href="profile.php" class="btn btn-glass-secondary rounded-pill px-4 py-2"><i class="bi bi-asterisk"></i> Company Profile</a>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="d-flex align-items-start justify-content-center justify-content-md-end gap-1" style="margin-right: -80px;">
+                    <img src="../assets/images/IMG_3342.PNG" alt="Your Idea Our Expertise" class="img-fluid hero-puzzle-img">
+                    <img src="../assets/images/homepage-logo.png" alt="Stacked Keys" class="img-fluid hero-stacked-keys">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title"><?= (int)$job_stats['total_jobs'] ?></h5>
-                    <p class="card-text text-muted mb-0">Total Jobs Posted</p>
+            <div class="card text-center shadow-sm glass-card glass-card-hover" onclick="location.href='manage_jobs.php'">
+                <div class="card-body py-4">
+                    <h3 class="card-title fw-bold text-info"><?= (int)$job_stats['total_jobs'] ?></h3>
+                    <p class="card-text text-muted small mb-0">Total Jobs Posted</p>
                 </div>
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title"><?= (int)$job_stats['active_jobs'] ?></h5>
-                    <p class="card-text text-muted mb-0">Active Listings</p>
+            <div class="card text-center shadow-sm glass-card glass-card-hover" onclick="location.href='manage_jobs.php'">
+                <div class="card-body py-4">
+                    <h3 class="card-title fw-bold text-success"><?= (int)$job_stats['active_jobs'] ?></h3>
+                    <p class="card-text text-muted small mb-0">Active Listings</p>
                 </div>
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title"><?= (int)$app_stats['total_applicants'] ?></h5>
-                    <p class="card-text text-muted mb-0">Total Applicants</p>
+            <div class="card text-center shadow-sm glass-card glass-card-hover" onclick="location.href='view_applicants.php'">
+                <div class="card-body py-4">
+                    <h3 class="card-title fw-bold text-primary"><?= (int)$app_stats['total_applicants'] ?></h3>
+                    <p class="card-text text-muted small mb-0">Total Applicants</p>
                 </div>
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title"><?= (int)$app_stats['pending'] ?></h5>
-                    <p class="card-text text-muted mb-0">Pending Review</p>
+            <div class="card text-center shadow-sm glass-card glass-card-hover" onclick="location.href='view_applicants.php'">
+                <div class="card-body py-4">
+                    <h3 class="card-title fw-bold text-warning"><?= (int)$app_stats['pending'] ?></h3>
+                    <p class="card-text text-muted small mb-0">Pending Review</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">Recent Job Postings</h5>
-        <a href="manage_jobs.php" class="btn btn-primary btn-sm">Manage Jobs</a>
-    </div>
+    <div class="card shadow-sm glass-card mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0 text-white">Recent Job Postings</h5>
+                <a href="manage_jobs.php" class="btn btn-glass-secondary btn-sm rounded-pill">Manage Jobs</a>
+            </div>
 
-    <?php if (mysqli_num_rows($recent_jobs) === 0): ?>
-        <div class="alert alert-info">
-            You haven't posted any internships yet.
-            <a href="manage_jobs.php">Post your first internship</a>.
+            <?php if (mysqli_num_rows($recent_jobs) === 0): ?>
+                <div class="alert bg-transparent border border-secondary text-white text-center py-4 my-2">
+                    You haven't posted any internships yet. <a href="manage_jobs.php" class="text-info text-decoration-none">Post your first internship</a>.
+                </div>
+            <?php else: ?>
+                <div class="table-responsive border-0">
+                    <table class="table table-hover align-middle mb-0 border-0">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Applicants</th>
+                                <th>Posted On</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($job = mysqli_fetch_assoc($recent_jobs)): ?>
+                                <tr>
+                                    <td class="fw-semibold text-white"><?= htmlspecialchars($job['title']) ?></td>
+                                    <td>
+                                        <span class="badge bg-<?= $job['status'] === 'active' ? 'success' : 'secondary' ?>">
+                                            <?= htmlspecialchars(ucfirst($job['status'])) ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-white-50"><?= (int)$job['applicant_count'] ?></td>
+                                    <td class="text-white-50 small"><?= htmlspecialchars(date('d M Y', strtotime($job['created_at']))) ?></td>
+                                    <td class="text-end">
+                                        <a href="applicants.php?job_id=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-secondary rounded-pill">View Applicants</a>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
         </div>
-    <?php else: ?>
-        <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Title</th>
-                        <th>Status</th>
-                        <th>Applicants</th>
-                        <th>Posted On</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($job = mysqli_fetch_assoc($recent_jobs)): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($job['title']) ?></td>
-                            <td>
-                                <span class="badge bg-<?= $job['status'] === 'active' ? 'success' : 'secondary' ?>">
-                                    <?= htmlspecialchars(ucfirst($job['status'])) ?>
-                                </span>
-                            </td>
-                            <td><?= (int)$job['applicant_count'] ?></td>
-                            <td><?= htmlspecialchars(date('d M Y', strtotime($job['created_at']))) ?></td>
-                            <td><a href="applicants.php?job_id=<?= (int)$job['id'] ?>" class="btn btn-sm btn-outline-primary">View Applicants</a></td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-        </div>
-    <?php endif; ?>
+    </div>
 </div>
 
 <?php include '../includes/footer.php'; ?>

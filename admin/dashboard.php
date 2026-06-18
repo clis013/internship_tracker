@@ -71,27 +71,44 @@ function app_badge($status) {
 
 <div class="container-lg mt-4 pb-5">
 
-    <!-- Page header -->
     <div class="d-flex align-items-baseline justify-content-between mb-4">
         <div>
-            <h4 class="mb-0 fw-bold">Dashboard</h4>
-            <p class="text-muted small mb-0 mt-1">
+            <h4 class="mb-0 fw-bold text-white">Dashboard</h4>
+            <p class="text-white-50 small mb-0 mt-1">
                 Welcome back, <?= htmlspecialchars($_SESSION['name']) ?> &mdash;
                 <?= date('l, d F Y') ?>
             </p>
         </div>
     </div>
 
-    <!-- ── Primary stat cards ── -->
-    <div class="row g-3 mb-4">
+    <div class="glass-hero mb-5">
+        <div class="glass-hero-content row align-items-center justify-content-between">
+            <div class="col-md-6 mb-4 mb-md-0" style="padding-left: 40px;">
+                <h1 class="hero-title">Manage.<br>Oversee.<br>Optimize.</h1>
+                <p class="hero-subtitle mt-3">Centralized control for your internship platform. Monitor user activity, manage job postings, and track application metrics in real-time.</p>
+                <div class="d-flex gap-3 mt-4">
+                    <a href="view_users.php" class="btn btn-glass-white rounded-pill">Manage Users</a>
+                    <a href="manage_internships.php" class="btn btn-glass-secondary rounded-pill px-4 py-2"><i class="bi bi-briefcase"></i> View Internships</a>
+                </div>
+            </div>
 
+            <div class="col-md-6">
+                <div class="d-flex align-items-start justify-content-center justify-content-md-end gap-1" style="margin-right: -80px;">
+                    <img src="../assets/images/IMG_3342.PNG" alt="Your Idea Our Expertise" class="img-fluid hero-puzzle-img">
+                    <img src="../assets/images/homepage-logo.png" alt="Stacked Keys" class="img-fluid hero-stacked-keys">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
         <div class="col-6 col-md-4 col-lg">
             <a href="view_users.php?role=student" class="stat-card">
-                <div class="stat-icon" style="background:#e8f0fe">
-                    <i class="bi bi-mortarboard-fill" style="color:#1a73e8"></i>
+                <div class="stat-icon">
+                    <i class="bi bi-mortarboard-fill text-info"></i>
                 </div>
                 <div>
-                    <div class="stat-value" style="color:#1a73e8"><?= (int)$users['students'] ?></div>
+                    <div class="stat-value text-info"><?= (int)$users['students'] ?></div>
                     <div class="stat-label">Students</div>
                 </div>
             </a>
@@ -99,11 +116,11 @@ function app_badge($status) {
 
         <div class="col-6 col-md-4 col-lg">
             <a href="view_users.php?role=company" class="stat-card">
-                <div class="stat-icon" style="background:#e6f4ea">
-                    <i class="bi bi-building-fill" style="color:#1e8e3e"></i>
+                <div class="stat-icon">
+                    <i class="bi bi-building-fill text-success"></i>
                 </div>
                 <div>
-                    <div class="stat-value" style="color:#1e8e3e"><?= (int)$users['companies'] ?></div>
+                    <div class="stat-value text-success"><?= (int)$users['companies'] ?></div>
                     <div class="stat-label">Companies</div>
                 </div>
             </a>
@@ -111,11 +128,11 @@ function app_badge($status) {
 
         <div class="col-6 col-md-4 col-lg">
             <a href="manage_companies.php?status=pending" class="stat-card">
-                <div class="stat-icon" style="background:#fef7e0">
-                    <i class="bi bi-hourglass-split" style="color:#b06000"></i>
+                <div class="stat-icon">
+                    <i class="bi bi-hourglass-split text-warning"></i>
                 </div>
                 <div>
-                    <div class="stat-value" style="color:#b06000"><?= (int)$users['pending_companies'] ?></div>
+                    <div class="stat-value text-warning"><?= (int)$users['pending_companies'] ?></div>
                     <div class="stat-label">Pending Companies</div>
                 </div>
             </a>
@@ -123,11 +140,11 @@ function app_badge($status) {
 
         <div class="col-6 col-md-4 col-lg">
             <a href="manage_internships.php" class="stat-card">
-                <div class="stat-icon" style="background:#fef3e2">
-                    <i class="bi bi-briefcase-fill" style="color:#e37400"></i>
+                <div class="stat-icon">
+                    <i class="bi bi-briefcase-fill text-primary"></i>
                 </div>
                 <div>
-                    <div class="stat-value" style="color:#e37400"><?= (int)$jobs['total'] ?></div>
+                    <div class="stat-value text-primary"><?= (int)$jobs['total'] ?></div>
                     <div class="stat-label">Internships</div>
                 </div>
             </a>
@@ -135,30 +152,28 @@ function app_badge($status) {
 
         <div class="col-6 col-md-4 col-lg">
             <a href="view_applicants.php" class="stat-card">
-                <div class="stat-icon" style="background:#fce8e6">
-                    <i class="bi bi-file-earmark-person-fill" style="color:#c5221f"></i>
+                <div class="stat-icon">
+                    <i class="bi bi-file-earmark-person-fill text-danger"></i>
                 </div>
                 <div>
-                    <div class="stat-value" style="color:#c5221f"><?= (int)$apps['total'] ?></div>
+                    <div class="stat-value text-danger"><?= (int)$apps['total'] ?></div>
                     <div class="stat-label">Applications</div>
                 </div>
             </a>
         </div>
-
     </div>
 
-    <!-- ── Secondary metrics strip ── -->
     <div class="row g-3 mb-4">
         <div class="col-md-4">
-            <div class="dash-card p-3">
-                <p class="text-muted small fw-semibold mb-2 text-uppercase" style="letter-spacing:.05em; font-size:.7rem">Internship Status</p>
+            <div class="dash-card p-3 h-100">
+                <p class="text-white-50 small fw-semibold mb-2 text-uppercase" style="letter-spacing:.05em; font-size:.7rem">Internship Status</p>
                 <div class="metric-strip">
                     <div class="metric-chip">
                         <div class="mc-val text-success"><?= (int)$jobs['active'] ?></div>
                         <div class="mc-lbl">Active</div>
                     </div>
                     <div class="metric-chip">
-                        <div class="mc-val text-secondary"><?= (int)$jobs['closed'] ?></div>
+                        <div class="mc-val text-white-50"><?= (int)$jobs['closed'] ?></div>
                         <div class="mc-lbl">Closed</div>
                     </div>
                     <div class="metric-chip">
@@ -169,10 +184,9 @@ function app_badge($status) {
             </div>
         </div>
 
-        <!-- Application breakdown -->
         <div class="col-md-4">
             <div class="dash-card p-3 h-100">
-                <p class="text-muted small fw-semibold mb-2 text-uppercase" style="letter-spacing:.05em; font-size:.7rem">Applications by Status</p>
+                <p class="text-white-50 small fw-semibold mb-2 text-uppercase" style="letter-spacing:.05em; font-size:.7rem">Applications by Status</p>
                 <?php
                 $statuses = [
                     ['label'=>'Pending',  'color'=>'secondary', 'val'=>(int)$apps['pending']],
@@ -186,7 +200,7 @@ function app_badge($status) {
                 <div class="prog-row">
                     <div class="prog-label">
                         <span><?= $s['label'] ?></span>
-                        <span class="text-muted"><?= $s['val'] ?> <span class="text-muted" style="font-size:.72rem">(<?= $pct ?>%)</span></span>
+                        <span class="text-white-50"><?= $s['val'] ?> <span class="text-white-50" style="font-size:.72rem">(<?= $pct ?>%)</span></span>
                     </div>
                     <div class="progress" style="height:6px">
                         <div class="progress-bar bg-<?= $s['color'] ?>" style="width:<?= $pct ?>%"></div>
@@ -196,27 +210,26 @@ function app_badge($status) {
             </div>
         </div>
 
-        <!-- Internships by field -->
         <div class="col-md-4">
             <div class="dash-card p-3 h-100">
-                <p class="text-muted small fw-semibold mb-2 text-uppercase" style="letter-spacing:.05em; font-size:.7rem">Internships by Field</p>
+                <p class="text-white-50 small fw-semibold mb-2 text-uppercase" style="letter-spacing:.05em; font-size:.7rem">Internships by Field</p>
                 <?php
                 $fields = [];
                 while ($f = mysqli_fetch_assoc($by_field)) $fields[] = $f;
                 $max_field = max(array_column($fields, 'cnt') ?: [1]);
                 if (empty($fields)):
                 ?>
-                    <p class="text-muted small mb-0">No field data yet.</p>
+                    <p class="text-white-50 small mb-0">No field data yet.</p>
                 <?php else: foreach ($fields as $f):
                     $pct = round($f['cnt'] / $max_field * 100);
                 ?>
                 <div class="prog-row">
                     <div class="prog-label">
                         <span><?= htmlspecialchars($f['field']) ?></span>
-                        <span class="text-muted"><?= $f['cnt'] ?></span>
+                        <span class="text-white-50"><?= $f['cnt'] ?></span>
                     </div>
                     <div class="progress" style="height:6px">
-                        <div class="progress-bar" style="width:<?= $pct ?>%; background:#1a73e8"></div>
+                        <div class="progress-bar bg-info" style="width:<?= $pct ?>%;"></div>
                     </div>
                 </div>
                 <?php endforeach; endif; ?>
@@ -224,16 +237,14 @@ function app_badge($status) {
         </div>
     </div>
 
-    <!-- ── Recent Activity ── -->
-    <h6 class="fw-semibold text-uppercase mb-3" style="letter-spacing:.06em; font-size:.75rem; color:#6c757d">Recent Activity</h6>
+    <h6 class="fw-semibold text-uppercase mb-3 mt-4" style="letter-spacing:.06em; font-size:.75rem; color:rgba(255,255,255,0.7)">Recent Activity</h6>
     <div class="row g-3">
 
-        <!-- Recent registrations -->
         <div class="col-md-4">
             <div class="dash-card h-100">
                 <div class="card-head">
-                    <span><i class="bi bi-person-plus me-1 text-primary"></i> New Registrations</span>
-                    <a href="view_users.php" class="btn btn-sm btn-outline-primary py-0 px-2" style="font-size:.75rem">View all</a>
+                    <span><i class="bi bi-person-plus me-1 text-info"></i> New Registrations</span>
+                    <a href="view_users.php" class="btn btn-sm btn-glass-secondary py-0 px-2 rounded-pill" style="font-size:.75rem">View all</a>
                 </div>
                 <?php
                 $has = false;
@@ -250,17 +261,16 @@ function app_badge($status) {
                 </div>
                 <?php endwhile; ?>
                 <?php if (!$has): ?>
-                    <div class="act-item text-muted small">No users yet.</div>
+                    <div class="act-item text-white-50 small">No users yet.</div>
                 <?php endif; ?>
             </div>
         </div>
 
-        <!-- Recent internship postings -->
         <div class="col-md-4">
             <div class="dash-card h-100">
                 <div class="card-head">
                     <span><i class="bi bi-briefcase me-1 text-warning"></i> New Postings</span>
-                    <a href="manage_internships.php" class="btn btn-sm btn-outline-primary py-0 px-2" style="font-size:.75rem">View all</a>
+                    <a href="manage_internships.php" class="btn btn-sm btn-glass-secondary py-0 px-2 rounded-pill" style="font-size:.75rem">View all</a>
                 </div>
                 <?php
                 $has = false;
@@ -279,17 +289,16 @@ function app_badge($status) {
                 </div>
                 <?php endwhile; ?>
                 <?php if (!$has): ?>
-                    <div class="act-item text-muted small">No postings yet.</div>
+                    <div class="act-item text-white-50 small">No postings yet.</div>
                 <?php endif; ?>
             </div>
         </div>
 
-        <!-- Recent applications -->
         <div class="col-md-4">
             <div class="dash-card h-100">
                 <div class="card-head">
                     <span><i class="bi bi-file-earmark-text me-1 text-danger"></i> New Applications</span>
-                    <a href="view_applicants.php" class="btn btn-sm btn-outline-primary py-0 px-2" style="font-size:.75rem">View all</a>
+                    <a href="view_applicants.php" class="btn btn-sm btn-glass-secondary py-0 px-2 rounded-pill" style="font-size:.75rem">View all</a>
                 </div>
                 <?php
                 $has = false;
@@ -306,7 +315,7 @@ function app_badge($status) {
                 </div>
                 <?php endwhile; ?>
                 <?php if (!$has): ?>
-                    <div class="act-item text-muted small">No applications yet.</div>
+                    <div class="act-item text-white-50 small">No applications yet.</div>
                 <?php endif; ?>
             </div>
         </div>

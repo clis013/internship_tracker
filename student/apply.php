@@ -93,6 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$already_applied) {
 }
 ?>
 
+<script>document.body.classList.add('light-theme');</script>
+
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">

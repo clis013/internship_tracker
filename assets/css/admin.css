@@ -1,21 +1,197 @@
-/* ── Dashboard design tokens ── */
+/* --------------------------------------
+   DASHBOARD TEXT READABILITY & CONTRAST
+--------------------------------------- */
+
+/* 1. Stat Cards (Students, Companies, etc.) */
+.stat-value {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+    font-weight: 800 !important; /* Bumped from 700 to 800 */
+}
+.stat-label {
+    color: #ffffff !important; /* Was 0.7 opacity, making it solid white */
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+}
+
+/* 2. Internship Status / Metric Strips */
+.metric-chip .mc-val { 
+    color: #ffffff !important; 
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important; 
+}
+.metric-chip .mc-lbl { 
+    color: rgba(255, 255, 255, 0.9) !important; /* Much brighter */
+    font-weight: 600;
+}
+
+/* 3. Section Headers (Internship Status, Recent Activity, etc.) */
+.dash-card .card-head span { 
+    color: #ffffff !important; 
+    font-size: 0.95rem !important;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 3px rgba(0,0,0,0.6) !important;
+}
+
+/* 4. Recent Activity List Items */
+.act-name { 
+    color: #ffffff !important; 
+    font-weight: 700 !important; 
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7) !important; 
+}
+.act-sub { 
+    color: rgba(255, 255, 255, 0.85) !important; /* Brighter */
+    font-weight: 500;
+}
+.act-time { 
+    color: rgba(255, 255, 255, 0.7) !important; /* Brighter */
+}
+
+/* 5. Progress Bars Labels */
+.prog-label { 
+    color: #ffffff !important; 
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+}
+
+/* ── Updated Solid White Button (Pill shape) ── */
+.btn-glass-white {
+    /* Solid white background with no transparency */
+    background: #ffffff !important; 
+    /* Remove blur effects */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* Clean border */
+    border: 1px solid #ffffff !important;
+    /* Black text for contrast on solid white */
+    color: #000000 !important;
+    padding: 10px 25px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Remove text shadow as it's not needed on solid white */
+    text-shadow: none !important;
+}
+
+.btn-glass-white:hover {
+    /* Slightly off-white on hover to show interaction */
+    background: #f0f0f0 !important;
+    border-color: #f0f0f0 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    color: #000000 !important;
+}
+
+/* --------------------------------------
+   Hero Section Glassmorphism
+--------------------------------------- */
+.glass-hero {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: -10%;
+    width: 60%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(180, 160, 100, 0.15) 0%, rgba(0,0,0,0) 70%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.glass-hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-puzzle-img {
+    width: 250px;
+    height: auto;
+    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
+    transition: transform 0.3s ease;
+}
+
+.hero-puzzle-img:hover { transform: scale(1.05); }
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #ffffff;
+    letter-spacing: -1px;
+}
+
+.hero-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    max-width: 90%;
+}
+
+.hero-stacked-keys {
+    max-height: 380px;
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+    transition: transform 0.3s ease;
+}
+
+.hero-stacked-keys:hover { transform: scale(1.05); }
+
+/* Custom Buttons (Default Dark Theme) */
+.btn-glass-primary {
+    background: #ffffff;
+    color: #000000;
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s ease;
+}
+.btn-glass-primary:hover {
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
+}
+
+.btn-glass-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.btn-glass-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+/* --------------------------------------
+   Admin Specific Dashboard Cards
+--------------------------------------- */
 .stat-card {
-    border: 1px solid #e9ecef;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 1.25rem 1.5rem;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     display: flex;
     align-items: center;
     gap: 1rem;
     text-decoration: none;
-    color: inherit;
-    transition: box-shadow .15s, transform .15s;
-    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    color: #ffffff;
+    transition: box-shadow .2s ease, transform .2s ease, background .2s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 .stat-card:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,.10);
-    transform: translateY(-2px);
-    color: inherit;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
 }
 .stat-icon {
     width: 48px;
@@ -26,6 +202,8 @@
     justify-content: center;
     flex-shrink: 0;
     font-size: 1.3rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .stat-value {
     font-size: 1.75rem;
@@ -34,11 +212,10 @@
 }
 .stat-label {
     font-size: .78rem;
-    color: #6c757d;
+    color: rgba(255, 255, 255, 0.7);
     margin-top: .2rem;
 }
 
-/* ── Mini metric strip ── */
 .metric-strip {
     display: flex;
     gap: .5rem;
@@ -47,49 +224,237 @@
 .metric-chip {
     flex: 1;
     min-width: 80px;
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: .55rem .75rem;
     text-align: center;
 }
 .metric-chip .mc-val  { font-size: 1.15rem; font-weight: 700; }
-.metric-chip .mc-lbl  { font-size: .72rem; color: #6c757d; }
+.metric-chip .mc-lbl  { font-size: .72rem; color: rgba(255, 255, 255, 0.7); }
 
-/* ── Section card ── */
 .dash-card {
-    border: 1px solid #e9ecef;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    color: #ffffff;
 }
 .dash-card .card-head {
     padding: .75rem 1.1rem;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #fafafa;
+    background: rgba(255, 255, 255, 0.02);
 }
-.dash-card .card-head span { font-weight: 600; font-size: .88rem; }
+.dash-card .card-head span { font-weight: 600; font-size: .88rem; color: #ffffff; }
 
-/* ── Activity list ── */
 .act-item {
     padding: .65rem 1.1rem;
-    border-bottom: 1px solid #f5f5f5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: .5rem;
 }
 .act-item:last-child { border-bottom: none; }
-.act-name  { font-size: .85rem; font-weight: 600; }
-.act-sub   { font-size: .75rem; color: #6c757d; }
-.act-time  { font-size: .7rem; color: #adb5bd; white-space: nowrap; }
+.act-name  { font-size: .85rem; font-weight: 600; color: #ffffff; }
+.act-sub   { font-size: .75rem; color: rgba(255, 255, 255, 0.6); }
+.act-time  { font-size: .7rem; color: rgba(255, 255, 255, 0.4); white-space: nowrap; }
 
-/* ── Progress bars ── */
 .prog-row { margin-bottom: .75rem; }
 .prog-row:last-child { margin-bottom: 0; }
-.prog-label { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .3rem; }
-.progress { border-radius: 99px; }
+.prog-label { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .3rem; color: #ffffff;}
+.progress { border-radius: 99px; background-color: rgba(255, 255, 255, 0.1); }
+
+/* --------------------------------------
+   Contrast & Text Readability Upgrade (Dark Dashboard)
+--------------------------------------- */
+.text-muted, .text-white-50 { color: rgba(255, 255, 255, 0.75) !important; }
+.stat-label { color: rgba(255, 255, 255, 0.85) !important; font-weight: 500; }
+.metric-chip .mc-lbl { color: rgba(255, 255, 255, 0.8) !important; }
+.prog-label span, .prog-label .text-white-50 { color: rgba(255, 255, 255, 0.9) !important; }
+.act-sub { color: rgba(255, 255, 255, 0.8) !important; }
+.act-time { color: rgba(255, 255, 255, 0.55) !important; }
+h6.text-uppercase, .dash-card p.text-uppercase { color: rgba(255, 255, 255, 0.5) !important; font-weight: 600; }
+.dash-card .text-white-50, .act-item.text-white-50 { color: rgba(255, 255, 255, 0.65) !important; }
+
+/* =========================================================================
+   UNIFIED DARK GLASSMORPHISM (Applied to all sub-pages)
+========================================================================== */
+
+/* ── Form Controls (Search, Select, and Buttons) ── */
+.glass-input, .glass-select, .btn-glass-primary, .btn-glass-secondary {
+    background: rgba(255, 255, 255, 0.15) !important; /* Increased opacity for better visibility */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25) !important; /* Stronger border */
+    color: #ffffff !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 8px; /* Smooth corners */
+}
+
+/* Specific fix for the placeholder text */
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important; /* Much brighter placeholder */
+    font-weight: 500;
+}
+
+/* Ensure the Search Button is NOT white */
+.btn-glass-primary {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+
+.btn-glass-primary:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Focus state for better accessibility */
+.glass-input:focus, .glass-select:focus {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    outline: none;
+}
+
+/* ── Main Outer 3D Glass Card Container ── */
+.glass-card {
+    background: rgba(15, 15, 15, 0.45) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    outline: 1px solid rgba(0, 0, 0, 0.2) !important;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ── Modular Glass Rows ── */
+.glass-row-item {
+    background: rgba(255, 255, 255, 0.03) !important;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    transition: all 0.2s ease;
+}
+.glass-row-item:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    transform: scale(1.002) translateY(-1px);
+}
+
+/* ── Text Styling ── */
+.glass-table-header {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+.glass-row-text-primary { color: #ffffff !important; font-weight: 600; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8) !important; }
+.glass-row-text-secondary { color: rgba(255, 255, 255, 0.95) !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important; }
+.glass-row-text-muted { color: rgba(255, 255, 255, 0.85) !important; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important; }
+
+/* ── Button Styles ── */
+.btn-glass-secondary {
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+.btn-glass-secondary:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* =========================================================================
+   SUB-PAGE THEME ACTIVATOR (Replace your typography section here)
+========================================================================== */
+body.light-theme {
+    background-image: url('../images/Page_bg.JPG.jpeg') !important;
+    background-color: #050505 !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+}
+
+/* Force All Typography to Crisp White with Depth Shadows */
+body.light-theme .text-white,
+body.light-theme h3, 
+body.light-theme h4, 
+body.light-theme h5, 
+body.light-theme .modal-title,
+body.light-theme p.text-white,
+body.light-theme label,
+body.light-theme .fw-bold,
+body.light-theme span:not(.badge) {
+    color: #ffffff !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7) !important;
+}
+
+body.light-theme p.text-white-50, 
+body.light-theme .text-white-50,
+body.light-theme .modal-body {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-weight: 500 !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.light-theme .text-muted {
+    color: rgba(255, 255, 255, 0.85) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.light-theme p.small {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* ... (Keep all your existing code above) ... */
+
+/* ── FIX: Ensure Solid White Button is not affected by Glass logic ── */
+.btn-glass-white {
+    background: #ffffff !important; 
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid #ffffff !important;
+    color: #000000 !important;
+    padding: 10px 25px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-shadow: none !important;
+    border-radius: 50rem !important; /* Forces the pill shape */
+}
+
+.btn-glass-white:hover {
+    background: #f0f0f0 !important;
+    border-color: #f0f0f0 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    color: #000000 !important;
+}
+
+/* ── UNIVERSAL SUB-PAGE ACTIVATOR (This handles the Page_bg background) ── */
+body.light-theme {
+    background-image: url('../images/Page_bg.JPG.jpeg') !important;
+    background-color: #050505 !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+/* Force high-contrast text for sub-pages */
+body.light-theme .glass-card, 
+body.light-theme .glass-row-item {
+    color: #ffffff !important;
+}
+
+body.light-theme h1, body.light-theme h2, body.light-theme h3, 
+body.light-theme h4, body.light-theme h5, body.light-theme p, 
+body.light-theme label, body.light-theme span {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+}

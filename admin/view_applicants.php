@@ -6,295 +6,166 @@ check_role('admin');
 include '../includes/header.php';
 include '../includes/navbar.php';
 
-$status_filter = $_GET['status'] ?? '';
-$search = trim($_GET['search'] ?? '');
-
-$sql = "SELECT a.id, a.status, a.applied_at, a.cover_letter, a.resume AS app_resume,
-        s.name AS student_name, s.email AS student_email, s.resume AS profile_resume,
-        j.title AS job_title, c.name AS company_name
-    FROM applications a
-    JOIN users s ON a.student_id = s.id
-    JOIN jobs j ON a.job_id = j.id
-    JOIN users c ON j.company_id = c.id";
-
-$params = [];
-$types = '';
-if (in_array($status_filter, ['pending', 'reviewed', 'accepted', 'rejected'])) {
-    $sql .= " WHERE a.status = ?";
-    $params[] = $status_filter;
-    $types .= 's';
+// ── Handle Global Application Record Deletion ──────────────────────────────
+if (isset($_GET['delete_app'])) {
+    $app_id = (int)$_GET['delete_app'];
+    $stmt = mysqli_prepare($conn, "DELETE FROM applications WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "i", $app_id);
+    mysqli_stmt_execute($stmt);
+    header("Location: view_applicants.php?deleted=1");
+    exit();
 }
+
+// ── Search Engine & Status Pipeline ────────────────────────────────────────
+$status_filter = $_GET['status'] ?? '';
+$search        = trim($_GET['search'] ?? '');
+
+$sql = "SELECT a.id, a.status, a.applied_at, 
+               s.name AS student_name, 
+               j.title AS job_title, 
+               c.name AS company_name 
+        FROM applications a
+        JOIN users s ON a.student_id = s.id
+        JOIN jobs j ON a.job_id = j.id
+        JOIN users c ON j.company_id = c.id
+        WHERE 1=1";
+$params = [];
+$types  = '';
+
+if (in_array($status_filter, ['pending', 'reviewed', 'accepted', 'rejected'])) {
+    $sql     .= " AND a.status = ?";
+    $params[] = $status_filter;
+    $types   .= 's';
+}
+
 if ($search !== '') {
-
-    $condition = "(s.name LIKE ? 
-                   OR s.email LIKE ? 
-                   OR j.title LIKE ? 
-                   OR c.name LIKE ?)";
-
-    if (!empty($params)) {
-        $sql .= " AND $condition";
-    } else {
-        $sql .= " WHERE $condition";
-    }
-
-    $like = "%$search%";
-
+    $sql     .= " AND (s.name LIKE ? OR j.title LIKE ? OR c.name LIKE ?)";
+    $like     = "%$search%";
     $params[] = $like;
     $params[] = $like;
     $params[] = $like;
-    $params[] = $like;
-
-    $types .= 'ssss';
+    $types   .= 'sss';
 }
 $sql .= " ORDER BY a.applied_at DESC";
 
 $stmt = mysqli_prepare($conn, $sql);
-if ($params) {
-    mysqli_stmt_bind_param($stmt, $types, ...$params);
-}
+if ($params) mysqli_stmt_bind_param($stmt, $types, ...$params);
 mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+$apps_res = mysqli_stmt_get_result($stmt);
 
-$applications = [];
-while ($row = mysqli_fetch_assoc($result)) {
-    $applications[] = $row;
+$app_rows = [];
+while ($row = mysqli_fetch_assoc($apps_res)) {
+    $app_rows[] = $row;
 }
 
-function status_badge($status) {
+function get_status_badge_class($status) {
     $map = [
         'pending'  => 'secondary',
         'reviewed' => 'info',
         'accepted' => 'success',
         'rejected' => 'danger',
     ];
-    $class = $map[$status] ?? 'secondary';
-    return "<span class=\"badge bg-$class\">" . htmlspecialchars(ucfirst($status)) . "</span>";
+    return $map[$status] ?? 'secondary';
 }
 ?>
 
+<!-- Light Glassmorphism Overrides for Sub-Pages -->
+<script>document.body.classList.add('light-theme');</script>
+
 <div class="container mt-4">
-    <h3 class="mb-4">All Applications</h3>
+    <h3 class="mb-1 text-white">Global Applications Tracker</h3>
+    <p class="text-white-50 mb-4">Audit running submissions, monitor placement conversion routes, and moderate system tracking channels.</p>
 
-    <form method="GET" class="row g-2 mb-4">
-
-    <div class="col-md-7">
-        <input type="text"
-               name="search"
-               class="form-control"
-               placeholder="Search student, company, internship..."
-               value="<?= htmlspecialchars($search) ?>">
-    </div>
-
-    <div class="col-md-3">
-        <select name="status" class="form-select">
-            <option value="">All Statuses</option>
-
-            <option value="pending"
-                <?= $status_filter === 'pending' ? 'selected' : '' ?>>
-                Pending
-            </option>
-
-            <option value="reviewed"
-                <?= $status_filter === 'reviewed' ? 'selected' : '' ?>>
-                Reviewed
-            </option>
-
-            <option value="accepted"
-                <?= $status_filter === 'accepted' ? 'selected' : '' ?>>
-                Accepted
-            </option>
-
-            <option value="rejected"
-                <?= $status_filter === 'rejected' ? 'selected' : '' ?>>
-                Rejected
-            </option>
-        </select>
-    </div>
-
-    <div class="col-md-1">
-        <button type="submit"
-                class="btn btn-primary w-100"
-                title="Search">
-            <i class="bi bi-search"></i>
-        </button>
-    </div>
-
-    <div class="col-md-1">
-        <a href="view_applicants.php"
-        class="btn btn-outline-secondary w-100"
-        title="Reset">
-            Reset
-        </a>
-    </div>
-
-</form>
-
-<p class="text-muted small mb-2">
-    <?= count($applications) ?> application(s) found.
-</p>
-
-    <?php if (empty($applications)): ?>
-        <div class="alert alert-info">No applications found.</div>
-    <?php else: ?>
-        <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Student</th>
-                        <th>Internship</th>
-                        <th>Company</th>
-                        <th>Applied On</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($applications as $i => $app): ?>
-                        <tr>
-                            <td>
-                                <?= htmlspecialchars($app['student_name']) ?><br>
-                                <span class="text-muted small"><?= htmlspecialchars($app['student_email']) ?></span>
-                            </td>
-                            <td><?= htmlspecialchars($app['job_title']) ?></td>
-                            <td><?= htmlspecialchars($app['company_name']) ?></td>
-                            <td><?= htmlspecialchars(date('d M Y', strtotime($app['applied_at']))) ?></td>
-                            <td><?= status_badge($app['status']) ?></td>
-
-                            <td>
-                                <button class="btn btn-sm btn-outline-primary"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#applicationModal<?= $i ?>">
-                                    View
-                                </button>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+    <?php if (isset($_GET['deleted'])): ?>
+        <div class="alert alert-success alert-dismissible fade show bg-transparent border-success text-success">
+            Application submission tracking record deleted successfully.
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
         </div>
     <?php endif; ?>
-</div>
 
-<?php foreach ($applications as $i => $app): ?>
+    <form method="GET" class="row g-2 mb-4">
+        <div class="col-md-5">
+            <input type="text" name="search" class="form-control glass-input" placeholder="Search by student, company, or job role..."
+                   value="<?= htmlspecialchars($search) ?>">
+        </div>
+        <div class="col-md-3">
+            <select name="status" class="form-select glass-select">
+                <option value="">All Application Statuses</option>
+                <option value="pending" <?= $status_filter === 'pending' ? 'selected' : '' ?>>Pending Review</option>
+                <option value="reviewed" <?= $status_filter === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
+                <option value="accepted" <?= $status_filter === 'accepted' ? 'selected' : '' ?>>Accepted (Offer)</option>
+                <option value="rejected" <?= $status_filter === 'rejected' ? 'selected' : '' ?>>Rejected</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-glass-primary w-100" title="Search">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+        <div class="col-md-2">
+            <a href="view_applicants.php" class="btn btn-glass-secondary w-100">Reset</a>
+        </div>
+    </form>
 
-<div class="modal fade"
-     id="applicationModal<?= $i ?>"
-     tabindex="-1">
+    <p class="text-white-50 small mb-2"><?= count($app_rows) ?> active application pipeline tracking record(s) mapped.</p>
 
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    Application Details
-                </h5>
-
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                </button>
+    <div class="card shadow-sm glass-card mb-5">
+        <div class="card-body p-4">
+            
+            <div class="row glass-table-header d-none d-md-flex mb-2 px-3">
+                <div class="col-md-1">#</div>
+                <div class="col-md-3">Candidate / Student</div>
+                <div class="col-md-3">Target Opportunity</div>
+                <div class="col-md-2">Date Submitted</div>
+                <div class="col-md-1">Status</div>
+                <div class="col-md-2 text-end">Actions</div>
             </div>
 
-            <div class="modal-body">
+            <?php if (empty($app_rows)): ?>
+                <div class="text-center text-white-50 py-4">No submission pipelines found matching criteria parameters.</div>
+            <?php endif; ?>
 
-                <h6 class="fw-semibold mb-3">
-                    Student Information
-                </h6>
+            <div class="d-flex flex-column">
+                <?php foreach ($app_rows as $a): ?>
+                    <div class="row glass-row-item align-items-center py-3 px-3 mx-0">
+                        
+                        <div class="col-md-1 glass-row-text-muted small">
+                            <span class="d-md-none fw-bold me-1">ID:</span><?= (int)$a['id'] ?>
+                        </div>
+                        
+                        <div class="col-md-3 glass-row-text-primary text-truncate">
+                            <?= htmlspecialchars($a['student_name']) ?>
+                        </div>
+                        
+                        <div class="col-md-3 glass-row-text-secondary text-truncate">
+                            <div class="fw-semibold text-white"><?= htmlspecialchars($a['job_title']) ?></div>
+                            <div class="text-muted" style="font-size: 0.75rem;">🏢 <?= htmlspecialchars($a['company_name']) ?></div>
+                        </div>
+                        
+                        <div class="col-md-2 glass-row-text-secondary small">
+                            <?= date('d M Y, H:i', strtotime($a['applied_at'])) ?>
+                        </div>
+                        
+                        <div class="col-md-1 my-1 my-md-0">
+                            <span class="badge bg-<?= get_status_badge_class($a['status']) ?>">
+                                <?= htmlspecialchars(ucfirst($a['status'])) ?>
+                            </span>
+                        </div>
+                        
+                        <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
+                            <a href="view_applicants.php?delete_app=<?= (int)$a['id'] ?>"
+                               class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                               onclick="return confirm('Completely delete and strike out this candidate application route description tracking logs from system memory?')">
+                                Delete Route
+                            </a>
+                        </div>
 
-                <table class="table table-sm table-borderless">
-                    <tr>
-                        <th width="30%">Name</th>
-                        <td><?= htmlspecialchars($app['student_name']) ?></td>
-                    </tr>
-
-                    <tr>
-                        <th>Email</th>
-                        <td><?= htmlspecialchars($app['student_email']) ?></td>
-                    </tr>
-
-                    <tr>
-                        <th>Resume</th>
-                        <td>
-                            <?php 
-                            $resume_path = $app['app_resume'] ?: $app['profile_resume'];
-                            if ($resume_path): 
-                            ?>
-                                <a href="/internship_tracker/<?= htmlspecialchars($resume_path) ?>" target="_blank" class="btn btn-sm btn-outline-primary py-0 px-2" style="font-size: 0.75rem;">
-                                    📄 View Resume
-                                </a>
-                            <?php else: ?>
-                                <span class="text-muted small">Not provided</span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                </table>
-
-                <hr>
-
-                <h6 class="fw-semibold mb-3">
-                    Internship Information
-                </h6>
-
-                <table class="table table-sm table-borderless">
-                    <tr>
-                        <th width="30%">Internship</th>
-                        <td><?= htmlspecialchars($app['job_title']) ?></td>
-                    </tr>
-
-                    <tr>
-                        <th>Company</th>
-                        <td><?= htmlspecialchars($app['company_name']) ?></td>
-                    </tr>
-                </table>
-
-                <hr>
-
-                <h6 class="fw-semibold mb-3">
-                    Application Information
-                </h6>
-
-                <table class="table table-sm table-borderless">
-                    <tr>
-                        <th width="30%">Status</th>
-                        <td><?= status_badge($app['status']) ?></td>
-                    </tr>
-
-                    <tr>
-                        <th>Applied Date</th>
-                        <td>
-                            <?= date('d M Y H:i', strtotime($app['applied_at'])) ?>
-                        </td>
-                    </tr>
-                </table>
-
-                <?php if (!empty($app['cover_letter'])): ?>
-
-                    <hr>
-
-                    <h6 class="fw-semibold mb-2">
-                        Cover Letter
-                    </h6>
-
-                    <div class="border rounded p-3 bg-light">
-                        <?= nl2br(htmlspecialchars($app['cover_letter'])) ?>
                     </div>
-
-                <?php endif; ?>
-
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-                    Close
-                </button>
+                <?php endforeach; ?>
             </div>
 
         </div>
     </div>
-
 </div>
-
-<?php endforeach; ?>
 
 <?php include '../includes/footer.php'; ?>

@@ -120,24 +120,7 @@ $search_query = http_build_query([
 ]);
 ?>
 
-<style>
-.job-card {
-    transition: all 0.2s ease-in-out;
-    border: 1px solid rgba(0,0,0,.125);
-    cursor: pointer;
-}
-.job-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.08)!important;
-}
-.active-job {
-    border-left: 4px solid #0d6efd!important;
-}
-.job-list-scroll {
-    max-height: 650px;
-    overflow-y: auto;
-}
-</style>
+<script>document.body.classList.add('light-theme');</script>
 
 <div class="container mt-4 pb-5">
     <h3 class="fw-bold text-dark mb-4">Browse Internships</h3>

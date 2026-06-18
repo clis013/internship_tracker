@@ -15,5 +15,8 @@
     <!-- Your custom CSS (loads after Bootstrap so it can override) -->
     <link href="/internship_tracker/assets/css/style.css" rel="stylesheet">
     <link href="/internship_tracker/assets/css/admin.css" rel="stylesheet">
+    
+    <!-- ADDED: Student Dashboard CSS -->
+    <link href="/internship_tracker/assets/css/student.css" rel="stylesheet">
 </head>
 <body>

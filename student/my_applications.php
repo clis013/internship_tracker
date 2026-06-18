@@ -112,6 +112,8 @@ function status_badge($status) {
 }
 ?>
 
+<script>document.body.classList.add('light-theme');</script>
+
 <div class="container mt-4">
     <h3 class="mb-4">My Applications</h3>
 

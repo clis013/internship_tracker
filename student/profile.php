@@ -199,6 +199,130 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+<?php
+session_start();
+include '../config/db_connect.php';
+include '../includes/session_check.php';
+check_role('student');
+include '../includes/header.php';
+include '../includes/navbar.php';
+
+$student_id = $_SESSION['user_id'];
+
+// Search / filter
+$search        = trim($_GET['search'] ?? '');
+$field         = trim($_GET['field'] ?? '');
+$location      = trim($_GET['location'] ?? '');
+$industry      = trim($_GET['industry'] ?? '');
+$min_allowance = trim($_GET['min_allowance'] ?? '');
+
+$sql = "SELECT j.id, j.company_id, j.title, j.description, j.location, j.allowance, j.field, j.created_at, 
+               u.name AS company_name, u.industry AS company_industry
+        FROM jobs j
+        JOIN users u ON j.company_id = u.id
+        WHERE j.status = 'active'";
+$params = [];
+$types  = '';
+
+if ($search !== '') {
+    $sql .= " AND (j.title LIKE ? OR j.description LIKE ?)";
+    $like = "%$search%";
+    $params[] = $like;
+    $params[] = $like;
+    $types .= 'ss';
+}
+if ($field !== '') {
+    $sql .= " AND j.field = ?";
+    $params[] = $field;
+    $types .= 's';
+}
+if ($location !== '') {
+    $sql .= " AND j.location = ?";
+    $params[] = $location;
+    $types .= 's';
+}
+if ($industry !== '') {
+    $sql .= " AND u.industry = ?";
+    $params[] = $industry;
+    $types .= 's';
+}
+if ($min_allowance !== '') {
+    $sql .= " AND j.allowance IS NOT NULL AND j.allowance != '' AND CAST(j.allowance AS UNSIGNED) >= ?";
+    $params[] = (int)$min_allowance;
+    $types .= 'i';
+}
+
+$sql .= " ORDER BY j.created_at DESC";
+
+$stmt = mysqli_prepare($conn, $sql);
+if ($params) {
+    mysqli_stmt_bind_param($stmt, $types, ...$params);
+}
+mysqli_stmt_execute($stmt);
+$jobs = mysqli_stmt_get_result($stmt);
+
+// Load all jobs into an array
+$jobs_list = [];
+while ($row = mysqli_fetch_assoc($jobs)) {
+    $jobs_list[] = $row;
+}
+
+// Determine selected job
+$selected_job = null;
+$selected_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+if ($selected_id > 0) {
+    foreach ($jobs_list as $job) {
+        if ((int)$job['id'] === $selected_id) {
+            $selected_job = $job;
+            break;
+        }
+    }
+}
+// Default to first job in search list if none selected
+if (!$selected_job && !empty($jobs_list)) {
+    $selected_job = $jobs_list[0];
+}
+
+// Fetch other jobs offered by the company of the selected job
+$res_other = null;
+if ($selected_job) {
+    $stmt_other = mysqli_prepare($conn, "SELECT id, title, location, field FROM jobs WHERE company_id = ? AND id != ? AND status = 'active' ORDER BY created_at DESC");
+    mysqli_stmt_bind_param($stmt_other, "ii", $selected_job['company_id'], $selected_job['id']);
+    mysqli_stmt_execute($stmt_other);
+    $res_other = mysqli_stmt_get_result($stmt_other);
+}
+
+// distinct fields for filter dropdown
+$field_list = mysqli_query($conn, "SELECT DISTINCT field FROM jobs WHERE field IS NOT NULL AND field != '' ORDER BY field");
+
+// distinct locations for filter dropdown
+$location_list = mysqli_query($conn, "SELECT DISTINCT location FROM jobs WHERE location IS NOT NULL AND location != '' ORDER BY location");
+
+// distinct industries for filter dropdown
+$industry_list = mysqli_query($conn, "SELECT DISTINCT industry FROM users WHERE role = 'company' AND industry IS NOT NULL AND industry != '' ORDER BY industry");
+
+// jobs the student already applied to
+$applied_ids = [];
+$stmt2 = mysqli_prepare($conn, "SELECT job_id FROM applications WHERE student_id = ?");
+mysqli_stmt_bind_param($stmt2, "i", $student_id);
+mysqli_stmt_execute($stmt2);
+$res2 = mysqli_stmt_get_result($stmt2);
+while ($r = mysqli_fetch_assoc($res2)) {
+    $applied_ids[] = $r['job_id'];
+}
+
+// Search parameters query string for side links
+$search_query = http_build_query([
+    'search' => $search,
+    'field' => $field,
+    'location' => $location,
+    'industry' => $industry,
+    'min_allowance' => $min_allowance
+]);
+?>
+
+<script>document.body.classList.add('light-theme');</script>
+
 <div class="container mt-4">
     <div class="row g-4">
         <!-- Left Column: Avatar & Account Actions -->

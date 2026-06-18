@@ -75,6 +75,126 @@ mysqli_stmt_execute($stmt);
 $jobs = mysqli_stmt_get_result($stmt);
 ?>
 
+<style>
+    body {
+        background-image: url('../assets/images/Page_bg.JPG.jpeg') !important;
+        background-color: #ffffff !important;
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+        background-size: contain !important; 
+        background-attachment: fixed !important;
+    }
+
+    /* ── Text Color Tuning for Dark Glass Visibility ── */
+    h3, h4, h5, .modal-t
+    
+    .glass-table-header { 
+        color: rgba(0, 0, 0, 0.5) !important; 
+    }
+
+    /* ── 3D Glass Form Fields & Dropdowns ── */
+    .glass-input, .glass-select {
+        background: rgba(255, 255, 255, 0.6) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.15) !important;
+        color: #111111 !important;
+        box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+    }
+    
+    .glass-input:focus, .glass-select:focus {
+        background: rgba(255, 255, 255, 0.85) !important;
+        border-color: #0d6efd !important; /* Accent blue glow on focus */
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15) !important;
+        color: #111111 !important;
+    }
+    
+    .glass-input::placeholder {
+        color: #666666 !important;
+    }
+    
+    .glass-select option {
+        background-color: #ffffff;
+        color: #111111;
+    }
+
+    /* ── Main Outer 3D Glass Card Container ── */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.35) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        /* Pure white top/left borders simulate a light source reflecting off glass edge */
+        border-top: 1px solid rgba(255, 255, 255, 0.6) !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.6) !important;
+        border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+        border-radius: 20px;
+        /* Layered multi-shadow gives that crisp volumetric 3D lift off the page */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02), 
+                    0 20px 30px rgba(0, 0, 0, 0.06), 
+                    inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+    }
+
+    /* ── Inner Stacked 3D Glass Row Panels ── */
+    .glass-row-item {
+        background: rgba(255, 255, 255, 0.4) !important;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-top: 1px solid rgba(255, 255, 255, 0.7) !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.7) !important;
+        border-right: 1px solid rgba(0, 0, 0, 0.06) !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+        border-radius: 14px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                    background-color 0.2s ease, 
+                    box-shadow 0.2s ease;
+    }
+    
+    .glass-row-item:hover {
+        background: rgba(255, 255, 255, 0.75) !important;
+        border-top-color: rgba(255, 255, 255, 0.9) !important;
+        border-left-color: rgba(255, 255, 255, 0.9) !important;
+        /* Pronounced shadow on hover makes row visually rise closer to user */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+        transform: scale(1.004) translateY(-2px);
+    }
+
+    /* ── Action Buttons Remastered ── */
+    .btn-glass-primary {
+        background: #111111 !important; /* Bold black primary button */
+        color: #ffffff !important;
+        font-weight: 600;
+        border: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+        transition: all 0.2s ease;
+    }
+    .btn-glass-primary:hover {
+        background: #2b2b2b !important;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2) !important;
+        transform: translateY(-1px);
+    }
+
+    .btn-glass-secondary {
+        color: #111111 !important;
+        border: 1px solid rgba(0, 0, 0, 0.12) !important;
+        background: rgba(255, 255, 255, 0.5) !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
+        transition: all 0.2s ease;
+    }
+    .btn-glass-secondary:hover {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-color: rgba(0, 0, 0, 0.25) !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05) !important;
+        transform: translateY(-1px);
+    }
+    
+    /* Revert close button color vectors back to standard visible crisp dark grey */
+    .btn-close-white {
+        filter: invert(0) !important;
+    }
+</style>
+
 <div class="container mt-4">
     <h3 class="mb-4">Manage Internships</h3>
 
