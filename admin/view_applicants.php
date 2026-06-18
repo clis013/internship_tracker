@@ -91,7 +91,6 @@ function get_status_badge_class($status) {
 }
 ?>
 
-<!-- Light Glassmorphism Overrides for Sub-Pages -->
 <script>document.body.classList.add('light-theme');</script>
 
 <div class="container mt-4">
@@ -117,27 +116,28 @@ function get_status_badge_class($status) {
         </div>
     <?php endif; ?>
 
-    <form method="GET" class="row g-2 mb-4">
-        <div class="col-md-5">
-            <input type="text" name="search" class="form-control glass-input" placeholder="Search by student, company, or job role..."
-                   value="<?= htmlspecialchars($search) ?>">
-        </div>
-        <div class="col-md-3">
-            <select name="status" class="form-select glass-select">
-                <option value="">All Application Statuses</option>
-                <option value="pending" <?= $status_filter === 'pending' ? 'selected' : '' ?>>Pending Review</option>
-                <option value="reviewed" <?= $status_filter === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
-                <option value="accepted" <?= $status_filter === 'accepted' ? 'selected' : '' ?>>Accepted (Offer)</option>
-                <option value="rejected" <?= $status_filter === 'rejected' ? 'selected' : '' ?>>Rejected</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-glass-primary w-100" title="Search">
-                <i class="bi bi-search"></i>
-            </button>
-        </div>
-        <div class="col-md-2">
-            <a href="view_applicants.php<?= $job_id ? '?job_id='.$job_id : '' ?>" class="btn btn-glass-secondary w-100">Reset</a>
+    <form method="GET" class="mb-4">
+        <div class="row g-2">
+            <div class="col-md-6">
+                <div class="input-group shadow-sm">
+                    <button type="submit" class="btn input-group-text glass-input border-end-0 text-white m-0 px-3" style="cursor: pointer;">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <input type="text" name="search" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Search by student, company, or job role..." value="<?= htmlspecialchars($search) ?>">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select name="status" class="form-select glass-input text-white shadow-sm" onchange="this.form.submit()">
+                    <option value="" class="bg-dark text-white">All Application Statuses</option>
+                    <option value="pending" class="bg-dark text-white" <?= $status_filter === 'pending' ? 'selected' : '' ?>>Pending Review</option>
+                    <option value="reviewed" class="bg-dark text-white" <?= $status_filter === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
+                    <option value="accepted" class="bg-dark text-white" <?= $status_filter === 'accepted' ? 'selected' : '' ?>>Accepted (Offer)</option>
+                    <option value="rejected" class="bg-dark text-white" <?= $status_filter === 'rejected' ? 'selected' : '' ?>>Rejected</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <a href="view_applicants.php" class="btn btn-glass-secondary w-100 shadow-sm">Reset</a>
+            </div>
         </div>
     </form>
 

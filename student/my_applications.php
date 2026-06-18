@@ -187,19 +187,19 @@ function status_badge($status) {
                     <hr class="border-secondary border-opacity-50 my-3">
 
                     <div class="d-flex flex-column gap-2">
-                        <div class="d-flex justify-content-between align-items-center px-2 py-1 rounded" onclick="location.href='my_applications.php'" style="cursor: pointer; background: rgba(255,255,255,0.02);">
+                        <div class="d-flex justify-content-between align-items-center px-2 py-1 rounded" onclick="location.href='my_applications.php'" style="cursor: pointer; background: rgba(255,255,255,0.05);">
                             <span class="small text-white-50"><i class="bi bi-circle-fill text-info me-2" style="font-size: 0.65rem;"></i>Total</span>
                             <span class="fw-bold text-info"><?= (int)$stats['total'] ?></span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center px-2 py-1 rounded" onclick="location.href='my_applications.php?status=pending'" style="cursor: pointer; background: rgba(255,255,255,0.02);">
+                        <div class="d-flex justify-content-between align-items-center px-2 py-1 rounded" onclick="location.href='my_applications.php?status=pending'" style="cursor: pointer; background: rgba(255,255,255,0.05);">
                             <span class="small text-white-50"><i class="bi bi-circle-fill text-warning me-2" style="font-size: 0.65rem;"></i>Pending</span>
                             <span class="fw-bold text-warning"><?= (int)($stats['pending'] + $stats['reviewed']) ?></span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center px-2 py-1 rounded" onclick="location.href='my_applications.php?status=accepted'" style="cursor: pointer; background: rgba(255,255,255,0.02);">
+                        <div class="d-flex justify-content-between align-items-center px-2 py-1 rounded" onclick="location.href='my_applications.php?status=accepted'" style="cursor: pointer; background: rgba(255,255,255,0.05);">
                             <span class="small text-white-50"><i class="bi bi-circle-fill text-success me-2" style="font-size: 0.65rem;"></i>Accepted</span>
                             <span class="fw-bold text-success"><?= (int)$stats['accepted'] ?></span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center px-2 py-1 rounded" onclick="location.href='my_applications.php?status=rejected'" style="cursor: pointer; background: rgba(255,255,255,0.02);">
+                        <div class="d-flex justify-content-between align-items-center px-2 py-1 rounded" onclick="location.href='my_applications.php?status=rejected'" style="cursor: pointer; background: rgba(255,255,255,0.05);">
                             <span class="small text-white-50"><i class="bi bi-circle-fill text-danger me-2" style="font-size: 0.65rem;"></i>Rejected</span>
                             <span class="fw-bold text-danger"><?= (int)$stats['rejected'] ?></span>
                         </div>
@@ -231,16 +231,16 @@ function status_badge($status) {
     <?php endif; ?>
 
     <!-- Search, Filter, and Sort Bar -->
-    <form method="GET" class="card shadow-sm border-0 p-3 mb-4 bg-white">
+    <form method="GET" class="glass-card p-3 mb-4">
         <div class="row g-2">
             <div class="col-md-4">
                 <div class="input-group">
-                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
-                    <input type="text" name="search" class="form-control border-start-0 ps-0" placeholder="Search Company or Job Title..." value="<?= htmlspecialchars($search) ?>">
+                    <span class="input-group-text glass-input border-end-0 text-white"><i class="bi bi-search"></i></span>
+                    <input type="text" name="search" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Search Company or Job Title..." value="<?= htmlspecialchars($search) ?>">
                 </div>
             </div>
             <div class="col-md-3">
-                <select name="status" class="form-select">
+                <select name="status" class="form-select glass-select text-white">
                     <option value="">All Statuses</option>
                     <option value="pending" <?= $status === 'pending' ? 'selected' : '' ?>>Pending</option>
                     <option value="reviewed" <?= $status === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
@@ -249,24 +249,24 @@ function status_badge($status) {
                 </select>
             </div>
             <div class="col-md-3">
-                <select name="sort" class="form-select">
+                <select name="sort" class="form-select glass-select text-white">
                     <option value="newest" <?= $sort === 'newest' ? 'selected' : '' ?>>Newest Applied</option>
                     <option value="oldest" <?= $sort === 'oldest' ? 'selected' : '' ?>>Oldest Applied</option>
                     <option value="company" <?= $sort === 'company' ? 'selected' : '' ?>>Company (A-Z)</option>
                 </select>
             </div>
             <div class="col-md-2 d-flex gap-2">
-                <button type="submit" class="btn btn-primary flex-fill">Apply</button>
-                <a href="my_applications.php" class="btn btn-light" title="Reset Filters"><i class="bi bi-arrow-counterclockwise"></i></a>
+                <button type="submit" class="btn btn-glass-primary flex-fill">Apply</button>
+                <a href="my_applications.php" class="btn btn-glass-secondary" title="Reset Filters"><i class="bi bi-arrow-counterclockwise"></i></a>
             </div>
         </div>
     </form>
 
     <?php if (mysqli_num_rows($apps) === 0): ?>
-        <div class="alert alert-info border-0 shadow-sm text-center py-5">
-            <i class="bi bi-info-circle fs-2 mb-3 d-block text-secondary"></i>
-            No applications found matching your criteria.
-            <a href="browse.php" class="d-block mt-2 fw-semibold">Browse internships to get started</a>
+        <div class="glass-card text-center py-5 mb-4">
+            <i class="bi bi-info-circle fs-2 mb-3 d-block text-white-50"></i>
+            <span class="text-white">No applications found matching your criteria.</span>
+            <a href="browse.php" class="d-block mt-2 fw-semibold text-info">Browse internships to get started</a>
         </div>
     <?php else: ?>
         <div class="accordion" id="appAccordion">
@@ -274,20 +274,21 @@ function status_badge($status) {
                 <?php 
                     $isExpanded = ($app['id'] == $open_id || ($open_id == 0 && $i === 1 && empty($search) && empty($status)));
                 ?>
-                <div class="accordion-item border-0 mb-3 shadow-sm rounded overflow-hidden">
+                <div class="accordion-item glass-row-item border-0 mb-3 overflow-hidden" style="background: transparent;">
                     <h2 class="accordion-header">
-                        <button class="accordion-button <?= $isExpanded ? '' : 'collapsed' ?> bg-white py-3" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#app<?= $i ?>" aria-expanded="<?= $isExpanded ? 'true' : 'false' ?>">
+                        <button class="accordion-button <?= $isExpanded ? '' : 'collapsed' ?> py-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#app<?= $i ?>" aria-expanded="<?= $isExpanded ? 'true' : 'false' ?>"
+                                style="background: transparent; color: #ffffff; box-shadow: none;">
                             <div class="d-flex justify-content-between w-100 me-3 align-items-center flex-wrap gap-2">
-                                <span class="fw-bold text-dark"><?= htmlspecialchars($app['title']) ?> — <span class="text-secondary fw-semibold"><?= htmlspecialchars($app['company_name']) ?></span></span>
+                                <span class="fw-bold text-white"><?= htmlspecialchars($app['title']) ?> — <span class="text-white-50 fw-semibold"><?= htmlspecialchars($app['company_name']) ?></span></span>
                                 <span><?= status_badge($app['status']) ?></span>
                             </div>
                         </button>
                     </h2>
                     <div id="app<?= $i ?>" class="accordion-collapse collapse <?= $isExpanded ? 'show' : '' ?>" data-bs-parent="#appAccordion">
-                        <div class="accordion-body bg-white border-top">
+                        <div class="accordion-body border-top border-light border-opacity-10" style="background: rgba(255, 255, 255, 0.02);">
                             <!-- Stepper Progress Tracker -->
-                            <h6 class="fw-bold text-dark mb-3">Application Progress</h6>
+                            <h6 class="fw-bold text-white mb-3">Application Progress</h6>
                             <div class="stepper-wrapper d-flex justify-content-between mb-4 mt-2">
                                 <?php
                                 $appStatus = $app['status'];
@@ -340,27 +341,27 @@ function status_badge($status) {
                                                 •
                                             <?php endif; ?>
                                         </div>
-                                        <div class="step-name small text-muted"><?= htmlspecialchars($step['label']) ?></div>
+                                        <div class="step-name small text-white-50"><?= htmlspecialchars($step['label']) ?></div>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
 
-                            <hr>
+                            <hr class="border-light border-opacity-10">
 
                             <div class="row g-3">
                                 <!-- Details & Cover Letter (Left Column) -->
                                 <div class="col-md-7">
-                                    <p class="mb-1 small"><strong>Applied on:</strong> <?= htmlspecialchars(date('d M Y, H:i', strtotime($app['applied_at']))) ?></p>
+                                    <p class="mb-1 small text-white"><strong>Applied on:</strong> <span class="text-white-50"><?= htmlspecialchars(date('d M Y, H:i', strtotime($app['applied_at']))) ?></span></p>
                                     <?php if ($app['location']): ?>
-                                        <p class="mb-1 small"><strong>Location:</strong> <?= htmlspecialchars($app['location']) ?></p>
+                                        <p class="mb-1 small text-white"><strong>Location:</strong> <span class="text-white-50"><?= htmlspecialchars($app['location']) ?></span></p>
                                     <?php endif; ?>
                                     <?php if ($app['field']): ?>
-                                        <p class="mb-1 small"><strong>Field:</strong> <?= htmlspecialchars($app['field']) ?></p>
+                                        <p class="mb-1 small text-white"><strong>Field:</strong> <span class="text-white-50"><?= htmlspecialchars($app['field']) ?></span></p>
                                     <?php endif; ?>
                                     
                                     <div class="mt-3">
-                                        <h6 class="fw-bold text-dark small mb-1">Key Contacts:</h6>
-                                        <ul class="list-unstyled small text-muted mb-0">
+                                        <h6 class="fw-bold text-white small mb-1">Key Contacts:</h6>
+                                        <ul class="list-unstyled small text-white-50 mb-0">
                                             <li><i class="bi bi-person me-1"></i> HR Recruiter</li>
                                             <li><i class="bi bi-envelope me-1"></i> <?= htmlspecialchars($app['company_email']) ?></li>
                                             <?php if (!empty($app['company_phone'])): ?>
@@ -372,50 +373,50 @@ function status_badge($status) {
                                     </div>
 
                                     <div class="mt-3">
-                                        <h6 class="fw-bold text-dark small mb-1">Job Description Snippet:</h6>
-                                        <p class="text-muted small mb-2 text-truncate-2">
+                                        <h6 class="fw-bold text-white small mb-1">Job Description Snippet:</h6>
+                                        <p class="text-white-50 small mb-2 text-truncate-2">
                                             <?= htmlspecialchars(mb_strimwidth($app['job_description'] ?? '', 0, 200, '...')) ?>
                                         </p>
-                                        <a href="browse.php?id=<?= $app['job_id'] ?>" class="btn btn-sm btn-outline-secondary py-1 px-2" style="font-size: 0.75rem;">
+                                        <a href="browse.php?id=<?= $app['job_id'] ?>" class="btn btn-sm btn-glass-secondary py-1 px-2" style="font-size: 0.75rem;">
                                             <i class="bi bi-eye"></i> View Full Details
                                         </a>
                                     </div>
 
                                     <div class="mt-3">
-                                        <h6 class="fw-bold text-dark small mb-1">Your Cover Letter:</h6>
-                                        <p class="text-muted small mb-0 lh-sm"><?= nl2br(htmlspecialchars($app['cover_letter'])) ?></p>
+                                        <h6 class="fw-bold text-white small mb-1">Your Cover Letter:</h6>
+                                        <p class="text-white-50 small mb-0 lh-sm"><?= nl2br(htmlspecialchars($app['cover_letter'])) ?></p>
                                     </div>
                                 </div>
 
                                 <!-- Reminders Section (Right Column) -->
-                                <div class="col-md-5 border-start ps-3">
-                                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-bell-fill text-primary me-1"></i> Make Reminder</h6>
+                                <div class="col-md-5 border-start border-light border-opacity-10 ps-3">
+                                    <h6 class="fw-bold text-white mb-2"><i class="bi bi-bell-fill text-primary me-1"></i> Make Reminder</h6>
                                     <form method="POST">
                                         <input type="hidden" name="action" value="save_reminder">
                                         <input type="hidden" name="app_id" value="<?= (int)$app['id'] ?>">
                                         
                                         <div class="mb-2">
-                                            <label class="form-label small fw-bold text-dark mb-1">Task Description</label>
-                                            <textarea name="task" class="form-control small mb-2" rows="3" placeholder="Write task here (e.g. Prep interview, follow up)..." required><?= htmlspecialchars($app['reminder_task'] ?? '') ?></textarea>
+                                            <label class="form-label small fw-bold text-white mb-1">Task Description</label>
+                                            <textarea name="task" class="form-control glass-input small mb-2 text-white" rows="3" placeholder="Write task here (e.g. Prep interview, follow up)..." required><?= htmlspecialchars($app['reminder_task'] ?? '') ?></textarea>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label small fw-bold text-dark mb-1">Due Date</label>
-                                            <input type="datetime-local" name="due_date" class="form-control small text-dark" value="<?= isset($app['reminder_due_date']) ? date('Y-m-d\TH:i', strtotime($app['reminder_due_date'])) : '' ?>" required>
+                                            <label class="form-label small fw-bold text-white mb-1">Due Date</label>
+                                            <input type="datetime-local" name="due_date" class="form-control glass-input small text-white" value="<?= isset($app['reminder_due_date']) ? date('Y-m-d\TH:i', strtotime($app['reminder_due_date'])) : '' ?>" required>
                                         </div>
                                         <div class="d-flex gap-2">
-                                            <button type="submit" class="btn btn-sm btn-primary flex-fill">Save Reminder</button>
+                                            <button type="submit" class="btn btn-sm btn-glass-primary flex-fill">Save Reminder</button>
                                             <?php if (!empty($app['reminder_task'])): ?>
-                                                <button type="submit" name="clear_reminder" value="1" class="btn btn-sm btn-outline-danger" onclick="this.form.task.required=false; this.form.due_date.required=false; this.form.task.value=''; this.form.due_date.value='';">Clear</button>
+                                                <button type="submit" name="clear_reminder" value="1" class="btn btn-sm btn-glass-secondary text-danger" onclick="this.form.task.required=false; this.form.due_date.required=false; this.form.task.value=''; this.form.due_date.value='';">Clear</button>
                                             <?php endif; ?>
                                         </div>
                                     </form>
                                 </div>
                             </div>
 
-                            <hr>
+                            <hr class="border-light border-opacity-10">
                             
                             <div>
-                                <button type="button" class="btn btn-danger btn-sm" onclick="triggerWithdraw(<?= (int)$app['id'] ?>, '<?= htmlspecialchars($app['title'], ENT_QUOTES) ?>', '<?= htmlspecialchars($app['company_name'], ENT_QUOTES) ?>')">
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="triggerWithdraw(<?= (int)$app['id'] ?>, '<?= htmlspecialchars($app['title'], ENT_QUOTES) ?>', '<?= htmlspecialchars($app['company_name'], ENT_QUOTES) ?>')">
                                     <i class="bi bi-x-circle"></i> Withdraw Application
                                 </button>
                             </div>

@@ -111,26 +111,30 @@ function stat_pill(string $label, $value, string $colour = 'secondary'): string 
         <div class="alert alert-danger bg-transparent border-danger text-danger"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
-    <form method="GET" class="row g-2 mb-4">
-        <div class="col-md-5">
-            <input type="text" name="search" class="form-control glass-input" placeholder="Search by name or email…"
-                   value="<?= htmlspecialchars($search) ?>">
-        </div>
-        <div class="col-md-3">
-            <select name="role" class="form-select glass-select">
-                <option value="">All Roles</option>
-                <option value="student" <?= $role_filter === 'student' ? 'selected' : '' ?>>Students</option>
-                <option value="company" <?= $role_filter === 'company' ? 'selected' : '' ?>>Companies</option>
-                <option value="admin"   <?= $role_filter === 'admin'   ? 'selected' : '' ?>>Admins</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-glass-primary w-100" title="Search">
-                <i class="bi bi-search"></i>
-            </button>
-        </div>
-        <div class="col-md-2">
-            <a href="view_users.php" class="btn btn-glass-secondary w-100">Reset</a>
+    <form method="GET" class="mb-4">
+        <div class="row g-2">
+            <!-- Search Bar with Clickable Icon -->
+            <div class="col-md-6">
+                <div class="input-group shadow-sm">
+                    <button type="submit" class="btn input-group-text glass-input border-end-0 text-white m-0 px-3" style="cursor: pointer;">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <input type="text" name="search" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Search by name or email…" value="<?= htmlspecialchars($search) ?>">
+                </div>
+            </div>
+            <!-- Glass Dropdown (Auto-submits on change) -->
+            <div class="col-md-4">
+                <select name="role" class="form-select glass-input text-white shadow-sm" onchange="this.form.submit()">
+                    <option value="" class="bg-dark text-white">All Roles</option>
+                    <option value="student" class="bg-dark text-white" <?= $role_filter === 'student' ? 'selected' : '' ?>>Students</option>
+                    <option value="company" class="bg-dark text-white" <?= $role_filter === 'company' ? 'selected' : '' ?>>Companies</option>
+                    <option value="admin" class="bg-dark text-white" <?= $role_filter === 'admin' ? 'selected' : '' ?>>Admins</option>
+                </select>
+            </div>
+            <!-- Reset Button -->
+            <div class="col-md-2">
+                <a href="view_users.php" class="btn btn-glass-secondary w-100 shadow-sm">Reset</a>
+            </div>
         </div>
     </form>
 
