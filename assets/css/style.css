@@ -12,9 +12,34 @@ body {
     background-color: #f8f9fa;
 }
 
-.navbar-brand {
+/* Premium Translucent Navbar */
+.navbar-custom {
+    background: rgba(15, 15, 15, 0.55) !important;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.navbar-custom .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.navbar-custom .nav-link:hover {
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+.navbar-custom .navbar-brand {
     font-weight: bold;
     letter-spacing: 1px;
+    color: #ffffff !important;
+    transition: transform 0.2s ease;
+}
+
+.navbar-custom .navbar-brand:hover {
+    transform: scale(1.02);
 }
 
 /* Add more as you build each page */
