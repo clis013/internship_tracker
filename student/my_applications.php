@@ -256,7 +256,7 @@ function status_badge($status) {
                 </select>
             </div>
             <div class="col-md-2 d-flex gap-2">
-                <button type="submit" class="btn btn-glass-primary flex-fill">Apply</button>
+                <button type="submit" class="btn btn-glass-white rounded flex-fill" style="border-radius: 8px !important; padding: 0.375rem 0.75rem !important;">Apply</button>
                 <a href="my_applications.php" class="btn btn-glass-secondary" title="Reset Filters"><i class="bi bi-arrow-counterclockwise"></i></a>
             </div>
         </div>
@@ -396,8 +396,8 @@ function status_badge($status) {
                                         <p class="text-white-50 small mb-2 text-truncate-2">
                                             <?= htmlspecialchars(mb_strimwidth($app['job_description'] ?? '', 0, 200, '...')) ?>
                                         </p>
-                                        <a href="browse.php?id=<?= $app['job_id'] ?>" class="btn btn-sm btn-glass-secondary py-1 px-2" style="font-size: 0.75rem;">
-                                            <i class="bi bi-eye"></i> View Full Details
+                                        <a href="browse.php?id=<?= $app['job_id'] ?>" class="btn btn-sm btn-glass-white" style="padding: 0.25rem 0.5rem !important; font-size: 0.75rem !important;">
+                                        <i class="bi bi-eye"></i> View Full Details
                                         </a>
                                     </div>
 
@@ -423,7 +423,7 @@ function status_badge($status) {
                                             <input type="datetime-local" name="due_date" class="form-control glass-input small text-white" value="<?= isset($app['reminder_due_date']) ? date('Y-m-d\TH:i', strtotime($app['reminder_due_date'])) : '' ?>" required>
                                         </div>
                                         <div class="d-flex gap-2">
-                                            <button type="submit" class="btn btn-sm btn-glass-primary flex-fill">Save Reminder</button>
+                                            <button type="submit" class="btn btn-sm btn-glass-white rounded flex-fill" style="border-radius: 8px !important; padding: 0.375rem 0.75rem !important;">Save Reminder</button>
                                             <?php if (!empty($app['reminder_task'])): ?>
                                                 <button type="submit" name="clear_reminder" value="1" class="btn btn-sm btn-glass-secondary text-danger" onclick="this.form.task.required=false; this.form.due_date.required=false; this.form.task.value=''; this.form.due_date.value='';">Clear</button>
                                             <?php endif; ?>

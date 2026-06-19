@@ -233,7 +233,7 @@ function app_badge($status) {
             <div class="dash-card h-100">
                 <div class="card-head">
                     <span><i class="bi bi-person-plus me-1 text-info"></i> New Registrations</span>
-                    <a href="view_users.php" class="btn btn-sm btn-glass-secondary py-0 px-2 rounded-pill" style="font-size:.75rem">View all</a>
+                    <a href="..." class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">View all</a>
                 </div>
                 <?php
                 $has = false;
@@ -263,7 +263,7 @@ function app_badge($status) {
             <div class="dash-card h-100">
                 <div class="card-head">
                     <span><i class="bi bi-briefcase me-1 text-warning"></i> New Postings</span>
-                    <a href="manage_internships.php" class="btn btn-sm btn-glass-secondary py-0 px-2 rounded-pill" style="font-size:.75rem">View all</a>
+                    <a href="..." class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">View all</a>
                 </div>
                 <?php
                 $has = false;
@@ -295,7 +295,7 @@ function app_badge($status) {
             <div class="dash-card h-100">
                 <div class="card-head">
                     <span><i class="bi bi-file-earmark-text me-1 text-danger"></i> New Applications</span>
-                    <a href="view_applicants.php" class="btn btn-sm btn-glass-secondary py-0 px-2 rounded-pill" style="font-size:.75rem">View all</a>
+                    <a href="..." class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">View all</a>
                 </div>
                 <?php
                 $has = false;

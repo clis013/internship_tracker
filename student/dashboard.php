@@ -203,7 +203,7 @@ function status_badge($status) {
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="fw-bold mb-0 text-white">Recent Applications</h5>
-                        <a href="my_applications.php" class="btn btn-glass-secondary btn-sm rounded-pill">View All</a>
+                        <a href="..." class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">View all</a>
                     </div>
                     
                     <?php if (mysqli_num_rows($recent) === 0): ?>
@@ -257,7 +257,7 @@ function status_badge($status) {
                                             <div class="small text-white-50 mb-3">
                                                 <span>📍 <?= htmlspecialchars($job['location']) ?></span>
                                             </div>
-                                            <a href="browse.php?id=<?= $job['id'] ?>" class="btn btn-sm btn-glass-secondary mt-auto w-100 rounded-pill">View Details</a>
+                                            <a href="browse.php?id=<?= $job['id'] ?>" class="btn btn-sm btn-glass-white mt-auto w-100 rounded-pill" style="padding: 0.25rem 0.5rem !important;">View Details</a>
                                         </div>
                                     </div>
                                 </div>

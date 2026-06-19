@@ -63,7 +63,7 @@ if ($is_valid_token && $_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-5">
-      <div class="card shadow-sm border-0">
+      <div class="glass-card shadow-sm border-0">
         <div class="card-body p-4">
           <h4 class="fw-bold mb-3">Reset Password</h4>
 

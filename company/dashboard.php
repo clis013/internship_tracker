@@ -39,8 +39,6 @@ mysqli_stmt_execute($stmt);
 $recent_jobs = mysqli_stmt_get_result($stmt);
 ?>
 
-<script>document.body.classList.add('light-theme');</script>
-
 <div class="container mt-4">
     <h3 class="mb-4 text-white">Welcome, <?= htmlspecialchars($_SESSION['name']) ?> 👋</h3>
 
@@ -50,7 +48,7 @@ $recent_jobs = mysqli_stmt_get_result($stmt);
                 <h1 class="hero-title">Innovate.<br>Elevate.<br>Transform.</h1>
                 <p class="hero-subtitle mt-3">Empowering your recruitment process with cutting-edge tools and streamlined applicant tracking. Build your dream team today.</p>
                 <div class="d-flex gap-3 mt-4">
-                    <a href="manage_jobs.php" class="btn btn-glass-primary rounded-pill px-4 py-2">Post a Job</a>
+                    <a href="post_job.php" class="btn btn-glass-white rounded-pill">Post a Job</a>
                     <a href="profile.php" class="btn btn-glass-secondary rounded-pill px-4 py-2"><i class="bi bi-asterisk"></i> Company Profile</a>
                 </div>
             </div>
@@ -103,7 +101,7 @@ $recent_jobs = mysqli_stmt_get_result($stmt);
         <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="fw-bold mb-0 text-white">Recent Job Postings</h5>
-                <a href="manage_jobs.php" class="btn btn-glass-secondary btn-sm rounded-pill">Manage Jobs</a>
+                <a href="manage_jobs.php" class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">Manage Jobs</a>
             </div>
 
             <?php if (mysqli_num_rows($recent_jobs) === 0): ?>
@@ -137,7 +135,7 @@ $recent_jobs = mysqli_stmt_get_result($stmt);
                                 <?= htmlspecialchars(date('d M Y', strtotime($job['created_at']))) ?>
                             </div>
                             <div class="col-md-2 text-md-end text-start mt-2 mt-md-0">
-                                <a href="applicants.php?job_id=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-secondary rounded-pill">View Applicants</a>
+                                <a href="applicants.php?job_id=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">View Applicants</a>
                             </div>
                         </div>
                     <?php endwhile; ?>

@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-5">
-      <div class="card shadow-sm border-0">
+      <div class="glass-card shadow-sm border-0">
         <div class="card-body p-4">
           <h4 class="fw-bold mb-3">Forgot Password</h4>
           <p class="text-muted small mb-4">Enter your registered email address below, and we will simulate sending a password reset link.</p>
@@ -83,13 +83,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <form method="POST" id="forgotPasswordForm" novalidate>
             <div class="mb-3">
               <label class="form-label small fw-bold">Email Address</label>
-              <input type="email" name="email" class="form-control" required placeholder="name@example.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+              <input type="email" name="email" class="form-control glass-input" required placeholder="name@example.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
             </div>
-            <button type="submit" class="btn btn-primary w-100 py-2">Get Reset Link</button>
+            <button type="submit" class="btn btn-glass-white w-100" style="border-radius: 8px !important; padding: 0.5rem !important;">Get Reset Link</button>
           </form>
           
           <div class="text-center mt-3 mb-0">
-            <a href="login.php" class="text-decoration-none small"><i class="bi bi-arrow-left me-1"></i> Back to Login</a>
+            <a href="login.php" class="text-decoration-none fw-bold" style="color: #81e6ff !important;">← Back to Login</a>
           </div>
         </div>
       </div>

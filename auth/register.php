@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-5">
-      <div class="card shadow-sm">
+      <div class="glass-card shadow-sm">
         <div class="card-body p-4">
           <h4 class="mb-4">Create an account</h4>
 
@@ -73,32 +73,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <form id="registerForm" method="POST" novalidate>
             <div class="mb-3">
               <label class="form-label">Full name</label>
-              <input type="text" name="name" class="form-control" required>
+              <input type="text" name="full_name" class="form-control glass-input" placeholder="Full name">
             </div>
             <div class="mb-3">
               <label class="form-label">Email</label>
-              <input type="email" name="email" class="form-control" required>
+              <input type="email" name="email" class="form-control glass-input" placeholder="Email">
             </div>
             <div class="mb-3">
               <label class="form-label">Password</label>
-              <input type="password" name="password" id="password" class="form-control" required>
+              <input type="password" name="password" class="form-control glass-input" placeholder="Password">
             </div>
             <div class="mb-3">
               <label class="form-label">Confirm password</label>
-              <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+              <input type="password" name="confirm_password" class="form-control glass-input" placeholder="Confirm password">
             </div>
             <div class="mb-3">
               <label class="form-label">I am a</label>
-              <select name="role" class="form-select" required>
+              <select name="role" class="form-select glass-select" required>
                 <option value="">Select role</option>
                 <option value="student">Student</option>
                 <option value="company">Company</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Register</button>
+            <button type="submit" class="btn btn-glass-white w-100" style="border-radius: 8px !important; padding: 0.5rem !important;">Register</button>
           </form>
           <p class="text-center mt-3 mb-0">
-            Already have an account? <a href="login.php">Login here</a>
+            Already have an account? <a href="login.php" class="text-decoration-none fw-bold" style="color: #81e6ff !important;">Login here</a>
           </p>
         </div>
       </div>

@@ -194,7 +194,7 @@ $search_query = http_build_query([
 
             <div class="col-md-3 d-flex align-items-end gap-2">
                 <button type="submit" class="btn btn-glass-primary flex-fill fw-bold py-2">Search & Filter</button>
-                <a href="browse.php" class="btn btn-glass-secondary px-3 py-2">Reset</a>
+                <a href="browse.php" class="btn btn-glass-white" style="border-radius: 8px !important; padding: 0.5rem 1.25rem !important;">Reset</a>
             </div>
         </div>
     </form>
@@ -261,9 +261,7 @@ $search_query = http_build_query([
                                     </button>
                                 <?php else: ?>
                                     <?php if ($has_resume): ?>
-                                        <a href="apply.php?job_id=<?= (int)$selected_job['id'] ?>" class="btn btn-glass-primary px-4 py-2 fw-bold">
-                                            Apply Now <i class="bi bi-arrow-right-short"></i>
-                                        </a>
+                                        <a href="apply.php?job_id=<?= (int)$job['id'] ?>" class="btn btn-glass-white rounded-pill px-4 py-2">Apply Now →</a>
                                     <?php else: ?>
                                         <div class="alert bg-transparent border border-warning text-warning p-2 mb-0 rounded d-flex align-items-center gap-2">
                                             <i class="bi bi-exclamation-triangle-fill fs-5"></i>

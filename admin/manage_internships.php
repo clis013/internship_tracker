@@ -89,9 +89,8 @@ while ($row = mysqli_fetch_assoc($internships)) {
                 </select>
             </div>
             <div class="col-md-2">
-                <a href="manage_internships.php" class="btn btn-glass-secondary w-100 shadow-sm">Reset</a>
+                <a href="view_users.php" class="btn btn-glass-white w-100" style="border-radius: 8px !important; padding: 0.45rem 0.75rem !important;">Reset</a>
             </div>
-        </div>
     </form>
 
     <p class="text-white-50 small mb-2"><?= count($job_rows) ?> internship(s) found.</p>
@@ -142,9 +141,7 @@ while ($row = mysqli_fetch_assoc($internships)) {
                         </div>
                         
                         <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
-                            <a href="view_applicants.php?job_id=<?= (int)$j['id'] ?>" class="btn btn-sm btn-glass-secondary rounded-pill px-3">
-                                Applicants
-                            </a>
+                            <a href="..." class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">Applicants</a>
                             <a href="manage_internships.php?delete=<?= (int)$j['id'] ?>"
                                class="btn btn-sm btn-glass-danger rounded-pill px-3"
                                onclick="return confirm('Delete this internship posting? This removes all associated student applications.')">

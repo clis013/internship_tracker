@@ -136,7 +136,7 @@ function get_status_badge_class($status) {
                 </select>
             </div>
             <div class="col-md-2">
-                <a href="view_applicants.php" class="btn btn-glass-secondary w-100 shadow-sm">Reset</a>
+                <a href="view_users.php" class="btn btn-glass-white w-100" style="border-radius: 8px !important; padding: 0.45rem 0.75rem !important;">Reset</a>
             </div>
         </div>
     </form>

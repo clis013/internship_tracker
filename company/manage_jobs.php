@@ -132,15 +132,15 @@ $jobs = mysqli_stmt_get_result($stmt);
                     <div class="col-md-3">
                         <label class="form-label text-white">Status</label>
                         <select name="status" class="form-select glass-select text-white">
-                            <option value="active" <?= (($edit_job['status'] ?? 'active') === 'active') ? 'selected' : '' ?>>Active</option>
-                            <option value="closed" <?= (($edit_job['status'] ?? '') === 'closed') ? 'selected' : '' ?>>Closed</option>
+                            <option value="active" class="bg-dark text-white" <?= (($edit_job['status'] ?? 'active') === 'active') ? 'selected' : '' ?>>Active</option>
+                            <option value="closed" class="bg-dark text-white" <?= (($edit_job['status'] ?? '') === 'closed') ? 'selected' : '' ?>>Closed</option>
                         </select>
                     </div>
                 </div>
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-glass-primary rounded-pill px-4 py-2"><?= $edit_job ? 'Update Internship' : 'Post Internship' ?></button>
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="submit" class="btn btn-glass-white rounded-pill px-4 py-2"><?= $edit_job ? 'Update Internship' : 'Post Internship' ?></button>
                     <?php if ($edit_job): ?>
-                        <a href="manage_jobs.php" class="btn btn-glass-secondary rounded-pill px-4 py-2 ms-2 text-decoration-none">Cancel</a>
+                        <a href="manage_jobs.php" class="btn btn-glass-secondary rounded-pill px-4 py-2 text-decoration-none">Cancel</a>
                     <?php endif; ?>
                 </div>
             </form>
@@ -184,9 +184,8 @@ $jobs = mysqli_stmt_get_result($stmt);
                                 <a href="applicants.php?job_id=<?= (int)$job['id'] ?>" class="text-info fw-bold text-decoration-none"><?= (int)$job['applicant_count'] ?> applicant(s)</a>
                             </div>
                             <div class="col-md-2 text-md-end text-start mt-2 mt-md-0 d-flex gap-1 justify-content-start justify-content-md-end">
-                                <a href="manage_jobs.php?edit=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-secondary rounded-pill">Edit</a>
-                                <a href="manage_jobs.php?delete=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-danger rounded-pill"
-                                   onclick="return confirm('Delete this internship? This will also remove all related applications.')">Delete</a>
+                                <a href="manage_jobs.php?edit=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">Edit</a>
+                                <a href="manage_jobs.php?delete=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-danger rounded-pill"onclick="return confirm('Delete this internship? This will also remove all related applications.')">Delete</a>
                             </div>
                         </div>
                     <?php endwhile; ?>

@@ -233,8 +233,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <hr class="my-4 border-secondary border-opacity-50">
 
                     <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-glass-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
-                            <i class="bi bi-key-fill me-1"></i> Change Password
+                        <button type="button" class="btn btn-glass-white" data-bs-toggle="modal" data-bs-target="#changePasswordModal" style="border-radius: 8px !important; padding: 0.375rem 0.75rem !important;">
+                        <i class="bi bi-key-fill me-1"></i> Change Password
                         </button>
                         <button type="button" class="btn btn-glass-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
                             <i class="bi bi-trash3-fill me-1"></i> Delete Account
@@ -326,7 +326,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-text small text-white-50">This resume is used as your default for applications.</div>
                         </div>
 
-                        <button type="submit" class="btn btn-glass-primary px-4 py-2">Save Changes</button>
+                        <div class="d-flex justify-content-end mt-4 mb-2">
+                            <button type="submit" class="btn btn-glass-white" style="border-radius: 8px !important; padding: 0.375rem 1.5rem !important;">
+                            Save Changes
+                            </button>
+                        </div>
                     </form>
 
                     <form id="deleteResumeForm" method="POST" style="display: none;">

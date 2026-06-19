@@ -3,6 +3,21 @@ session_start();
 include '../config/db_connect.php';
 include '../includes/header.php';
 include '../includes/navbar.php';
+?>
+
+<style>
+    /* Force override by targeting the body tag directly with high specificity */
+    body {
+        background: url('../images/Login_bg.JPG.jpeg') no-repeat center center fixed !important;
+        -webkit-background-size: cover !important;
+        -moz-background-size: cover !important;
+        -o-background-size: cover !important;
+        background-size: cover !important;
+        background-color: #000000 !important;
+    }
+</style>
+
+<?php
 
 $error = '';
 
@@ -71,15 +86,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <label class="form-label text-white">Password</label>
               <div class="input-group">
                 <input type="password" name="password" id="loginPassword" class="form-control glass-input border-end-0 text-white" required>
-                <button class="btn btn-glass-secondary border-start-0 text-white" type="button"
+                <button class="btn btn-glass-white border-start-0" type="button" 
+                  style="border-radius: 0 8px 8px 0 !important; padding: 0.375rem 0.75rem !important;" 
                   onclick="togglePassword('loginPassword')">Show</button>
               </div>
             </div>
-            <button type="submit" class="btn btn-glass-primary w-100">Login</button>
+            <button type="submit" class="btn btn-glass-white w-100" style="border-radius: 8px !important; padding: 0.5rem !important;">Login</button>
           </form>
           <div class="d-flex justify-content-between mt-3 mb-0 small text-white-50">
-            <span>No account? <a href="register.php" class="text-info text-decoration-underline">Register here</a></span>
-            <a href="forgot_password.php" class="text-info text-decoration-underline">Forgot password?</a>
+            <span>No account? <a href="register.php" class="text-info text-decoration-underline fw-bold" style="color: #81e6ff !important;">Register here</a></span>
+            <a href="forgot_password.php" class="text-info text-decoration-underline fw-bold" style="color: #81e6ff !important;">Forgot password?</a>
           </div>
         </div>
       </div>
