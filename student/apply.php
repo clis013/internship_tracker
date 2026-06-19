@@ -98,64 +98,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$already_applied) {
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <h4><?= htmlspecialchars($job['title']) ?></h4>
-                    <h6 class="text-muted mb-3"><?= htmlspecialchars($job['company_name']) ?></h6>
+            <?php if (!$default_resume): ?>
+                <div class="glass-card text-white p-4 text-center">
+                    <i class="bi bi-file-earmark-person-fill text-warning display-4 mb-3"></i>
+                    <h4 class="text-white fw-bold mb-2">Resume Required</h4>
+                    <p class="text-white-50 mb-4">You must upload your resume on your profile page before you can apply for this internship job.</p>
+                    <a href="profile.php" class="btn btn-glass-primary px-4 py-2">Go to Profile to Upload Resume</a>
+                    <a href="browse.php" class="btn btn-glass-secondary px-4 py-2 ms-2">Back to Browse</a>
+                </div>
+            <?php else: ?>
+                <div class="glass-card text-white p-4">
+                    <h4 class="text-white fw-bold mb-1"><?= htmlspecialchars($job['title']) ?></h4>
+                    <h6 class="text-info mb-3"><?= htmlspecialchars($job['company_name']) ?></h6>
 
                     <?php if ($job['location']): ?>
-                        <p class="mb-1"><strong>Location:</strong> <?= htmlspecialchars($job['location']) ?></p>
+                        <p class="mb-1 text-white-50"><strong class="text-white">Location:</strong> <?= htmlspecialchars($job['location']) ?></p>
                     <?php endif; ?>
                     <?php if ($job['field']): ?>
-                        <p class="mb-1"><strong>Field:</strong> <?= htmlspecialchars($job['field']) ?></p>
+                        <p class="mb-1 text-white-50"><strong class="text-white">Field:</strong> <?= htmlspecialchars($job['field']) ?></p>
                     <?php endif; ?>
 
-                    <hr>
-                    <p><?= nl2br(htmlspecialchars($job['description'] ?? '')) ?></p>
-                    <hr>
+                    <hr class="border-light border-opacity-10 my-3">
+                    <p class="text-white-50 small lh-sm"><?= nl2br(htmlspecialchars($job['description'] ?? '')) ?></p>
+                    <hr class="border-light border-opacity-10 my-3">
 
                     <?php if ($error): ?>
-                        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+                         <div class="alert bg-transparent border border-danger text-danger my-3"><?= htmlspecialchars($error) ?></div>
                     <?php endif; ?>
                     <?php if ($success): ?>
-                        <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
+                         <div class="alert bg-transparent border border-success text-success my-3"><?= htmlspecialchars($success) ?></div>
                     <?php endif; ?>
 
                     <?php if ($already_applied): ?>
-                        <div class="alert alert-info mb-0">You have already applied for this internship.</div>
-                        <a href="my_applications.php" class="btn btn-outline-primary mt-3">View My Applications</a>
+                        <div class="alert bg-transparent border border-info text-info mb-0">You have already applied for this internship.</div>
+                        <a href="my_applications.php" class="btn btn-glass-secondary mt-3">View My Applications</a>
                     <?php else: ?>
                         <form method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="job_id" value="<?= (int)$job_id ?>">
                             <div class="mb-3">
-                                <label class="form-label">Cover Letter / Message to Company</label>
-                                <textarea name="cover_letter" class="form-control" rows="5" required
+                                <label class="form-label small fw-bold text-white">Cover Letter / Message to Company</label>
+                                <textarea name="cover_letter" class="form-control glass-input text-white" rows="5" required
                                     placeholder="Briefly explain why you're a good fit for this internship..."></textarea>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Resume</label>
-                                <?php if ($default_resume): ?>
-                                    <div class="form-text mb-2">
-                                        Your default resume will be used:
-                                        <a href="/internship_tracker/<?= htmlspecialchars($default_resume) ?>" target="_blank">View Current Resume</a>.
-                                        You may upload a different one below for this application only.
-                                    </div>
-                                <?php else: ?>
-                                    <div class="form-text mb-2 text-warning">
-                                        You don't have a default resume on your profile. Please upload one here, or
-                                        <a href="profile.php">add one to your profile</a> for future applications.
-                                    </div>
-                                <?php endif; ?>
-                                <input type="file" name="resume" class="form-control" accept=".pdf">
+                                <label class="form-label small fw-bold text-white">Resume (PDF only)</label>
+                                <div class="form-text small text-white-50 mb-2">
+                                    Your default resume will be used:
+                                    <a href="/internship_tracker/<?= htmlspecialchars($default_resume) ?>" target="_blank" class="text-info text-decoration-underline">View Current Resume</a>.
+                                    You may upload a different one below for this application only.
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <button type="button" class="btn btn-sm btn-glass-primary" onclick="document.getElementById('appResumeInput').click();">
+                                        <i class="bi bi-upload me-1"></i> Upload Different Resume
+                                    </button>
+                                    <span id="appResumeFileName" class="small text-white-50"></span>
+                                </div>
+                                <input type="file" name="resume" id="appResumeInput" style="display: none;" accept=".pdf" onchange="showAppSelectedResumeName(this)">
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit Application</button>
-                            <a href="browse.php" class="btn btn-link">Cancel</a>
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-glass-primary px-4 py-2">Submit Application</button>
+                                <a href="browse.php" class="btn btn-glass-secondary px-4 py-2 ms-2">Cancel</a>
+                            </div>
                         </form>
                     <?php endif; ?>
                 </div>
-            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
+
+<script>
+function showAppSelectedResumeName(input) {
+    const fileNameSpan = document.getElementById('appResumeFileName');
+    if (input && input.files && input.files[0]) {
+        fileNameSpan.textContent = "Selected: " + input.files[0].name;
+    } else {
+        fileNameSpan.textContent = "";
+    }
+}
+</script>
 
 <?php include '../includes/footer.php'; ?>

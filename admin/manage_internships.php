@@ -23,7 +23,7 @@ if (isset($_GET['delete'])) {
 $status_filter = $_GET['status'] ?? '';
 $search        = trim($_GET['search'] ?? '');
 
-$sql = "SELECT j.id, j.title, j.field, j.location, j.status, j.created_at, u.name AS company_name 
+$sql = "SELECT j.id, j.title, j.field, j.location, j.status, j.created_at, u.name AS company_name, u.id AS company_id 
         FROM jobs j 
         JOIN users u ON j.company_id = u.id 
         WHERE 1=1";
@@ -75,10 +75,10 @@ while ($row = mysqli_fetch_assoc($internships)) {
         <div class="row g-2">
             <div class="col-md-6">
                 <div class="input-group shadow-sm">
-                    <button type="submit" class="btn input-group-text glass-input border-end-0 text-white m-0 px-3" style="cursor: pointer;">
+                    <input type="text" name="search" class="form-control glass-input border-end-0 text-white" placeholder="Search by title, company, field, or location..." value="<?= htmlspecialchars($search) ?>">
+                    <button type="submit" class="btn input-group-text glass-input border-start-0 text-white m-0 px-3" style="cursor: pointer;">
                         <i class="bi bi-search"></i>
                     </button>
-                    <input type="text" name="search" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Search by title, company, field, or location..." value="<?= htmlspecialchars($search) ?>">
                 </div>
             </div>
             <div class="col-md-4">
@@ -125,7 +125,9 @@ while ($row = mysqli_fetch_assoc($internships)) {
                         </div>
                         
                         <div class="col-md-2 glass-row-text-secondary text-truncate">
-                            <?= htmlspecialchars($j['company_name']) ?>
+                            <a href="#" class="view-user-trigger text-decoration-none text-white-50 fw-semibold" data-user-id="<?= (int)$j['company_id'] ?>">
+                                <?= htmlspecialchars($j['company_name']) ?>
+                            </a>
                         </div>
                         
                         <div class="col-md-2 glass-row-text-secondary small text-truncate">
@@ -144,7 +146,7 @@ while ($row = mysqli_fetch_assoc($internships)) {
                                 Applicants
                             </a>
                             <a href="manage_internships.php?delete=<?= (int)$j['id'] ?>"
-                               class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                               class="btn btn-sm btn-glass-danger rounded-pill px-3"
                                onclick="return confirm('Delete this internship posting? This removes all associated student applications.')">
                                 Delete
                             </a>

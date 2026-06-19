@@ -226,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php if (!empty($user['profile_picture'])): ?>
                         <form method="POST" class="mb-3" onsubmit="return confirm('Remove your profile picture?')">
                             <input type="hidden" name="form" value="delete_profile_picture">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Remove Photo</button>
+                            <button type="submit" class="btn btn-sm btn-glass-danger">Remove Photo</button>
                         </form>
                     <?php endif; ?>
 
@@ -236,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <button type="button" class="btn btn-glass-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                             <i class="bi bi-key-fill me-1"></i> Change Password
                         </button>
-                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                        <button type="button" class="btn btn-glass-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
                             <i class="bi bi-trash3-fill me-1"></i> Delete Account
                         </button>
                     </div>
@@ -282,11 +282,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-text small text-white-50">Your email address cannot be changed.</div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-white">Profile Picture</label>
-                            <input type="file" name="profile_picture" id="profilePicInput" class="form-control glass-input text-white" accept="image/*">
-                            <div class="form-text small text-white-50">Click your avatar above or choose an image file from your laptop (JPG, JPEG, PNG, GIF, max 2MB).</div>
-                        </div>
+                        <!-- Hidden Profile Picture Input -->
+                        <input type="file" name="profile_picture" id="profilePicInput" accept="image/*" style="display: none;">
 
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-white">About Me / Bio</label>
@@ -306,13 +303,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-white">Resume (PDF, DOC, or DOCX)</label>
                             <?php if (!empty($user['resume'])): ?>
-                                <div class="mb-2">
+                                <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
                                     <a href="/internship_tracker/<?= htmlspecialchars($user['resume']) ?>" target="_blank" class="btn btn-sm btn-glass-secondary">
                                         📄 View Current Resume
                                     </a>
+                                    <button type="button" class="btn btn-sm btn-glass-primary" onclick="document.getElementById('resumeFileInput').click();">
+                                        <i class="bi bi-upload me-1"></i> Upload / Replace Resume
+                                    </button>
+                                    <span id="resumeFileName" class="small text-white-50 ms-2"></span>
                                 </div>
+                                <input type="file" name="resume" id="resumeFileInput" style="display: none;" accept=".pdf,.doc,.docx" onchange="showSelectedResumeName(this)">
+                            <?php else: ?>
+                                <input type="file" name="resume" class="form-control glass-input text-white" accept=".pdf,.doc,.docx">
                             <?php endif; ?>
-                            <input type="file" name="resume" class="form-control glass-input text-white" accept=".pdf,.doc,.docx">
                             <div class="form-text small text-white-50">This resume is used as your default for applications.</div>
                         </div>
 
@@ -416,6 +419,15 @@ document.getElementById('profilePicInput').addEventListener('change', function(e
         reader.readAsDataURL(file);
     }
 });
+
+function showSelectedResumeName(input) {
+    const fileNameSpan = document.getElementById('resumeFileName');
+    if (input && input.files && input.files[0]) {
+        fileNameSpan.textContent = "Selected: " + input.files[0].name;
+    } else {
+        fileNameSpan.textContent = "";
+    }
+}
 </script>
 
 <?php include '../includes/footer.php'; ?>

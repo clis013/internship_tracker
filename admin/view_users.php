@@ -116,10 +116,10 @@ function stat_pill(string $label, $value, string $colour = 'secondary'): string 
             <!-- Search Bar with Clickable Icon -->
             <div class="col-md-6">
                 <div class="input-group shadow-sm">
-                    <button type="submit" class="btn input-group-text glass-input border-end-0 text-white m-0 px-3" style="cursor: pointer;">
+                    <input type="text" name="search" class="form-control glass-input border-end-0 text-white" placeholder="Search by name or email…" value="<?= htmlspecialchars($search) ?>">
+                    <button type="submit" class="btn input-group-text glass-input border-start-0 text-white m-0 px-3" style="cursor: pointer;">
                         <i class="bi bi-search"></i>
                     </button>
-                    <input type="text" name="search" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Search by name or email…" value="<?= htmlspecialchars($search) ?>">
                 </div>
             </div>
             <!-- Glass Dropdown (Auto-submits on change) -->
@@ -165,7 +165,9 @@ function stat_pill(string $label, $value, string $colour = 'secondary'): string 
                         </div>
                         
                         <div class="col-md-2 glass-row-text-primary text-truncate">
-                            <?= htmlspecialchars($u['name']) ?>
+                            <a href="#" class="view-user-trigger text-decoration-none text-white fw-bold" data-user-id="<?= (int)$u['id'] ?>">
+                                <?= htmlspecialchars($u['name']) ?>
+                            </a>
                         </div>
                         
                         <div class="col-md-3 glass-row-text-secondary text-truncate">
@@ -181,14 +183,13 @@ function stat_pill(string $label, $value, string $colour = 'secondary'): string 
                         </div>
                         
                         <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
-                            <button class="btn btn-sm btn-glass-secondary rounded-pill px-3"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#userModal<?= $i ?>">
+                            <button class="btn btn-sm btn-glass-secondary rounded-pill px-3 view-user-trigger"
+                                    data-user-id="<?= (int)$u['id'] ?>">
                                 View
                             </button>
                             <?php if ((int)$u['id'] !== (int)$_SESSION['user_id']): ?>
                                 <a href="view_users.php?delete=<?= (int)$u['id'] ?>"
-                                   class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                   class="btn btn-sm btn-glass-danger rounded-pill px-3"
                                    onclick="return confirm('Delete <?= htmlspecialchars(addslashes($u['name'])) ?>? This removes all their data.')">
                                     Delete
                                 </a>
@@ -204,94 +205,5 @@ function stat_pill(string $label, $value, string $colour = 'secondary'): string 
         </div>
     </div>
 </div>
-
-<?php foreach ($user_rows as $i => $u):
-    $role = $u['role'];
-    if ($role === 'company') $stats = get_company_stats($conn, (int)$u['id']);
-    if ($role === 'student') $stats = get_student_stats($conn, (int)$u['id']);
-?>
-<div class="modal fade" id="userModal<?= $i ?>" tabindex="-1" aria-labelledby="userModalLabel<?= $i ?>" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered <?= $role === 'company' ? 'modal-lg' : '' ?>">
-        <div class="modal-content glass-card"> 
-
-            <div class="modal-header border-0 border-bottom border-secondary border-opacity-25">
-                <div>
-                    <h5 class="modal-title mb-1 text-white" id="userModalLabel<?= $i ?>"><?= htmlspecialchars($u['name']) ?></h5>
-                    <?= role_badge($role) ?>
-                </div>
-                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body text-white">
-
-                <?php if ($role === 'company'): ?>
-
-                    <div class="d-flex gap-2 flex-wrap mb-4">
-                        <?= stat_pill('Jobs Posted',  $stats['job_count'],       'primary') ?>
-                        <?= stat_pill('Active Jobs',  $stats['active_jobs'],     'success') ?>
-                        <?= stat_pill('Applicants',   $stats['applicant_count'], 'warning') ?>
-                    </div>
-
-                    <table class="table table-sm table-borderless text-white mb-0">
-                        <tr><th style="width:30%" class="text-white-50">ID</th>        <td><?= (int)$u['id'] ?></td></tr>
-                        <tr><th class="text-white-50">Email</th>      <td><?= htmlspecialchars($u['email']) ?></td></tr>
-                        <?php if (!empty($u['phone'])): ?>
-                        <tr><th class="text-white-50">Phone</th>      <td><?= htmlspecialchars($u['phone']) ?></td></tr>
-                        <?php endif; ?>
-                        <?php if (!empty($u['website'])): ?>
-                        <tr><th class="text-white-50">Website</th>
-                            <td><a href="<?= htmlspecialchars($u['website']) ?>" target="_blank" rel="noopener" class="text-info">
-                                <?= htmlspecialchars($u['website']) ?></a></td></tr>
-                        <?php endif; ?>
-                        <tr><th class="text-white-50">Registered</th> <td><?= date('d M Y, H:i', strtotime($u['created_at'])) ?></td></tr>
-                    </table>
-
-                    <?php if (!empty($u['description'])): ?>
-                        <hr class="border-secondary border-opacity-50">
-                        <p class="small text-white-50 mb-1 fw-semibold">About</p>
-                        <p class="small mb-0"><?= nl2br(htmlspecialchars($u['description'])) ?></p>
-                    <?php endif; ?>
-
-                <?php elseif ($role === 'student'): ?>
-
-                    <div class="d-flex gap-2 flex-wrap mb-4">
-                        <?= stat_pill('Applied',   $stats['total_apps'], 'primary') ?>
-                        <?= stat_pill('Pending',   $stats['pending'],    'warning') ?>
-                        <?= stat_pill('Accepted',  $stats['accepted'],   'success') ?>
-                        <?= stat_pill('Rejected',  $stats['rejected'],   'danger')  ?>
-                    </div>
-
-                    <table class="table table-sm table-borderless text-white mb-0">
-                        <tr><th style="width:30%" class="text-white-50">ID</th>        <td><?= (int)$u['id'] ?></td></tr>
-                        <tr><th class="text-white-50">Email</th>      <td><?= htmlspecialchars($u['email']) ?></td></tr>
-                        <tr><th class="text-white-50">Registered</th> <td><?= date('d M Y, H:i', strtotime($u['created_at'])) ?></td></tr>
-                    </table>
-
-                <?php else: ?>
-
-                    <table class="table table-sm table-borderless text-white mb-0">
-                        <tr><th style="width:30%" class="text-white-50">ID</th>        <td><?= (int)$u['id'] ?></td></tr>
-                        <tr><th class="text-white-50">Email</th>      <td><?= htmlspecialchars($u['email']) ?></td></tr>
-                        <tr><th class="text-white-50">Registered</th> <td><?= date('d M Y, H:i', strtotime($u['created_at'])) ?></td></tr>
-                    </table>
-                    <p class="text-white-50 small mt-3 mb-0">Administrator accounts have no additional activity stats.</p>
-
-                <?php endif; ?>
-
-            </div>
-            
-            <div class="modal-footer border-0 border-top border-secondary border-opacity-25">
-                <button class="btn btn-glass-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
-                <?php if ((int)$u['id'] !== (int)$_SESSION['user_id']): ?>
-                    <a href="view_users.php?delete=<?= (int)$u['id'] ?>"
-                       class="btn btn-danger rounded-pill"
-                       onclick="return confirm('Delete this user?')">Delete User</a>
-                <?php endif; ?>
-            </div>
-
-        </div>
-    </div>
-</div>
-<?php endforeach; ?>
 
 <?php include '../includes/footer.php'; ?>

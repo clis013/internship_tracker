@@ -85,13 +85,13 @@
    Hero Section Glassmorphism
 --------------------------------------- */
 .glass-hero {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.18) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
     border-radius: 24px;
     padding: 3rem;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
 }
@@ -173,24 +173,25 @@
    Admin Specific Dashboard Cards
 --------------------------------------- */
 .stat-card {
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
     border-radius: 12px;
     padding: 1.25rem 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.18) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: flex;
     align-items: center;
     gap: 1rem;
     text-decoration: none;
     color: #ffffff;
     transition: box-shadow .2s ease, transform .2s ease, background .2s ease;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
 }
 .stat-card:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25) !important;
     transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.28) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
     color: #ffffff;
 }
 .stat-icon {
@@ -202,8 +203,8 @@
     justify-content: center;
     flex-shrink: 0;
     font-size: 1.3rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 .stat-value {
     font-size: 1.75rem;
@@ -224,8 +225,8 @@
 .metric-chip {
     flex: 1;
     min-width: 80px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 8px;
     padding: .55rem .75rem;
     text-align: center;
@@ -234,22 +235,22 @@
 .metric-chip .mc-lbl  { font-size: .72rem; color: rgba(255, 255, 255, 0.7); }
 
 .dash-card {
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.18) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
     overflow: hidden;
     color: #ffffff;
 }
 .dash-card .card-head {
     padding: .75rem 1.1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.05) !important;
 }
 .dash-card .card-head span { font-weight: 600; font-size: .88rem; color: #ffffff; }
 
@@ -347,28 +348,29 @@ select.glass-input, select.glass-select {
 
 /* ── Main Outer 3D Glass Card Container ── */
 .glass-card {
-    background: rgba(15, 15, 15, 0.45) !important;
+    background: rgba(255, 255, 255, 0.18) !important;
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    outline: 1px solid rgba(0, 0, 0, 0.2) !important;
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    outline: 1px solid rgba(255, 255, 255, 0.1) !important;
     border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
 }
 
 /* ── Modular Glass Rows ── */
 .glass-row-item {
-    background: rgba(255, 255, 255, 0.03) !important;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
+    background: rgba(160, 160, 160, 0.15) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
     border-radius: 14px;
     margin-bottom: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
     transition: all 0.2s ease;
 }
 .glass-row-item:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
+    background: rgba(200, 200, 200, 0.22) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
     transform: scale(1.002) translateY(-1px);
 }
 
@@ -491,4 +493,41 @@ body.light-theme h4, body.light-theme h5, body.light-theme p,
 body.light-theme label, body.light-theme span {
     color: #ffffff !important;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+}
+
+/* Enable crisp font-smoothing and remove text shadow inside glass containers for maximum readability */
+.glass-card, 
+.glass-row-item, 
+.glass-card *, 
+.glass-row-item * {
+    text-shadow: none !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Force Bootstrap tables inside glass cards to be transparent */
+.glass-card .table, 
+.glass-card .table tr, 
+.glass-card .table td, 
+.glass-card .table th {
+    background-color: transparent !important;
+    color: #ffffff !important;
+}
+
+/* Premium red glass button */
+.btn-glass-danger {
+    background: rgba(220, 53, 69, 0.4) !important;
+    border: 1px solid rgba(220, 53, 69, 0.6) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15) !important;
+    transition: all 0.2s ease-in-out !important;
+}
+.btn-glass-danger:hover {
+    background: rgba(220, 53, 69, 0.6) !important;
+    border-color: rgba(220, 53, 69, 0.8) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3) !important;
 }

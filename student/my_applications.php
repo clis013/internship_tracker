@@ -235,8 +235,8 @@ function status_badge($status) {
         <div class="row g-2">
             <div class="col-md-4">
                 <div class="input-group">
-                    <span class="input-group-text glass-input border-end-0 text-white"><i class="bi bi-search"></i></span>
-                    <input type="text" name="search" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Search Company or Job Title..." value="<?= htmlspecialchars($search) ?>">
+                    <input type="text" name="search" class="form-control glass-input border-end-0 text-white" placeholder="Search Company or Job Title..." value="<?= htmlspecialchars($search) ?>">
+                    <span class="input-group-text glass-input border-start-0 text-white"><i class="bi bi-search"></i></span>
                 </div>
             </div>
             <div class="col-md-3">
@@ -416,7 +416,7 @@ function status_badge($status) {
                             <hr class="border-light border-opacity-10">
                             
                             <div>
-                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="triggerWithdraw(<?= (int)$app['id'] ?>, '<?= htmlspecialchars($app['title'], ENT_QUOTES) ?>', '<?= htmlspecialchars($app['company_name'], ENT_QUOTES) ?>')">
+                                <button type="button" class="btn btn-glass-danger btn-sm" onclick="triggerWithdraw(<?= (int)$app['id'] ?>, '<?= htmlspecialchars($app['title'], ENT_QUOTES) ?>', '<?= htmlspecialchars($app['company_name'], ENT_QUOTES) ?>')">
                                     <i class="bi bi-x-circle"></i> Withdraw Application
                                 </button>
                             </div>

@@ -35,7 +35,7 @@ if ($job_id > 0) {
 $status_filter = $_GET['status'] ?? '';
 $search        = trim($_GET['search'] ?? '');
 
-$sql = "SELECT a.id, a.status, a.applied_at, 
+$sql = "SELECT a.id, a.status, a.applied_at, a.student_id, j.company_id, 
                s.name AS student_name, 
                j.title AS job_title, 
                c.name AS company_name 
@@ -120,10 +120,10 @@ function get_status_badge_class($status) {
         <div class="row g-2">
             <div class="col-md-6">
                 <div class="input-group shadow-sm">
-                    <button type="submit" class="btn input-group-text glass-input border-end-0 text-white m-0 px-3" style="cursor: pointer;">
+                    <input type="text" name="search" class="form-control glass-input border-end-0 text-white" placeholder="Search by student, company, or job role..." value="<?= htmlspecialchars($search) ?>">
+                    <button type="submit" class="btn input-group-text glass-input border-start-0 text-white m-0 px-3" style="cursor: pointer;">
                         <i class="bi bi-search"></i>
                     </button>
-                    <input type="text" name="search" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Search by student, company, or job role..." value="<?= htmlspecialchars($search) ?>">
                 </div>
             </div>
             <div class="col-md-4">
@@ -168,12 +168,14 @@ function get_status_badge_class($status) {
                         </div>
                         
                         <div class="col-md-3 glass-row-text-primary text-truncate">
-                            <?= htmlspecialchars($a['student_name']) ?>
+                            <a href="#" class="view-user-trigger text-decoration-none text-white fw-bold" data-user-id="<?= (int)$a['student_id'] ?>">
+                                <?= htmlspecialchars($a['student_name']) ?>
+                            </a>
                         </div>
                         
                         <div class="col-md-3 glass-row-text-secondary text-truncate">
                             <div class="fw-semibold text-white"><?= htmlspecialchars($a['job_title']) ?></div>
-                            <div class="text-muted" style="font-size: 0.75rem;">🏢 <?= htmlspecialchars($a['company_name']) ?></div>
+                            <div class="text-muted" style="font-size: 0.75rem;">🏢 <a href="#" class="view-user-trigger text-decoration-none text-white-50" data-user-id="<?= (int)$a['company_id'] ?>"><?= htmlspecialchars($a['company_name']) ?></a></div>
                         </div>
                         
                         <div class="col-md-2 glass-row-text-secondary small">
@@ -188,7 +190,7 @@ function get_status_badge_class($status) {
                         
                         <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
                             <a href="view_applicants.php?delete_app=<?= (int)$a['id'] ?><?= $job_id ? '&job_id='.$job_id : '' ?>"
-                               class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                               class="btn btn-sm btn-glass-danger rounded-pill px-3"
                                onclick="return confirm('Delete this application record?')">
                                 Delete
                             </a>

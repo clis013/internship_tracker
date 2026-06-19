@@ -39,6 +39,8 @@ mysqli_stmt_execute($stmt);
 $recent_jobs = mysqli_stmt_get_result($stmt);
 ?>
 
+<script>document.body.classList.add('light-theme');</script>
+
 <div class="container mt-4">
     <h3 class="mb-4 text-white">Welcome, <?= htmlspecialchars($_SESSION['name']) ?> 👋</h3>
 
@@ -109,35 +111,36 @@ $recent_jobs = mysqli_stmt_get_result($stmt);
                     You haven't posted any internships yet. <a href="manage_jobs.php" class="text-info text-decoration-none">Post your first internship</a>.
                 </div>
             <?php else: ?>
-                <div class="table-responsive border-0">
-                    <table class="table table-hover align-middle mb-0 border-0">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Status</th>
-                                <th>Applicants</th>
-                                <th>Posted On</th>
-                                <th class="text-end">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php while ($job = mysqli_fetch_assoc($recent_jobs)): ?>
-                                <tr>
-                                    <td class="fw-semibold text-white"><?= htmlspecialchars($job['title']) ?></td>
-                                    <td>
-                                        <span class="badge bg-<?= $job['status'] === 'active' ? 'success' : 'secondary' ?>">
-                                            <?= htmlspecialchars(ucfirst($job['status'])) ?>
-                                        </span>
-                                    </td>
-                                    <td class="text-white-50"><?= (int)$job['applicant_count'] ?></td>
-                                    <td class="text-white-50 small"><?= htmlspecialchars(date('d M Y', strtotime($job['created_at']))) ?></td>
-                                    <td class="text-end">
-                                        <a href="applicants.php?job_id=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-secondary rounded-pill">View Applicants</a>
-                                    </td>
-                                </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    </table>
+                <div class="row glass-table-header d-none d-md-flex mb-2 px-3 mt-4">
+                    <div class="col-md-4">Title</div>
+                    <div class="col-md-2">Status</div>
+                    <div class="col-md-2">Applicants</div>
+                    <div class="col-md-2">Posted On</div>
+                    <div class="col-md-2 text-end">Action</div>
+                </div>
+                
+                <div class="d-flex flex-column">
+                    <?php while ($job = mysqli_fetch_assoc($recent_jobs)): ?>
+                        <div class="row glass-row-item align-items-center py-3 px-3 mx-0">
+                            <div class="col-md-4 glass-row-text-primary text-truncate fw-semibold">
+                                <?= htmlspecialchars($job['title']) ?>
+                            </div>
+                            <div class="col-md-2 my-1 my-md-0">
+                                <span class="badge bg-<?= $job['status'] === 'active' ? 'success' : 'secondary' ?>">
+                                    <?= htmlspecialchars(ucfirst($job['status'])) ?>
+                                </span>
+                            </div>
+                            <div class="col-md-2 glass-row-text-secondary text-white-50">
+                                <?= (int)$job['applicant_count'] ?> applicant(s)
+                            </div>
+                            <div class="col-md-2 glass-row-text-muted small">
+                                <?= htmlspecialchars(date('d M Y', strtotime($job['created_at']))) ?>
+                            </div>
+                            <div class="col-md-2 text-md-end text-start mt-2 mt-md-0">
+                                <a href="applicants.php?job_id=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-secondary rounded-pill">View Applicants</a>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
                 </div>
             <?php endif; ?>
         </div>

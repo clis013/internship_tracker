@@ -80,10 +80,10 @@ while ($row = mysqli_fetch_assoc($companies_res)) {
         <div class="row g-2">
             <div class="col-md-6">
                 <div class="input-group shadow-sm">
-                    <button type="submit" class="btn input-group-text glass-input border-end-0 text-white m-0 px-3" style="cursor: pointer;">
+                    <input type="text" name="search" class="form-control glass-input border-end-0 text-white" placeholder="Search by corporate name or email..." value="<?= htmlspecialchars($search) ?>">
+                    <button type="submit" class="btn input-group-text glass-input border-start-0 text-white m-0 px-3" style="cursor: pointer;">
                         <i class="bi bi-search"></i>
                     </button>
-                    <input type="text" name="search" class="form-control glass-input border-start-0 ps-0 text-white" placeholder="Search by corporate name or email..." value="<?= htmlspecialchars($search) ?>">
                 </div>
             </div>
             <div class="col-md-4">
@@ -126,7 +126,9 @@ while ($row = mysqli_fetch_assoc($companies_res)) {
                         </div>
                         
                         <div class="col-md-3 glass-row-text-primary text-truncate">
-                            <?= htmlspecialchars($c['name']) ?>
+                            <a href="#" class="view-user-trigger text-decoration-none text-white fw-bold" data-user-id="<?= (int)$c['id'] ?>">
+                                <?= htmlspecialchars($c['name']) ?>
+                            </a>
                         </div>
                         
                         <div class="col-md-3 glass-row-text-secondary text-truncate">
@@ -151,7 +153,7 @@ while ($row = mysqli_fetch_assoc($companies_res)) {
                                 </a>
                             <?php endif; ?>
                             <a href="manage_companies.php?delete=<?= (int)$c['id'] ?>"
-                               class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                               class="btn btn-sm btn-glass-danger rounded-pill px-3"
                                onclick="return confirm('Completely purge corporate listing registration for <?= htmlspecialchars(addslashes($c['name'])) ?>? This deletes all postings associated with them.')">
                                 Delete
                             </a>

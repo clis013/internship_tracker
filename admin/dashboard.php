@@ -34,12 +34,12 @@ $recent_users = mysqli_query($conn,
      ORDER BY created_at DESC LIMIT 5");
 
 $recent_jobs = mysqli_query($conn,
-    "SELECT j.id, j.title, j.status, j.created_at, u.name AS company_name
+    "SELECT j.id, j.title, j.status, j.created_at, u.name AS company_name, u.id AS company_id
      FROM jobs j JOIN users u ON j.company_id = u.id
      ORDER BY j.created_at DESC LIMIT 5");
 
 $recent_apps = mysqli_query($conn,
-    "SELECT a.id, a.status, a.applied_at,
+    "SELECT a.id, a.status, a.applied_at, a.student_id,
             s.name AS student_name,
             j.title AS job_title,
             c.name AS company_name
@@ -88,7 +88,7 @@ function app_badge($status) {
                 <p class="hero-subtitle mt-3">Centralized control for your internship platform. Monitor user activity, manage job postings, and track application metrics in real-time.</p>
                 <div class="d-flex gap-3 mt-4">
                     <a href="view_users.php" class="btn btn-glass-white rounded-pill">Manage Users</a>
-                    <a href="manage_internships.php" class="btn btn-glass-secondary rounded-pill px-4 py-2"><i class="bi bi-briefcase"></i> View Internships</a>
+                    <a href="manage_internships.php" class="btn btn-glass-secondary rounded-pill px-4 py-2"><i class="bi bi-briefcase"></i> View Jobs</a>
                 </div>
             </div>
 
@@ -165,21 +165,10 @@ function app_badge($status) {
 
     <div class="row g-3 mb-4">
         <div class="col-md-4">
-            <div class="dash-card p-3 h-100">
-                <p class="text-white-50 small fw-semibold mb-2 text-uppercase" style="letter-spacing:.05em; font-size:.7rem">Internship Status</p>
-                <div class="metric-strip">
-                    <div class="metric-chip">
-                        <div class="mc-val text-success"><?= (int)$jobs['active'] ?></div>
-                        <div class="mc-lbl">Active</div>
-                    </div>
-                    <div class="metric-chip">
-                        <div class="mc-val text-white-50"><?= (int)$jobs['closed'] ?></div>
-                        <div class="mc-lbl">Closed</div>
-                    </div>
-                    <div class="metric-chip">
-                        <div class="mc-val text-warning"><?= (int)$apps['pending'] ?></div>
-                        <div class="mc-lbl">Pending</div>
-                    </div>
+            <div class="dash-card p-3 h-100 d-flex flex-column align-items-center">
+                <p class="text-white-50 small fw-semibold mb-2 text-uppercase w-100" style="letter-spacing:.05em; font-size:.7rem">Job Postings Status</p>
+                <div class="d-flex align-items-center justify-content-center my-auto" style="position: relative; height: 120px; width: 120px;">
+                    <canvas id="jobStatusChart"></canvas>
                 </div>
             </div>
         </div>
@@ -253,7 +242,11 @@ function app_badge($status) {
                 ?>
                 <div class="act-item">
                     <div class="flex-grow-1 min-width-0">
-                        <div class="act-name"><?= htmlspecialchars($u['name']) ?></div>
+                        <div class="act-name">
+                            <a href="#" class="view-user-trigger text-decoration-none text-white fw-bold" data-user-id="<?= (int)$u['id'] ?>">
+                                <?= htmlspecialchars($u['name']) ?>
+                            </a>
+                        </div>
                         <div class="act-sub"><?= htmlspecialchars($u['email']) ?></div>
                         <div class="act-time"><?= date('d M Y, H:i', strtotime($u['created_at'])) ?></div>
                     </div>
@@ -280,7 +273,11 @@ function app_badge($status) {
                 <div class="act-item">
                     <div class="flex-grow-1 min-width-0">
                         <div class="act-name"><?= htmlspecialchars($j['title']) ?></div>
-                        <div class="act-sub"><?= htmlspecialchars($j['company_name']) ?></div>
+                        <div class="act-sub">
+                            <a href="#" class="view-user-trigger text-decoration-none text-white-50" data-user-id="<?= (int)$j['company_id'] ?>">
+                                <?= htmlspecialchars($j['company_name']) ?>
+                            </a>
+                        </div>
                         <div class="act-time"><?= date('d M Y, H:i', strtotime($j['created_at'])) ?></div>
                     </div>
                     <span class="badge bg-<?= $j['status']==='active'?'success':'secondary' ?>">
@@ -307,7 +304,11 @@ function app_badge($status) {
                 ?>
                 <div class="act-item">
                     <div class="flex-grow-1 min-width-0">
-                        <div class="act-name"><?= htmlspecialchars($a['student_name']) ?></div>
+                        <div class="act-name">
+                            <a href="#" class="view-user-trigger text-decoration-none text-white fw-bold" data-user-id="<?= (int)$a['student_id'] ?>">
+                                <?= htmlspecialchars($a['student_name']) ?>
+                            </a>
+                        </div>
                         <div class="act-sub"><?= htmlspecialchars($a['job_title']) ?></div>
                         <div class="act-time"><?= date('d M Y, H:i', strtotime($a['applied_at'])) ?></div>
                     </div>
@@ -322,5 +323,73 @@ function app_badge($status) {
 
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('jobStatusChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Active', 'Closed'],
+            datasets: [{
+                data: [<?= (int)$jobs['active'] ?>, <?= (int)$jobs['closed'] ?>],
+                backgroundColor: [
+                    '#10b981', // Emerald green
+                    'rgba(255, 255, 255, 0.2)'  // Slate/gray translucent
+                ],
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '84%',
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleFont: { family: "'Inter', sans-serif", size: 12, weight: 'bold' },
+                    bodyFont: { family: "'Inter', sans-serif", size: 11 },
+                    padding: 8,
+                    cornerRadius: 6,
+                    displayColors: false
+                }
+            }
+        },
+        plugins: [{
+            id: 'textCenter',
+            beforeDraw: function(chart) {
+                const width = chart.width,
+                      height = chart.height,
+                      ctx = chart.ctx;
+                ctx.restore();
+                
+                // Draw Total Number
+                ctx.font = "bold 1.35rem 'Inter', sans-serif";
+                ctx.textBaseline = "middle";
+                ctx.fillStyle = "#ffffff";
+                const textTotal = "<?= (int)$jobs['total'] ?>";
+                const totalX = Math.round((width - ctx.measureText(textTotal).width) / 2);
+                const totalY = (height / 2) - 8;
+                ctx.fillText(textTotal, totalX, totalY);
+                
+                // Draw "JOBS" Label
+                ctx.font = "600 0.52rem 'Inter', sans-serif";
+                ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+                const textLabel = "TOTAL JOBS";
+                const labelX = Math.round((width - ctx.measureText(textLabel).width) / 2);
+                const labelY = (height / 2) + 8;
+                ctx.fillText(textLabel, labelX, labelY);
+                
+                ctx.save();
+            }
+        }]
+    });
+});
+</script>
 
 <?php include '../includes/footer.php'; ?>

@@ -49,35 +49,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+<script>document.body.classList.add('light-theme');</script>
+
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-5">
-      <div class="card shadow-sm">
+      <div class="glass-card shadow-sm">
         <div class="card-body p-4">
-          <h4 class="mb-4">Login</h4>
+          <h4 class="mb-4 text-white">Login</h4>
 
           <?php if ($error): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+            <div class="alert bg-transparent border border-danger text-danger"><?= htmlspecialchars($error) ?></div>
           <?php endif; ?>
 
           <form id="loginForm" method="POST" novalidate>
             <div class="mb-3">
-              <label class="form-label">Email</label>
-              <input type="email" name="email" class="form-control" required>
+              <label class="form-label text-white">Email</label>
+              <input type="email" name="email" class="form-control glass-input text-white" required>
             </div>
             <div class="mb-3">
-              <label class="form-label">Password</label>
+              <label class="form-label text-white">Password</label>
               <div class="input-group">
-                <input type="password" name="password" id="loginPassword" class="form-control" required>
-                <button class="btn btn-outline-secondary" type="button"
+                <input type="password" name="password" id="loginPassword" class="form-control glass-input border-end-0 text-white" required>
+                <button class="btn btn-glass-secondary border-start-0 text-white" type="button"
                   onclick="togglePassword('loginPassword')">Show</button>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <button type="submit" class="btn btn-glass-primary w-100">Login</button>
           </form>
-          <div class="d-flex justify-content-between mt-3 mb-0 small">
-            <span>No account? <a href="register.php" class="text-decoration-none">Register here</a></span>
-            <a href="forgot_password.php" class="text-decoration-none">Forgot password?</a>
+          <div class="d-flex justify-content-between mt-3 mb-0 small text-white-50">
+            <span>No account? <a href="register.php" class="text-info text-decoration-underline">Register here</a></span>
+            <a href="forgot_password.php" class="text-info text-decoration-underline">Forgot password?</a>
           </div>
         </div>
       </div>
