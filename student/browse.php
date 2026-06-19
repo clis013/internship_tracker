@@ -149,7 +149,7 @@ $search_query = http_build_query([
     <!-- Filters Panel -->
     <form method="GET" class="glass-card p-4 mb-4">
         <div class="row g-3">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label class="form-label small fw-bold text-white">Search Keywords</label>
                 <div class="input-group">
                     <input type="text" name="search" class="form-control glass-input border-end-0 text-white" placeholder="Search by title or keyword..."
@@ -187,27 +187,14 @@ $search_query = http_build_query([
             </div>
 
             <div class="col-md-2">
-                <label class="form-label small fw-bold text-white">Industry</label>
-                <select name="industry" class="form-select glass-select text-white">
-                    <option value="">All Industries</option>
-                    <?php mysqli_data_seek($industry_list, 0); ?>
-                    <?php while ($ind = mysqli_fetch_assoc($industry_list)): ?>
-                        <option value="<?= htmlspecialchars($ind['industry']) ?>" <?= $industry === $ind['industry'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($ind['industry']) ?>
-                        </option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-
-            <div class="col-md-2">
                 <label class="form-label small fw-bold text-white">Min Allowance ($)</label>
                 <input type="number" name="min_allowance" class="form-control glass-input text-white" placeholder="e.g. 500"
                        value="<?= htmlspecialchars($min_allowance) ?>">
             </div>
 
-            <div class="col-12 d-flex justify-content-end gap-2 mt-3">
-                <a href="browse.php" class="btn btn-glass-secondary px-3">Reset Filters</a>
-                <button type="submit" class="btn btn-glass-primary px-4 fw-bold">Search & Filter</button>
+            <div class="col-md-3 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-glass-primary flex-fill fw-bold py-2">Search & Filter</button>
+                <a href="browse.php" class="btn btn-glass-secondary px-3 py-2">Reset</a>
             </div>
         </div>
     </form>

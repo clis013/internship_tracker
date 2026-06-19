@@ -303,14 +303,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-white">Resume (PDF, DOC, or DOCX)</label>
                             <?php if (!empty($user['resume'])): ?>
-                                <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
-                                    <a href="/internship_tracker/<?= htmlspecialchars($user['resume']) ?>" target="_blank" class="btn btn-sm btn-glass-secondary">
-                                        📄 View Current Resume
-                                    </a>
-                                    <button type="button" class="btn btn-sm btn-glass-primary" onclick="document.getElementById('resumeFileInput').click();">
-                                        <i class="bi bi-upload me-1"></i> Upload / Replace Resume
-                                    </button>
-                                    <span id="resumeFileName" class="small text-white-50 ms-2"></span>
+                                <div class="d-flex flex-column gap-1 mb-2">
+                                    <div class="d-flex align-items-center flex-wrap gap-2">
+                                        <a href="/internship_tracker/<?= htmlspecialchars($user['resume']) ?>" target="_blank" class="btn btn-sm btn-glass-secondary">
+                                            📄 View Current Resume
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-glass-primary" onclick="document.getElementById('resumeFileInput').click();">
+                                            <i class="bi bi-upload me-1"></i> Upload / Replace Resume
+                                        </button>
+                                        <span id="resumeFileName" class="small text-white-50 ms-2"></span>
+                                    </div>
+                                    <div>
+                                        <a href="#" class="btn btn-sm btn-link text-danger border-0 ps-0 pt-0" onclick="if(confirm('Remove your resume?')) { document.getElementById('deleteResumeForm').submit(); } return false;">
+                                            Remove Resume
+                                        </a>
+                                    </div>
                                 </div>
                                 <input type="file" name="resume" id="resumeFileInput" style="display: none;" accept=".pdf,.doc,.docx" onchange="showSelectedResumeName(this)">
                             <?php else: ?>
@@ -322,12 +329,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <button type="submit" class="btn btn-glass-primary px-4 py-2">Save Changes</button>
                     </form>
 
-                    <?php if (!empty($user['resume'])): ?>
-                        <form method="POST" class="mt-2" onsubmit="return confirm('Remove your resume?')">
-                            <input type="hidden" name="form" value="delete_resume">
-                            <button type="submit" class="btn btn-sm btn-link text-danger border-0 ps-0">Remove Resume</button>
-                        </form>
-                    <?php endif; ?>
+                    <form id="deleteResumeForm" method="POST" style="display: none;">
+                        <input type="hidden" name="form" value="delete_resume">
+                    </form>
                 </div>
             </div>
         </div>

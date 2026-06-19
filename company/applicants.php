@@ -16,16 +16,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_status = $_POST['status'];
 
     if (in_array($new_status, ['pending', 'reviewed', 'accepted', 'rejected'])) {
-        // Ensure the application belongs to a job owned by this company
-        $stmt = mysqli_prepare($conn, "UPDATE applications a
-            JOIN jobs j ON a.job_id = j.id
-            SET a.status = ?
-            WHERE a.id = ? AND j.company_id = ?");
-        mysqli_stmt_bind_param($stmt, "sii", $new_status, $app_id, $company_id);
-        if (mysqli_stmt_execute($stmt)) {
-            $success = 'Application status updated.';
+        if ($new_status === 'accepted') {
+            $interview_date  = trim($_POST['interview_date'] ?? '');
+            $interview_time  = trim($_POST['interview_time'] ?? '');
+            $interview_venue = trim($_POST['interview_venue'] ?? '');
+
+            // Ensure the application belongs to a job owned by this company
+            $stmt = mysqli_prepare($conn, "UPDATE applications a
+                JOIN jobs j ON a.job_id = j.id
+                SET a.status = ?, a.interview_date = ?, a.interview_time = ?, a.interview_venue = ?
+                WHERE a.id = ? AND j.company_id = ?");
+            mysqli_stmt_bind_param($stmt, "ssssii", $new_status, $interview_date, $interview_time, $interview_venue, $app_id, $company_id);
         } else {
-            $error = 'Failed to update status.';
+            // Ensure the application belongs to a job owned by this company
+            $stmt = mysqli_prepare($conn, "UPDATE applications a
+                JOIN jobs j ON a.job_id = j.id
+                SET a.status = ?, a.interview_date = NULL, a.interview_time = NULL, a.interview_venue = NULL
+                WHERE a.id = ? AND j.company_id = ?");
+            mysqli_stmt_bind_param($stmt, "sii", $new_status, $app_id, $company_id);
+        }
+
+        if (mysqli_stmt_execute($stmt)) {
+            $success = 'Application updated successfully.';
+        } else {
+            $error = 'Failed to update application.';
         }
     } else {
         $error = 'Invalid status value.';
@@ -48,7 +62,7 @@ while ($r = mysqli_fetch_assoc($job_list)) {
 }
 
 // Fetch applicants
-$sql = "SELECT a.id, a.status, a.applied_at, a.cover_letter, a.resume AS app_resume,
+$sql = "SELECT a.id, a.status, a.applied_at, a.cover_letter, a.resume AS app_resume, a.interview_date, a.interview_time, a.interview_venue,
         j.id AS job_id, j.title AS job_title,
         u.id AS student_id, u.name AS student_name, u.email AS student_email, u.phone, u.bio, u.resume AS profile_resume,
         u.academic_info, u.skills, u.profile_picture
@@ -175,15 +189,42 @@ function status_badge($status) {
                             <p class="mb-1"><strong>Cover Letter:</strong></p>
                             <p class="text-white-50 small lh-sm"><?= nl2br(htmlspecialchars($app['cover_letter'])) ?></p>
                             <hr class="border-light border-opacity-10 my-3">
-                            <form method="POST" class="d-flex gap-2 align-items-center">
+                            <form method="POST" class="mt-3">
                                 <input type="hidden" name="app_id" value="<?= (int)$app['id'] ?>">
-                                <label class="form-label mb-0 text-white fw-semibold">Status:</label>
-                                <select name="status" class="form-select form-select-sm w-auto glass-select text-white">
-                                    <?php foreach (['pending', 'reviewed', 'accepted', 'rejected'] as $s): ?>
-                                        <option value="<?= $s ?>" <?= $app['status'] === $s ? 'selected' : '' ?>><?= ucfirst($s) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <button type="submit" class="btn btn-sm btn-glass-primary rounded-pill px-3 py-1">Update</button>
+                                
+                                <div class="row g-3 align-items-center mb-3">
+                                    <div class="col-auto">
+                                        <label class="form-label text-white fw-semibold mb-0">Status:</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <select name="status" id="statusSelect<?= $i ?>" class="form-select form-select-sm glass-select text-white" onchange="toggleInterviewFields(<?= $i ?>)">
+                                            <?php foreach (['pending', 'reviewed', 'accepted', 'rejected'] as $s): ?>
+                                                <option value="<?= $s ?>" <?= $app['status'] === $s ? 'selected' : '' ?>><?= ucfirst($s) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Interview Fields: Only visible/active when 'accepted' is selected -->
+                                <div id="interviewFieldsContainer<?= $i ?>" style="display: <?= $app['status'] === 'accepted' ? 'block' : 'none' ?>;">
+                                    <h6 class="text-info fw-bold mb-3"><i class="bi bi-calendar-event-fill me-2"></i>Interview Details</h6>
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label small text-white fw-semibold">Date</label>
+                                            <input type="text" name="interview_date" class="form-control form-control-sm glass-input text-white" placeholder="e.g. 25 June 2026" value="<?= htmlspecialchars($app['interview_date'] ?? '') ?>">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small text-white fw-semibold">Time</label>
+                                            <input type="text" name="interview_time" class="form-control form-control-sm glass-input text-white" placeholder="e.g. 10:00 AM" value="<?= htmlspecialchars($app['interview_time'] ?? '') ?>">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small text-white fw-semibold">Venue</label>
+                                            <input type="text" name="interview_venue" class="form-control form-control-sm glass-input text-white" placeholder="e.g. Level 5, Room 502 / Google Meet" value="<?= htmlspecialchars($app['interview_venue'] ?? '') ?>">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-sm btn-glass-primary px-4 py-2 mt-2">Update Application</button>
                             </form>
                         </div>
                     </div>
@@ -241,5 +282,17 @@ function status_badge($status) {
         </div>
     <?php endif; ?>
 </div>
+
+<script>
+function toggleInterviewFields(index) {
+    const select = document.getElementById('statusSelect' + index);
+    const container = document.getElementById('interviewFieldsContainer' + index);
+    if (select.value === 'accepted') {
+        container.style.display = 'block';
+    } else {
+        container.style.display = 'none';
+    }
+}
+</script>
 
 <?php include '../includes/footer.php'; ?>

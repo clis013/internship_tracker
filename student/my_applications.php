@@ -98,7 +98,7 @@ $search = trim($_GET['search'] ?? '');
 $status = trim($_GET['status'] ?? '');
 $sort   = trim($_GET['sort'] ?? 'newest');
 
-$sql = "SELECT a.id, a.status, a.applied_at, a.cover_letter, a.notes,
+$sql = "SELECT a.id, a.status, a.applied_at, a.cover_letter, a.notes, a.interview_date, a.interview_time, a.interview_venue,
                j.id AS job_id, j.title, j.location, j.field, j.description AS job_description,
                u.name AS company_name, u.email AS company_email, u.phone AS company_phone,
                r.task AS reminder_task, r.due_date AS reminder_due_date, r.id AS reminder_id
@@ -345,6 +345,25 @@ function status_badge($status) {
                                     </div>
                                 <?php endforeach; ?>
                             </div>
+
+                            <?php if ($app['status'] === 'accepted'): ?>
+                                <div class="alert bg-success bg-opacity-10 border border-success border-opacity-30 text-white p-3 mb-3 rounded-3" style="backdrop-filter: blur(10px);">
+                                    <h6 class="fw-bold text-success mb-2"><i class="bi bi-calendar-check-fill me-2"></i>Interview Scheduled</h6>
+                                    <div class="row g-2 small text-white-50 mb-2">
+                                        <div class="col-sm-4"><strong>Date:</strong> <span class="text-white"><?= htmlspecialchars($app['interview_date'] ?: 'To be announced') ?></span></div>
+                                        <div class="col-sm-4"><strong>Time:</strong> <span class="text-white"><?= htmlspecialchars($app['interview_time'] ?: 'To be announced') ?></span></div>
+                                        <div class="col-sm-4"><strong>Venue:</strong> <span class="text-white"><?= htmlspecialchars($app['interview_venue'] ?: 'To be announced') ?></span></div>
+                                    </div>
+                                    <hr class="border-success border-opacity-20 my-2">
+                                    <div class="small text-white-50">
+                                        If you have any questions, feel free to contact us at 
+                                        <strong class="text-white"><?= htmlspecialchars($app['company_email']) ?></strong>
+                                        <?php if (!empty($app['company_phone'])): ?>
+                                            or <strong class="text-white"><?= htmlspecialchars($app['company_phone']) ?></strong>
+                                        <?php endif; ?>.
+                                    </div>
+                                </div>
+                            <?php endif; ?>
 
                             <hr class="border-light border-opacity-10">
 
