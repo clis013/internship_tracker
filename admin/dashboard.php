@@ -60,12 +60,12 @@ $by_field = mysqli_query($conn,
 function role_badge($role) {
     $map = ['student'=>'primary','company'=>'success','admin'=>'danger'];
     $c = $map[$role] ?? 'secondary';
-    return "<span class='badge bg-$c'>".htmlspecialchars(ucfirst($role))."</span>";
+    return "<span class='badge badge-uniform bg-$c'>".htmlspecialchars(ucfirst($role))."</span>";
 }
 function app_badge($status) {
     $map = ['pending'=>'secondary','reviewed'=>'info','accepted'=>'success','rejected'=>'danger'];
     $c = $map[$status] ?? 'secondary';
-    return "<span class='badge bg-$c'>".htmlspecialchars(ucfirst($status))."</span>";
+    return "<span class='badge badge-uniform bg-$c'>".htmlspecialchars(ucfirst($status))."</span>";
 }
 ?>
 
@@ -280,7 +280,7 @@ function app_badge($status) {
                         </div>
                         <div class="act-time"><?= date('d M Y, H:i', strtotime($j['created_at'])) ?></div>
                     </div>
-                    <span class="badge bg-<?= $j['status']==='active'?'success':'secondary' ?>">
+                    <span class="badge badge-uniform bg-<?= $j['status']==='active'?'success':'secondary' ?>">
                         <?= ucfirst($j['status']) ?>
                     </span>
                 </div>

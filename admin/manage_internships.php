@@ -89,9 +89,9 @@ while ($row = mysqli_fetch_assoc($internships)) {
                 </select>
             </div>
             <div class="col-md-2">
-                <a href="view_users.php" class="btn btn-glass-white w-100" style="border-radius: 8px !important; padding: 0.45rem 0.75rem !important;">Reset</a>
+                <a href="manage_internships.php" class="btn btn-glass-white w-100" style="border-radius: 8px !important; padding: 0.45rem 0.75rem !important;">Reset</a>
             </div>
-    </form>
+        </div> </form>
 
     <p class="text-white-50 small mb-2"><?= count($job_rows) ?> internship(s) found.</p>
 
@@ -135,7 +135,7 @@ while ($row = mysqli_fetch_assoc($internships)) {
                         </div>
                         
                         <div class="col-md-2 my-1 my-md-0">
-                            <span class="badge bg-<?= $j['status'] === 'active' ? 'success' : 'secondary' ?>">
+                            <span class="badge badge-uniform bg-<?= $j['status'] === 'active' ? 'success' : 'secondary' ?>">
                                 <?= htmlspecialchars(ucfirst($j['status'])) ?>
                             </span>
                         </div>

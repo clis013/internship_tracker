@@ -17,6 +17,23 @@ body {
     letter-spacing: 1px;
 }
 
+/* ========================================================= */
+/* GLOBAL UTILITIES                                          */
+/* ========================================================= */
+
+/* Locks badge sizes across the entire application */
+.badge-uniform {
+    font-size: 0.75rem !important;     
+    padding: 0.4em 0 !important;       /* Removed side padding so fixed width works perfectly */
+    line-height: 1.2 !important;         
+    border-radius: 6px !important;     
+    font-weight: 600 !important;
+    width: 80px !important;            /* Forces all badges to be exactly 80px wide */
+    display: inline-block !important;  /* Required for fixed width to apply */
+    text-align: center !important;     /* Keeps the text perfectly centered */
+}
+
+
 /* Add more as you build each page */
 
 /* Browse Internships Two-Column Layout */

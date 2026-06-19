@@ -3,7 +3,18 @@ session_start();
 include '../config/db_connect.php';
 include '../includes/header.php';
 include '../includes/navbar.php';
+?>
 
+<style>
+    html, body {
+        /* Notice the ?v=2 added right after the file extension */
+        background: url('../assets/images/Login_bg.JPG.jpeg?v=2') no-repeat center center fixed !important;
+        background-size: cover !important;
+        background-color: #000000 !important;
+    }
+</style>
+
+<?php
 $error = '';
 $success = '';
 
@@ -59,45 +70,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-5">
-      <div class="glass-card shadow-sm">
-        <div class="card-body p-4">
-          <h4 class="mb-4">Create an account</h4>
+      <div class="glass-card shadow-sm p-4">
+        <div class="card-body p-0">
+          <h4 class="mb-4 text-white">Create an account</h4>
 
           <?php if ($error): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+            <div class="alert bg-transparent border border-danger text-danger"><?= htmlspecialchars($error) ?></div>
           <?php endif; ?>
           <?php if ($success): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
+            <div class="alert bg-transparent border border-success text-success"><?= htmlspecialchars($success) ?></div>
           <?php endif; ?>
 
           <form id="registerForm" method="POST" novalidate>
             <div class="mb-3">
-              <label class="form-label">Full name</label>
-              <input type="text" name="full_name" class="form-control glass-input" placeholder="Full name">
+              <label class="form-label text-white">Full name</label>
+              <input type="text" name="full_name" class="form-control glass-input text-white" placeholder="Full name">
             </div>
             <div class="mb-3">
-              <label class="form-label">Email</label>
-              <input type="email" name="email" class="form-control glass-input" placeholder="Email">
+              <label class="form-label text-white">Email</label>
+              <input type="email" name="email" class="form-control glass-input text-white" placeholder="Email">
             </div>
             <div class="mb-3">
-              <label class="form-label">Password</label>
-              <input type="password" name="password" class="form-control glass-input" placeholder="Password">
+              <label class="form-label text-white">Password</label>
+              <input type="password" name="password" class="form-control glass-input text-white" placeholder="Password">
             </div>
             <div class="mb-3">
-              <label class="form-label">Confirm password</label>
-              <input type="password" name="confirm_password" class="form-control glass-input" placeholder="Confirm password">
+              <label class="form-label text-white">Confirm password</label>
+              <input type="password" name="confirm_password" class="form-control glass-input text-white" placeholder="Confirm password">
             </div>
             <div class="mb-3">
-              <label class="form-label">I am a</label>
-              <select name="role" class="form-select glass-select" required>
-                <option value="">Select role</option>
-                <option value="student">Student</option>
-                <option value="company">Company</option>
+              <label class="form-label text-white">I am a</label>
+              <select name="role" class="form-select glass-select text-white" required>
+                <option value="" class="bg-dark">Select role</option>
+                <option value="student" class="bg-dark">Student</option>
+                <option value="company" class="bg-dark">Company</option>
               </select>
             </div>
             <button type="submit" class="btn btn-glass-white w-100" style="border-radius: 8px !important; padding: 0.5rem !important;">Register</button>
           </form>
-          <p class="text-center mt-3 mb-0">
+          <p class="text-center mt-3 mb-0 text-white-50">
             Already have an account? <a href="login.php" class="text-decoration-none fw-bold" style="color: #81e6ff !important;">Login here</a>
           </p>
         </div>

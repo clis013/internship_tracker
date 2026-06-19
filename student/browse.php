@@ -217,7 +217,7 @@ $search_query = http_build_query([
                                 <div class="text-white-50 small mb-2 text-truncate fw-semibold"><?= htmlspecialchars($job['company_name']) ?></div>
                                 
                                 <?php if (!empty($job['company_industry'])): ?>
-                                    <span class="badge bg-white bg-opacity-10 text-white border border-light border-opacity-10 mb-2 small fw-semibold" style="font-size: 0.7rem;">
+                                    <span class="badge badge-uniform bg-white bg-opacity-10 text-white border border-light border-opacity-10 mb-2 small fw-semibold" style="font-size: 0.7rem;">
                                         <i class="bi bi-building me-1"></i><?= htmlspecialchars($job['company_industry']) ?>
                                     </span>
                                 <?php endif; ?>
@@ -249,7 +249,7 @@ $search_query = http_build_query([
                                 <h4 class="fw-bold mb-1 text-white"><?= htmlspecialchars($selected_job['title']) ?></h4>
                                 <h5 class="text-white-50 fw-semibold"><?= htmlspecialchars($selected_job['company_name']) ?></h5>
                                 <?php if (!empty($selected_job['company_industry'])): ?>
-                                    <span class="badge bg-white bg-opacity-10 text-white border border-light border-opacity-10 small fw-semibold py-1 px-2">
+                                    <span class="badge badge-uniform bg-white bg-opacity-10 text-white border border-light border-opacity-10 small fw-semibold py-1 px-2">
                                         <i class="bi bi-building me-1"></i><?= htmlspecialchars($selected_job['company_industry']) ?>
                                     </span>
                                 <?php endif; ?>

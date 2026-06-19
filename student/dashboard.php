@@ -97,7 +97,7 @@ function status_badge($status) {
         'rejected' => 'danger',
     ];
     $class = $map[$status] ?? 'secondary';
-    return "<span class=\"badge bg-$class\">" . htmlspecialchars(ucfirst($status)) . "</span>";
+    return "<span class=\" badge-uniform bg-$class\">" . htmlspecialchars(ucfirst($status)) . "</span>";
 }
 ?>
 
@@ -296,11 +296,11 @@ function status_badge($status) {
                                             <small class="<?= $due_color ?>" style="font-size: 0.75rem;"><?= $formatted_due ?></small>
                                         </div>
                                         <?php if ($rem['app_id']): ?>
-                                            <span class="badge bg-secondary bg-opacity-50 text-white small" style="font-size: 0.7rem; cursor: pointer;" onclick="location.href='my_applications.php'">
+                                            <span class="badge badge-uniform bg-secondary bg-opacity-50 text-white small" style="font-size: 0.7rem; cursor: pointer;" onclick="location.href='my_applications.php'">
                                                 <i class="bi bi-briefcase-fill me-1"></i><?= htmlspecialchars($rem['job_title']) ?> (<?= htmlspecialchars($rem['company_name']) ?>)
                                             </span>
                                         <?php else: ?>
-                                            <span class="badge bg-info bg-opacity-25 text-info small" style="font-size: 0.7rem;">
+                                            <span class="badge badge-uniform bg-info bg-opacity-25 text-info small" style="font-size: 0.7rem;">
                                                 <i class="bi bi-pin-angle-fill me-1"></i>Personal Task
                                             </span>
                                         <?php endif; ?>

@@ -136,7 +136,7 @@ while ($row = mysqli_fetch_assoc($companies_res)) {
                         </div>
                         
                         <div class="col-md-2 my-1 my-md-0">
-                            <span class="badge bg-<?= $c['approval_status'] === 'approved' ? 'success' : 'warning text-dark' ?>">
+                            <span class="badge badge-uniform bg-<?= $c['approval_status'] === 'approved' ? 'success' : 'warning text-dark' ?>">
                                 <?= htmlspecialchars(ucfirst($c['approval_status'])) ?>
                             </span>
                         </div>

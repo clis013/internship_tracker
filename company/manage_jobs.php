@@ -176,7 +176,7 @@ $jobs = mysqli_stmt_get_result($stmt);
                                 <?= htmlspecialchars($job['allowance'] ? '$' . $job['allowance'] . '/mo' : '-') ?>
                             </div>
                             <div class="col-md-1 my-1 my-md-0">
-                                <span class="badge bg-<?= $job['status'] === 'active' ? 'success' : 'secondary' ?>">
+                                <span class="badge badge-uniform bg-<?= $job['status'] === 'active' ? 'success' : 'secondary' ?>">
                                     <?= htmlspecialchars(ucfirst($job['status'])) ?>
                                 </span>
                             </div>

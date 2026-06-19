@@ -98,7 +98,7 @@ function status_badge($status) {
         'rejected' => 'danger',
     ];
     $class = $map[$status] ?? 'secondary';
-    return "<span class=\"badge bg-$class\">" . htmlspecialchars(ucfirst($status)) . "</span>";
+    return "<span class=\"badge badge-uniform bg-$class\">" . htmlspecialchars(ucfirst($status)) . "</span>";
 }
 ?>
 
@@ -224,7 +224,9 @@ function status_badge($status) {
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-sm btn-glass-primary px-4 py-2 mt-2">Update Application</button>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-sm btn-glass-white px-4 py-2 mt-2" style="border-radius: 8px !important;">Update Application</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -238,7 +240,7 @@ function status_badge($status) {
                                 <h5 class="modal-title text-white fw-bold" id="studentProfileModalLabel<?= $i ?>"><i class="bi bi-person-fill text-info me-2"></i>Applicant Profile</h5>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body py-4">
+                            <div class="modal-body pt-4 pb-5">
                                 <div class="row g-4">
                                     <!-- Avatar and Quick Info -->
                                     <div class="col-md-4 text-center border-end border-light border-opacity-10">
@@ -271,9 +273,6 @@ function status_badge($status) {
                                         <p class="text-white-50 small mb-0"><?= htmlspecialchars($app['skills'] ?: 'No skills listed.') ?></p>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer border-0 pt-0">
-                                <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>

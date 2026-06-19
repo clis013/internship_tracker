@@ -86,7 +86,7 @@ function get_student_stats($conn, int $id): array {
 function role_badge(string $role): string {
     $map = ['student' => 'primary', 'company' => 'success', 'admin' => 'danger'];
     $c   = $map[$role] ?? 'secondary';
-    return "<span class='badge bg-$c'>" . htmlspecialchars(ucfirst($role)) . "</span>";
+    return "<span class='badge badge-uniform bg-$c'>" . htmlspecialchars(ucfirst($role)) . "</span>";
 }
 
 function stat_pill(string $label, $value, string $colour = 'secondary'): string {

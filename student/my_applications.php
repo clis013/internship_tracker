@@ -160,7 +160,7 @@ function status_badge($status) {
         'rejected' => 'danger',
     ];
     $class = $map[$status] ?? 'secondary';
-    return "<span class=\"badge bg-$class\">" . htmlspecialchars(ucfirst($status)) . "</span>";
+    return "<span class=\"badge badge-uniform bg-$class\">" . htmlspecialchars(ucfirst($status)) . "</span>";
 }
 ?>
 

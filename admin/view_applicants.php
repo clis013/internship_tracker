@@ -183,7 +183,7 @@ function get_status_badge_class($status) {
                         </div>
                         
                         <div class="col-md-1 my-1 my-md-0">
-                            <span class="badge bg-<?= get_status_badge_class($a['status']) ?>">
+                            <span class="badge badge-uniform bg-<?= get_status_badge_class($a['status']) ?>">
                                 <?= htmlspecialchars(ucfirst($a['status'])) ?>
                             </span>
                         </div>

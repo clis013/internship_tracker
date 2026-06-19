@@ -6,19 +6,15 @@ include '../includes/navbar.php';
 ?>
 
 <style>
-    /* Force override by targeting the body tag directly with high specificity */
-    body {
-        background: url('../images/Login_bg.JPG.jpeg') no-repeat center center fixed !important;
-        -webkit-background-size: cover !important;
-        -moz-background-size: cover !important;
-        -o-background-size: cover !important;
+    html, body {
+        /* Notice the ?v=2 added right after the file extension */
+        background: url('../assets/images/Login_bg.JPG.jpeg?v=2') no-repeat center center fixed !important;
         background-size: cover !important;
         background-color: #000000 !important;
     }
 </style>
 
 <?php
-
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -64,13 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<script>document.body.classList.add('light-theme');</script>
-
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-5">
-      <div class="glass-card shadow-sm">
-        <div class="card-body p-4">
+      <div class="glass-card shadow-sm p-4">
+        <div class="card-body p-0">
           <h4 class="mb-4 text-white">Login</h4>
 
           <?php if ($error): ?>
