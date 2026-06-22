@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="col-md-5">
       <div class="glass-card shadow-sm p-4">
         <div class="card-body p-0">
-          <h4 class="mb-4 text-white">Create an account</h4>
+          <h4 class="mb-4 text-white fw-bolder fs-3" style="letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(224, 240, 255, 0.3);">Create an account</h4>
 
           <?php if ($error): ?>
             <div class="alert bg-transparent border border-danger text-danger"><?= htmlspecialchars($error) ?></div>
