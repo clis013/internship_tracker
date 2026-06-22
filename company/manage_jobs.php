@@ -187,7 +187,7 @@ $jobs = mysqli_stmt_get_result($stmt);
                                 <div class="text-muted" style="font-size: 0.75rem;">📍 <?= htmlspecialchars($job['location'] ?? '-') ?></div>
                             </div>
                             <div class="col-md-2 glass-row-text-secondary text-white-50">
-                                <?= htmlspecialchars($job['allowance'] ? '$' . $job['allowance'] . '/mo' : '-') ?>
+                                <?= htmlspecialchars($job['allowance'] ? 'RM' . $job['allowance'] . '/mo' : '-') ?>
                             </div>
                             <div class="col-md-1 my-1 my-md-0">
                                 <span class="badge badge-uniform bg-<?= $job['status'] === 'active' ? 'success' : 'secondary' ?>">

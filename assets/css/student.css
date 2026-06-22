@@ -283,7 +283,7 @@ body {
 
 /* ── SUB-PAGE THEME ACTIVATOR ── */
 body.light-theme {
-    background-image: url('../images/Page_bg.JPG.jpeg') !important;
+    background-image: url('../images/Page_bg.jpg?v=6') !important;
     background-color: #050505 !important;
     background-position: center center !important;
     background-size: cover !important;

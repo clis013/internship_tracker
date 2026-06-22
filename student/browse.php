@@ -188,21 +188,22 @@ function selectFilter(name, value) {
 <div class="container mt-4 pb-5">
     <h3 class="fw-bold text-white mb-4">Browse Internships</h3>
 
-    <!-- Filters Panel -->
     <form method="GET" class="glass-card p-4 mb-4" style="position: relative; z-index: 10;">
-        <div class="row g-3">
+        <div class="row g-2 align-items-end">
             <div class="col-md-3">
                 <label class="form-label small fw-bold text-white">Search Keywords</label>
-                <div class="input-group">
+                <div class="input-group shadow-sm">
                     <input type="text" name="search" class="form-control glass-input border-end-0 text-white" placeholder="Search by title or keyword..."
                            value="<?= htmlspecialchars($search) ?>">
-                    <span class="input-group-text glass-input border-start-0 text-white"><i class="bi bi-search"></i></span>
+                    <button type="submit" class="btn input-group-text glass-input border-start-0 text-white m-0 px-3" style="cursor: pointer;">
+                        <i class="bi bi-search"></i>
+                    </button>
                 </div>
             </div>
             
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label small fw-bold text-white">Field</label>
-                <select name="field" class="form-select glass-select text-white">
+                <select name="field" class="form-select glass-select text-white shadow-sm" onchange="this.form.submit()">
                     <option value="">All Fields</option>
                     <?php 
                     mysqli_data_seek($field_list, 0);
@@ -217,7 +218,7 @@ function selectFilter(name, value) {
 
             <div class="col-md-2">
                 <label class="form-label small fw-bold text-white">Location</label>
-                <select name="location" class="form-select glass-select text-white">
+                <select name="location" class="form-select glass-select text-white shadow-sm" onchange="this.form.submit()">
                     <option value="">All Locations</option>
                     <?php mysqli_data_seek($location_list, 0); ?>
                     <?php while ($loc = mysqli_fetch_assoc($location_list)): ?>
@@ -229,16 +230,13 @@ function selectFilter(name, value) {
             </div>
 
             <div class="col-md-2">
-                <label class="form-label small fw-bold text-white">Min Allowance ($)</label>
-                <input type="number" name="min_allowance" class="form-control glass-input text-white" placeholder="e.g. 500" min="0"
-                       value="<?= htmlspecialchars($min_allowance) ?>">
+                <label class="form-label small fw-bold text-white">Min Allowance (RM)</label>
+                <input type="number" name="min_allowance" class="form-control glass-input text-white shadow-sm" placeholder="e.g. 500" min="0"
+                       value="<?= htmlspecialchars($min_allowance) ?>" onchange="this.form.submit()">
             </div>
 
-            <div class="col-md-3 d-flex align-items-end gap-2">
-                <button type="submit" class="btn btn-glass-primary d-flex align-items-center justify-content-center px-3" style="border-radius: 8px !important; height: 38px; width: 45px; flex-shrink: 0;" title="Apply Filters">
-                    <i class="bi bi-funnel-fill fs-5"></i>
-                </button>
-                <a href="browse.php" class="btn btn-glass-white flex-fill d-flex align-items-center justify-content-center fw-bold" style="border-radius: 8px !important; height: 38px; text-decoration: none;">Reset</a>
+            <div class="col-md-2">
+                <a href="browse.php" class="btn btn-glass-white text-dark w-100 d-flex align-items-center justify-content-center fw-bold shadow-sm" style="border-radius: 8px !important; height: 38px; text-decoration: none; color: #000000 !important; text-shadow: none !important;">Reset</a>
             </div>
         </div>
     </form>
@@ -247,7 +245,6 @@ function selectFilter(name, value) {
         <div class="glass-card p-4 text-center mb-4"><i class="bi bi-info-circle-fill text-info fs-3 mb-2 d-block"></i>No internships found matching your criteria.</div>
     <?php else: ?>
         <div class="row g-4">
-            <!-- Left Column: Scrollable Internship List -->
             <div class="col-lg-4 col-md-5">
                 <div class="job-list-scroll pe-2">
                     <?php foreach ($jobs_list as $job): ?>
@@ -276,7 +273,7 @@ function selectFilter(name, value) {
                                 </div>
                                 
                                 <div class="small text-success fw-bold">
-                                    <i class="bi bi-cash-stack me-1"></i><?= $job['allowance'] ? '$' . htmlspecialchars($job['allowance']) : 'Not specified' ?>
+                                    <i class="bi bi-cash-stack me-1"></i><?= $job['allowance'] ? 'RM ' . htmlspecialchars($job['allowance']) : 'Not specified' ?>
                                 </div>
                             </div>
                         </div>
@@ -284,7 +281,6 @@ function selectFilter(name, value) {
                 </div>
             </div>
 
-            <!-- Right Column: Detail View -->
             <div class="col-lg-8 col-md-7">
                 <?php if ($selected_job): ?>
                     <div class="glass-card shadow-sm p-4">
@@ -325,7 +321,7 @@ function selectFilter(name, value) {
                             <?php endif; ?>
                             <div>
                                 <i class="bi bi-cash-stack text-success me-1"></i> 
-                                Allowance: <strong><?= $selected_job['allowance'] ? '$' . htmlspecialchars($selected_job['allowance']) : 'Not specified' ?></strong>
+                                Allowance: <strong><?= $selected_job['allowance'] ? 'RM ' . htmlspecialchars($selected_job['allowance']) : 'Not specified' ?></strong>
                             </div>
                             <div><i class="bi bi-calendar3 me-1"></i> Posted <?= htmlspecialchars(date('d M Y', strtotime($selected_job['created_at']))) ?></div>
                         </div>
@@ -339,7 +335,6 @@ function selectFilter(name, value) {
 
                         <hr class="my-4 border-light border-opacity-10">
 
-                        <!-- Other Internships offered by the company -->
                         <div>
                             <h5 class="fw-bold mb-3 text-white">Other Internships from <?= htmlspecialchars($selected_job['company_name']) ?></h5>
                             <?php if (!$res_other || mysqli_num_rows($res_other) === 0): ?>

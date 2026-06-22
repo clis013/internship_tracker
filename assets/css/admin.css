@@ -476,7 +476,7 @@ body.light-theme p.small {
 
 /* ── UNIVERSAL SUB-PAGE ACTIVATOR (This handles the Page_bg background) ── */
 body.light-theme {
-    background-image: url('../images/Page_bg.JPG.jpeg') !important;
+    background-image: url('../images/Page_bg.jpg?v=6') !important;
     background-color: #050505 !important;
     background-size: cover !important;
     background-position: center !important;
