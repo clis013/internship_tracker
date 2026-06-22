@@ -18,5 +18,10 @@
     
     <!-- ADDED: Student Dashboard CSS -->
     <link href="/internship_tracker/assets/css/student.css" rel="stylesheet">
+    
+    <!-- ADDED: Company Dashboard CSS -->
+    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'company'): ?>
+        <link href="/internship_tracker/assets/css/company.css" rel="stylesheet">
+    <?php endif; ?>
 </head>
 <body>

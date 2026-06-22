@@ -67,10 +67,17 @@ if (isset($_GET['edit'])) {
     $edit_job = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 }
 
-// Fetch all jobs for this company
-$stmt = mysqli_prepare($conn, "SELECT j.*, (SELECT COUNT(*) FROM applications a WHERE a.job_id = j.id) AS applicant_count
-    FROM jobs j WHERE j.company_id = ? ORDER BY j.created_at DESC");
-mysqli_stmt_bind_param($stmt, "i", $company_id);
+// Fetch jobs for this company (filter by status if requested)
+$status_filter = $_GET['status'] ?? '';
+if ($status_filter === 'active' || $status_filter === 'closed') {
+    $stmt = mysqli_prepare($conn, "SELECT j.*, (SELECT COUNT(*) FROM applications a WHERE a.job_id = j.id) AS applicant_count
+        FROM jobs j WHERE j.company_id = ? AND j.status = ? ORDER BY j.created_at DESC");
+    mysqli_stmt_bind_param($stmt, "is", $company_id, $status_filter);
+} else {
+    $stmt = mysqli_prepare($conn, "SELECT j.*, (SELECT COUNT(*) FROM applications a WHERE a.job_id = j.id) AS applicant_count
+        FROM jobs j WHERE j.company_id = ? ORDER BY j.created_at DESC");
+    mysqli_stmt_bind_param($stmt, "i", $company_id);
+}
 mysqli_stmt_execute($stmt);
 $jobs = mysqli_stmt_get_result($stmt);
 ?>
@@ -147,7 +154,14 @@ $jobs = mysqli_stmt_get_result($stmt);
         </div>
     </div>
 
-    <h5 class="mb-3 text-white">Your Internship Listings</h5>
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h5 class="mb-0 text-white">Your Internship Listings</h5>
+        <div class="btn-group">
+            <a href="manage_jobs.php" class="btn btn-sm <?= empty($status_filter) ? 'btn-glass-primary' : 'btn-glass-secondary' ?> px-3">All</a>
+            <a href="manage_jobs.php?status=active" class="btn btn-sm <?= $status_filter === 'active' ? 'btn-glass-primary' : 'btn-glass-secondary' ?> px-3">Active</a>
+            <a href="manage_jobs.php?status=closed" class="btn btn-sm <?= $status_filter === 'closed' ? 'btn-glass-primary' : 'btn-glass-secondary' ?> px-3">Closed</a>
+        </div>
+    </div>
     <?php if (mysqli_num_rows($jobs) === 0): ?>
         <div class="alert bg-transparent border border-info text-info text-center py-4 my-2">No internships posted yet.</div>
     <?php else: ?>
