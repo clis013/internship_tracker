@@ -203,7 +203,7 @@ function status_badge($status) {
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="fw-bold mb-0 text-white">Recent Applications</h5>
-                        <a href="..." class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">View all</a>
+                        <a href="my_applications.php" class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">View all</a>
                     </div>
                     
                     <?php if (mysqli_num_rows($recent) === 0): ?>

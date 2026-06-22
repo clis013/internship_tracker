@@ -48,7 +48,7 @@ $recent_jobs = mysqli_stmt_get_result($stmt);
                 <h1 class="hero-title">Innovate.<br>Elevate.<br>Transform.</h1>
                 <p class="hero-subtitle mt-3">Empowering your recruitment process with cutting-edge tools and streamlined applicant tracking. Build your dream team today.</p>
                 <div class="d-flex gap-3 mt-4">
-                    <a href="post_job.php" class="btn btn-glass-white rounded-pill">Post a Job</a>
+                    <a href="manage_jobs.php" class="btn btn-glass-white rounded-pill">Post a Job</a>
                     <a href="profile.php" class="btn btn-glass-secondary rounded-pill px-4 py-2"><i class="bi bi-asterisk"></i> Company Profile</a>
                 </div>
             </div>
