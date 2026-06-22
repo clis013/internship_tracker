@@ -296,7 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-glass-primary">Update Password</button>
+                    <button type="submit" name="update_password" class="btn btn-glass-white" style="border-radius: 8px !important; padding: 0.375rem 0.75rem !important; font-size: 1rem !important; line-height: 1.5 !important;">Update Password</button>
                 </div>
             </form>
         </div>
