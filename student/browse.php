@@ -22,6 +22,9 @@ $field         = trim($_GET['field'] ?? '');
 $location      = trim($_GET['location'] ?? '');
 $industry      = trim($_GET['industry'] ?? '');
 $min_allowance = trim($_GET['min_allowance'] ?? '');
+if ($min_allowance !== '' && (int)$min_allowance < 0) {
+    $min_allowance = '0';
+}
 
 $sql = "SELECT j.id, j.company_id, j.title, j.description, j.location, j.allowance, j.field, j.created_at, 
                u.name AS company_name, u.industry AS company_industry
@@ -227,7 +230,7 @@ function selectFilter(name, value) {
 
             <div class="col-md-2">
                 <label class="form-label small fw-bold text-white">Min Allowance ($)</label>
-                <input type="number" name="min_allowance" class="form-control glass-input text-white" placeholder="e.g. 500"
+                <input type="number" name="min_allowance" class="form-control glass-input text-white" placeholder="e.g. 500" min="0"
                        value="<?= htmlspecialchars($min_allowance) ?>">
             </div>
 

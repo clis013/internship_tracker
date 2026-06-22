@@ -154,10 +154,11 @@ $stats = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt_stats));
 
 function status_badge($status) {
     $map = [
-        'pending'  => 'secondary',
-        'reviewed' => 'info',
-        'accepted' => 'success',
-        'rejected' => 'danger',
+        'pending'     => 'secondary',
+        'reviewed'    => 'info',
+        'interviewed' => 'primary',
+        'accepted'    => 'success',
+        'rejected'    => 'danger',
     ];
     $class = $map[$status] ?? 'secondary';
     return "<span class=\"badge badge-uniform bg-$class\">" . htmlspecialchars(ucfirst($status)) . "</span>";
@@ -244,6 +245,7 @@ function status_badge($status) {
                     <option value="">All Statuses</option>
                     <option value="pending" <?= $status === 'pending' ? 'selected' : '' ?>>Pending</option>
                     <option value="reviewed" <?= $status === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
+                    <option value="interviewed" <?= $status === 'interviewed' ? 'selected' : '' ?>>Interviewed</option>
                     <option value="accepted" <?= $status === 'accepted' ? 'selected' : '' ?>>Accepted</option>
                     <option value="rejected" <?= $status === 'rejected' ? 'selected' : '' ?>>Rejected</option>
                 </select>
@@ -296,30 +298,35 @@ function status_badge($status) {
                                     $steps = [
                                         ['label' => 'Applied', 'state' => 'completed'],
                                         ['label' => 'Resume Screen', 'state' => 'completed'],
-                                        ['label' => 'Rejected', 'state' => 'rejected']
+                                        ['label' => 'Interview', 'state' => 'completed'],
+                                        ['label' => 'Decision', 'state' => 'rejected']
                                     ];
                                 } elseif ($appStatus === 'accepted') {
                                     $steps = [
                                         ['label' => 'Applied', 'state' => 'completed'],
                                         ['label' => 'Resume Screen', 'state' => 'completed'],
-                                        ['label' => 'Technical Interview', 'state' => 'completed'],
-                                        ['label' => 'HR Interview', 'state' => 'completed'],
-                                        ['label' => 'Accepted', 'state' => 'accepted']
+                                        ['label' => 'Interview', 'state' => 'completed'],
+                                        ['label' => 'Decision', 'state' => 'accepted']
+                                    ];
+                                } elseif ($appStatus === 'interviewed') {
+                                    $steps = [
+                                        ['label' => 'Applied', 'state' => 'completed'],
+                                        ['label' => 'Resume Screen', 'state' => 'completed'],
+                                        ['label' => 'Interview', 'state' => 'completed'],
+                                        ['label' => 'Decision', 'state' => 'active']
                                     ];
                                 } elseif ($appStatus === 'reviewed') {
                                     $steps = [
                                         ['label' => 'Applied', 'state' => 'completed'],
                                         ['label' => 'Resume Screen', 'state' => 'completed'],
-                                        ['label' => 'Technical Interview', 'state' => 'active'],
-                                        ['label' => 'HR Interview', 'state' => 'pending'],
+                                        ['label' => 'Interview', 'state' => 'active'],
                                         ['label' => 'Decision', 'state' => 'pending']
                                     ];
                                 } else { // pending
                                     $steps = [
                                         ['label' => 'Applied', 'state' => 'completed'],
                                         ['label' => 'Resume Screen', 'state' => 'active'],
-                                        ['label' => 'Technical Interview', 'state' => 'pending'],
-                                        ['label' => 'HR Interview', 'state' => 'pending'],
+                                        ['label' => 'Interview', 'state' => 'pending'],
                                         ['label' => 'Decision', 'state' => 'pending']
                                     ];
                                 }

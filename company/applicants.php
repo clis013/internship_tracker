@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $app_id = (int)$_POST['app_id'];
     $new_status = $_POST['status'];
 
-    if (in_array($new_status, ['pending', 'reviewed', 'accepted', 'rejected'])) {
-        if ($new_status === 'accepted') {
+    if (in_array($new_status, ['pending', 'reviewed', 'interviewed', 'accepted', 'rejected'])) {
+        if ($new_status === 'accepted' || $new_status === 'interviewed') {
             $interview_date  = trim($_POST['interview_date'] ?? '');
             $interview_time  = trim($_POST['interview_time'] ?? '');
             $interview_venue = trim($_POST['interview_venue'] ?? '');
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Optional filters
 $job_id_filter   = isset($_GET['job_id']) ? (int)$_GET['job_id'] : 0;
-$status_filter   = isset($_GET['status']) && in_array($_GET['status'], ['pending','reviewed','accepted','rejected'])
+$status_filter   = isset($_GET['status']) && in_array($_GET['status'], ['pending','reviewed','interviewed','accepted','rejected'])
                    ? $_GET['status'] : '';
 
 // Get this company's jobs for the filter dropdown
@@ -92,10 +92,11 @@ $applicants = mysqli_stmt_get_result($stmt);
 
 function status_badge($status) {
     $map = [
-        'pending'  => 'secondary',
-        'reviewed' => 'info',
-        'accepted' => 'success',
-        'rejected' => 'danger',
+        'pending'     => 'secondary',
+        'reviewed'    => 'info',
+        'interviewed' => 'primary',
+        'accepted'    => 'success',
+        'rejected'    => 'danger',
     ];
     $class = $map[$status] ?? 'secondary';
     return "<span class=\"badge badge-uniform bg-$class\">" . htmlspecialchars(ucfirst($status)) . "</span>";
@@ -128,10 +129,11 @@ function status_badge($status) {
         <div class="col-md-3">
             <select name="status" class="form-select glass-select text-white" onchange="this.form.submit()">
                 <option value="">All Statuses</option>
-                <option value="pending"   <?= $status_filter === 'pending'  ? 'selected' : '' ?>>Pending Review</option>
-                <option value="reviewed"  <?= $status_filter === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
-                <option value="accepted"  <?= $status_filter === 'accepted' ? 'selected' : '' ?>>Accepted</option>
-                <option value="rejected"  <?= $status_filter === 'rejected' ? 'selected' : '' ?>>Rejected</option>
+                <option value="pending"     <?= $status_filter === 'pending'     ? 'selected' : '' ?>>Pending Review</option>
+                <option value="reviewed"    <?= $status_filter === 'reviewed'    ? 'selected' : '' ?>>Reviewed</option>
+                <option value="interviewed" <?= $status_filter === 'interviewed' ? 'selected' : '' ?>>Interviewed</option>
+                <option value="accepted"    <?= $status_filter === 'accepted'    ? 'selected' : '' ?>>Accepted</option>
+                <option value="rejected"    <?= $status_filter === 'rejected'    ? 'selected' : '' ?>>Rejected</option>
             </select>
         </div>
         <?php if ($job_id_filter || $status_filter): ?>
@@ -197,30 +199,11 @@ function status_badge($status) {
                                         <label class="form-label text-white fw-semibold mb-0">Status:</label>
                                     </div>
                                     <div class="col-auto">
-                                        <select name="status" id="statusSelect<?= $i ?>" class="form-select form-select-sm glass-select text-white" onchange="toggleInterviewFields(<?= $i ?>)">
-                                            <?php foreach (['pending', 'reviewed', 'accepted', 'rejected'] as $s): ?>
+                                        <select name="status" id="statusSelect<?= $i ?>" class="form-select form-select-sm glass-select text-white">
+                                            <?php foreach (['pending', 'reviewed', 'interviewed', 'accepted', 'rejected'] as $s): ?>
                                                 <option value="<?= $s ?>" <?= $app['status'] === $s ? 'selected' : '' ?>><?= ucfirst($s) ?></option>
                                             <?php endforeach; ?>
                                         </select>
-                                    </div>
-                                </div>
-
-                                <!-- Interview Fields: Only visible/active when 'accepted' is selected -->
-                                <div id="interviewFieldsContainer<?= $i ?>" style="display: <?= $app['status'] === 'accepted' ? 'block' : 'none' ?>;">
-                                    <h6 class="text-info fw-bold mb-3"><i class="bi bi-calendar-event-fill me-2"></i>Interview Details</h6>
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-md-4">
-                                            <label class="form-label small text-white fw-semibold">Date</label>
-                                            <input type="text" name="interview_date" class="form-control form-control-sm glass-input text-white" placeholder="e.g. 25 June 2026" value="<?= htmlspecialchars($app['interview_date'] ?? '') ?>">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label small text-white fw-semibold">Time</label>
-                                            <input type="text" name="interview_time" class="form-control form-control-sm glass-input text-white" placeholder="e.g. 10:00 AM" value="<?= htmlspecialchars($app['interview_time'] ?? '') ?>">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label small text-white fw-semibold">Venue</label>
-                                            <input type="text" name="interview_venue" class="form-control form-control-sm glass-input text-white" placeholder="e.g. Level 5, Room 502 / Google Meet" value="<?= htmlspecialchars($app['interview_venue'] ?? '') ?>">
-                                        </div>
                                     </div>
                                 </div>
 
@@ -282,16 +265,5 @@ function status_badge($status) {
     <?php endif; ?>
 </div>
 
-<script>
-function toggleInterviewFields(index) {
-    const select = document.getElementById('statusSelect' + index);
-    const container = document.getElementById('interviewFieldsContainer' + index);
-    if (select.value === 'accepted') {
-        container.style.display = 'block';
-    } else {
-        container.style.display = 'none';
-    }
-}
-</script>
 
 <?php include '../includes/footer.php'; ?>

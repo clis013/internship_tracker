@@ -91,10 +91,11 @@ $interest_jobs = mysqli_stmt_get_result($stmt_interest);
 
 function status_badge($status) {
     $map = [
-        'pending'  => 'secondary',
-        'reviewed' => 'info',
-        'accepted' => 'success',
-        'rejected' => 'danger',
+        'pending'     => 'secondary',
+        'reviewed'    => 'info',
+        'interviewed' => 'primary',
+        'accepted'    => 'success',
+        'rejected'    => 'danger',
     ];
     $class = $map[$status] ?? 'secondary';
     return "<span class=\" badge-uniform bg-$class\">" . htmlspecialchars(ucfirst($status)) . "</span>";
