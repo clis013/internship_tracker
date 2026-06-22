@@ -141,7 +141,7 @@ while ($row = mysqli_fetch_assoc($internships)) {
                         </div>
                         
                         <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
-                            <a href="..." class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">Applicants</a>
+                            <a href="view_applicants.php?job_id=<?= (int)$j['id'] ?>" class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">Applicants</a>
                             <a href="manage_internships.php?delete=<?= (int)$j['id'] ?>"
                                class="btn btn-sm btn-glass-danger rounded-pill px-3"
                                onclick="return confirm('Delete this internship posting? This removes all associated student applications.')">

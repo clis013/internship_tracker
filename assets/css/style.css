@@ -1,15 +1,3 @@
-/* Custom styles — written after Bootstrap so these override it */
-/*share styling for there components
-body
-navbar
-footer
-buttons
-forms
-tables
-modals
-*/
-
-
 body {
     background-color: #f8f9fa;
 }
@@ -19,33 +7,23 @@ body {
     letter-spacing: 1px;
 }
 
-/* ========================================================= */
-/* GLOBAL UTILITIES                                          */
-/* ========================================================= */
-
-/* Locks badge sizes across the entire application */
 .badge-uniform {
-    font-size: 0.75rem !important;     
-    padding: 0.4em 0 !important;       /* Removed side padding so fixed width works perfectly */
-    line-height: 1.2 !important;         
-    border-radius: 6px !important;     
+    font-size: 0.75rem !important;
+    padding: 0.4em 0 !important;
+    line-height: 1.2 !important;
+    border-radius: 6px !important;
     font-weight: 600 !important;
-    width: 80px !important;            /* Forces all badges to be exactly 80px wide */
-    display: inline-block !important;  /* Required for fixed width to apply */
-    text-align: center !important;     /* Keeps the text perfectly centered */
+    width: 80px !important;
+    display: inline-block !important;
+    text-align: center !important;
 }
 
-
-/* Add more as you build each page */
-
-/* Browse Internships Two-Column Layout */
 .job-list-scroll {
     max-height: calc(100vh - 250px);
     overflow-y: auto;
     padding-right: 5px;
 }
 
-/* Premium scrollbar styling */
 .job-list-scroll::-webkit-scrollbar {
     width: 6px;
 }
@@ -64,7 +42,6 @@ body {
     background: #aaa;
 }
 
-/* Job Card Hover & Active Styles */
 .job-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     cursor: pointer;
@@ -83,7 +60,6 @@ body {
     box-shadow: 0 2px 8px rgba(13, 110, 253, 0.08) !important;
 }
 
-/* Truncation utility */
 .text-truncate-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -91,12 +67,10 @@ body {
     overflow: hidden;
 }
 
-/* Dashed borders for cleaner detail subsections */
 .border-bottom-dashed {
     border-bottom: 1px dashed #dee2e6 !important;
 }
 
-/* Profile Avatar Styles */
 .profile-avatar-container {
     position: relative;
     width: 150px;
@@ -127,7 +101,6 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* Avatar Hover Overlay */
 .avatar-hover-overlay {
     transition: opacity 0.2s ease-in-out;
 }
@@ -136,7 +109,6 @@ body {
     opacity: 1 !important;
 }
 
-/* Dashboard Cards Hover */
 .dashboard-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
@@ -147,7 +119,6 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Stepper progress */
 .stepper-wrapper {
     position: relative;
 }
@@ -170,4 +141,19 @@ body {
 
 .step-counter {
     z-index: 2;
+}
+
+.badge-fit-content {
+    font-size: 0.75rem !important;
+    padding: 0.4em 0.8em !important;
+    line-height: 1.2 !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    display: inline-block !important;
+    text-align: center !important;
+    width: auto !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }

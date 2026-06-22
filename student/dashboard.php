@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif (isset($_POST['action']) && $_POST['action'] === 'delete_reminder') {
         $reminder_id = (int)($_POST['reminder_id'] ?? 0);
-        // Verify ownership
         $stmt_del = mysqli_prepare($conn, "DELETE FROM reminders WHERE id = ? AND student_id = ?");
         mysqli_stmt_bind_param($stmt_del, "ii", $reminder_id, $student_id);
         if (mysqli_stmt_execute($stmt_del)) {
@@ -41,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch reminders sorted by due_date ASC (closer due dates first)
 $sql_reminders = "SELECT r.id, r.task, r.due_date, r.app_id, j.title AS job_title, u.name AS company_name
                   FROM reminders r
                   LEFT JOIN applications a ON r.app_id = a.id
@@ -54,7 +52,6 @@ mysqli_stmt_bind_param($stmt_reminders, "i", $student_id);
 mysqli_stmt_execute($stmt_reminders);
 $reminders = mysqli_stmt_get_result($stmt_reminders);
 
-// Stats
 $stmt = mysqli_prepare($conn, "SELECT 
     COUNT(*) AS total,
     SUM(status = 'pending') AS pending,
@@ -66,7 +63,6 @@ mysqli_stmt_bind_param($stmt, "i", $student_id);
 mysqli_stmt_execute($stmt);
 $stats = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 
-// Recent applications (limit to 3)
 $stmt = mysqli_prepare($conn, "SELECT a.id, a.status, a.applied_at, j.title, u.name AS company_name
     FROM applications a
     JOIN jobs j ON a.job_id = j.id
@@ -77,7 +73,6 @@ mysqli_stmt_bind_param($stmt, "i", $student_id);
 mysqli_stmt_execute($stmt);
 $recent = mysqli_stmt_get_result($stmt);
 
-// Jobs you may be interested in (limit to 3, excluding already applied)
 $stmt_interest = mysqli_prepare($conn, "SELECT j.id, j.title, j.location, j.field, u.name AS company_name
     FROM jobs j
     JOIN users u ON j.company_id = u.id
@@ -297,11 +292,11 @@ function status_badge($status) {
                                             <small class="<?= $due_color ?>" style="font-size: 0.75rem;"><?= $formatted_due ?></small>
                                         </div>
                                         <?php if ($rem['app_id']): ?>
-                                            <span class="badge badge-uniform bg-secondary bg-opacity-50 text-white small" style="font-size: 0.7rem; cursor: pointer;" onclick="location.href='my_applications.php'">
+                                            <span class="badge badge-fit-content bg-secondary bg-opacity-50 text-white small" style="font-size: 0.7rem; cursor: pointer;" onclick="location.href='my_applications.php'">
                                                 <i class="bi bi-briefcase-fill me-1"></i><?= htmlspecialchars($rem['job_title']) ?> (<?= htmlspecialchars($rem['company_name']) ?>)
                                             </span>
                                         <?php else: ?>
-                                            <span class="badge badge-uniform bg-info bg-opacity-25 text-info small" style="font-size: 0.7rem;">
+                                            <span class="badge badge-fit-content bg-info bg-opacity-25 text-info small" style="font-size: 0.7rem;">
                                                 <i class="bi bi-pin-angle-fill me-1"></i>Personal Task
                                             </span>
                                         <?php endif; ?>

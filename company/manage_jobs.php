@@ -33,6 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($title) || empty($description) || empty($location) || empty($field) || empty($allowance)) {
         $error = 'All fields (Title, Description, Location, Allowance, and Field) are required.';
+    } elseif (preg_match('/-\s*\d+/', $allowance) || (is_numeric($allowance) && (float)$allowance < 0)) {
+        $error = 'Allowance cannot be a negative value.';
     } elseif (!in_array($status, ['active', 'closed'])) {
         $error = 'Invalid status.';
     } else {
@@ -130,7 +132,8 @@ $jobs = mysqli_stmt_get_result($stmt);
                     <div class="col-md-3">
                         <label class="form-label text-white">Allowance (USD/month)</label>
                         <input type="text" name="allowance" class="form-control glass-input text-white" placeholder="e.g. 500 or Unpaid" required
-                               value="<?= htmlspecialchars($edit_job['allowance'] ?? '') ?>">
+                               value="<?= htmlspecialchars($edit_job['allowance'] ?? '') ?>"
+                               oninput="this.setCustomValidity((/-\s*\d+/.test(this.value) || (!isNaN(this.value.trim()) && this.value.trim() !== '' && Number(this.value.trim()) < 0)) ? 'Allowance cannot be a negative value.' : '')">
                     </div>
                     <div class="col-12">
                         <label class="form-label text-white">Description</label>

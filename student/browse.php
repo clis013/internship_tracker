@@ -71,13 +71,11 @@ if ($params) {
 mysqli_stmt_execute($stmt);
 $jobs = mysqli_stmt_get_result($stmt);
 
-// Load all jobs into an array
 $jobs_list = [];
 while ($row = mysqli_fetch_assoc($jobs)) {
     $jobs_list[] = $row;
 }
 
-// Determine selected job
 $selected_job = null;
 $selected_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($selected_id > 0) {
@@ -88,12 +86,10 @@ if ($selected_id > 0) {
         }
     }
 }
-// Default to first job in search list if none selected
 if (!$selected_job && !empty($jobs_list)) {
     $selected_job = $jobs_list[0];
 }
 
-// Fetch other jobs offered by the company of the selected job
 $res_other = null;
 if ($selected_job) {
     $stmt_other = mysqli_prepare($conn, "SELECT id, title, location, field FROM jobs WHERE company_id = ? AND id != ? AND status = 'active' ORDER BY created_at DESC");
@@ -102,16 +98,12 @@ if ($selected_job) {
     $res_other = mysqli_stmt_get_result($stmt_other);
 }
 
-// distinct fields for filter dropdown
 $field_list = mysqli_query($conn, "SELECT DISTINCT field FROM jobs WHERE field IS NOT NULL AND field != '' ORDER BY field");
 
-// distinct locations for filter dropdown
 $location_list = mysqli_query($conn, "SELECT DISTINCT location FROM jobs WHERE location IS NOT NULL AND location != '' ORDER BY location");
 
-// distinct industries for filter dropdown
 $industry_list = mysqli_query($conn, "SELECT DISTINCT industry FROM users WHERE role = 'company' AND industry IS NOT NULL AND industry != '' ORDER BY industry");
 
-// jobs the student already applied to
 $applied_ids = [];
 $stmt2 = mysqli_prepare($conn, "SELECT job_id FROM applications WHERE student_id = ?");
 mysqli_stmt_bind_param($stmt2, "i", $student_id);
@@ -121,7 +113,6 @@ while ($r = mysqli_fetch_assoc($res2)) {
     $applied_ids[] = $r['job_id'];
 }
 
-// Search parameters query string for side links
 $search_query = http_build_query([
     'search' => $search,
     'field' => $field,
@@ -257,11 +248,13 @@ function selectFilter(name, value) {
                                 <h6 class="card-title fw-bold mb-1 text-truncate text-white"><?= htmlspecialchars($job['title']) ?></h6>
                                 <div class="text-white-50 small mb-2 text-truncate fw-semibold"><?= htmlspecialchars($job['company_name']) ?></div>
                                 
-                                <?php if (!empty($job['company_industry'])): ?>
-                                    <span class="badge badge-uniform bg-white bg-opacity-10 text-white border border-light border-opacity-10 mb-2 small fw-semibold" style="font-size: 0.7rem;">
-                                        <i class="bi bi-building me-1"></i><?= htmlspecialchars($job['company_industry']) ?>
-                                    </span>
-                                <?php endif; ?>
+                                <div class="d-flex flex-wrap gap-1 mb-2">
+                                    <?php if (!empty($job['company_industry'])): ?>
+                                        <span class="badge badge-fit-content bg-white bg-opacity-10 text-white border border-light border-opacity-10 small fw-semibold" style="font-size: 0.7rem;">
+                                            <i class="bi bi-building me-1"></i><?= htmlspecialchars($job['company_industry']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
                                 
                                 <div class="d-flex flex-wrap gap-2 mb-2 small text-white-50">
                                     <?php if ($job['location']): ?>
@@ -280,19 +273,21 @@ function selectFilter(name, value) {
                     <?php endforeach; ?>
                 </div>
             </div>
-
+ 
             <div class="col-lg-8 col-md-7">
                 <?php if ($selected_job): ?>
                     <div class="glass-card shadow-sm p-4">
                         <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
                             <div>
                                 <h4 class="fw-bold mb-1 text-white"><?= htmlspecialchars($selected_job['title']) ?></h4>
-                                <h5 class="text-white-50 fw-semibold"><?= htmlspecialchars($selected_job['company_name']) ?></h5>
-                                <?php if (!empty($selected_job['company_industry'])): ?>
-                                    <span class="badge badge-uniform bg-white bg-opacity-10 text-white border border-light border-opacity-10 small fw-semibold py-1 px-2">
-                                        <i class="bi bi-building me-1"></i><?= htmlspecialchars($selected_job['company_industry']) ?>
-                                    </span>
-                                <?php endif; ?>
+                                <h5 class="text-white-50 fw-semibold mb-2"><?= htmlspecialchars($selected_job['company_name']) ?></h5>
+                                <div class="d-flex flex-wrap gap-1 mb-2">
+                                    <?php if (!empty($selected_job['company_industry'])): ?>
+                                        <span class="badge badge-fit-content bg-white bg-opacity-10 text-white border border-light border-opacity-10 small fw-semibold py-1 px-2">
+                                            <i class="bi bi-building me-1"></i><?= htmlspecialchars($selected_job['company_industry']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                             <div>
                                 <?php if (in_array($selected_job['id'], $applied_ids)): ?>
@@ -301,7 +296,7 @@ function selectFilter(name, value) {
                                     </button>
                                 <?php else: ?>
                                     <?php if ($has_resume): ?>
-                                        <a href="apply.php?job_id=<?= (int)$job['id'] ?>" class="btn btn-glass-white rounded-pill px-4 py-2">Apply Now →</a>
+                                        <a href="apply.php?job_id=<?= (int)$selected_job['id'] ?>" class="btn btn-glass-white rounded-pill px-4 py-2">Apply Now →</a>
                                     <?php else: ?>
                                         <div class="alert bg-transparent border border-warning text-warning p-2 mb-0 rounded d-flex align-items-center gap-2">
                                             <i class="bi bi-exclamation-triangle-fill fs-5"></i>
@@ -311,7 +306,7 @@ function selectFilter(name, value) {
                                 <?php endif; ?>
                             </div>
                         </div>
-
+ 
                         <div class="d-flex flex-wrap gap-3 mb-4 text-white-50 small border-bottom border-light border-opacity-10 pb-3">
                             <?php if ($selected_job['location']): ?>
                                 <div><i class="bi bi-geo-alt-fill text-danger me-1"></i> <?= htmlspecialchars($selected_job['location']) ?></div>

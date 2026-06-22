@@ -183,7 +183,7 @@ function stat_pill(string $label, $value, string $colour = 'secondary'): string 
                         </div>
                         
                         <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
-                            <a href="..." class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">View</a>
+                            <a href="#" class="view-user-trigger btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;" data-user-id="<?= (int)$u['id'] ?>">View</a>
                             <?php if ((int)$u['id'] !== (int)$_SESSION['user_id']): ?>
                                 <a href="view_users.php?delete=<?= (int)$u['id'] ?>"
                                    class="btn btn-sm btn-glass-danger rounded-pill px-3"
