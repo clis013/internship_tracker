@@ -273,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- Change Password Modal -->
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass-card text-start" style="background: rgba(15, 15, 15, 0.85) !important;">
+        <div class="modal-content glass-card text-start">
             <div class="modal-header border-0 pb-0">
                 <h5 class="modal-title text-white fw-bold" id="changePasswordModalLabel">Change Password</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -306,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- Delete Account Modal -->
 <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass-card text-start" style="background: rgba(15, 15, 15, 0.85) !important;">
+        <div class="modal-content glass-card text-start">
             <div class="modal-header border-0 pb-0">
                 <h5 class="modal-title text-danger fw-bold" id="deleteAccountModalLabel">Delete Account</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>

@@ -141,60 +141,178 @@ $search_query = http_build_query([
     background-color: rgba(255, 255, 255, 0.05) !important;
     color: #ffffff !important;
 }
+.no-caret::after {
+    display: none !important;
+}
+.dropdown-submenu {
+    position: relative;
+}
+.dropdown-submenu-menu {
+    top: 0;
+    right: 100%;
+    margin-right: 2px;
+    display: none !important;
+    position: absolute;
+    list-style: none;
+    padding: 0;
+    z-index: 2000 !important;
+}
+.dropdown-submenu:hover > .dropdown-submenu-menu {
+    display: block !important;
+}
+.active-filter {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-left: 3px solid #38b6ff !important;
+}
+.dropdown-submenu-menu .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+.dropdown-menu {
+    z-index: 2000 !important;
+}
 </style>
+
+<script>
+function selectFilter(name, value) {
+    const input = document.getElementById('filter_' + name);
+    if (input) {
+        input.value = value;
+        input.form.submit();
+    }
+}
+</script>
 
 <div class="container mt-4 pb-5">
     <h3 class="fw-bold text-white mb-4">Browse Internships</h3>
 
     <!-- Filters Panel -->
-    <form method="GET" class="glass-card p-4 mb-4">
+    <form method="GET" class="glass-card p-4 mb-4" style="position: relative; z-index: 10;">
         <div class="row g-3">
-            <div class="col-md-3">
+            <div class="col-md-9">
                 <label class="form-label small fw-bold text-white">Search Keywords</label>
                 <div class="input-group">
                     <input type="text" name="search" class="form-control glass-input border-end-0 text-white" placeholder="Search by title or keyword..."
                            value="<?= htmlspecialchars($search) ?>">
-                    <span class="input-group-text glass-input border-start-0 text-white"><i class="bi bi-search"></i></span>
+                    <button type="submit" class="btn input-group-text glass-input border-start-0 text-white m-0 px-3" style="cursor: pointer;">
+                        <i class="bi bi-search"></i>
+                    </button>
                 </div>
-            </div>
-            
-            <div class="col-md-2">
-                <label class="form-label small fw-bold text-white">Field</label>
-                <select name="field" class="form-select glass-select text-white">
-                    <option value="">All Fields</option>
-                    <?php 
-                    mysqli_data_seek($field_list, 0);
-                    while ($f = mysqli_fetch_assoc($field_list)): 
-                    ?>
-                        <option value="<?= htmlspecialchars($f['field']) ?>" <?= $field === $f['field'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($f['field']) ?>
-                        </option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label class="form-label small fw-bold text-white">Location</label>
-                <select name="location" class="form-select glass-select text-white">
-                    <option value="">All Locations</option>
-                    <?php mysqli_data_seek($location_list, 0); ?>
-                    <?php while ($loc = mysqli_fetch_assoc($location_list)): ?>
-                        <option value="<?= htmlspecialchars($loc['location']) ?>" <?= $location === $loc['location'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($loc['location']) ?>
-                        </option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label class="form-label small fw-bold text-white">Min Allowance ($)</label>
-                <input type="number" name="min_allowance" class="form-control glass-input text-white" placeholder="e.g. 500"
-                       value="<?= htmlspecialchars($min_allowance) ?>">
             </div>
 
             <div class="col-md-3 d-flex align-items-end gap-2">
-                <button type="submit" class="btn btn-glass-primary flex-fill fw-bold py-2">Search & Filter</button>
-                <a href="browse.php" class="btn btn-glass-white" style="border-radius: 8px !important; padding: 0.5rem 1.25rem !important;">Reset</a>
+                <!-- Filter Dropdown Trigger -->
+                <div class="dropdown">
+                    <button class="btn btn-glass-primary px-3 fw-bold dropdown-toggle no-caret" type="button" id="filterDropdownButton" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 8px !important; padding: 0.5rem 1rem !important;" title="Filters">
+                        <i class="bi bi-filter fs-5"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end glass-card p-2 shadow-lg" aria-labelledby="filterDropdownButton" style="background: rgba(15, 15, 15, 0.95) !important; border: 1px solid rgba(255, 255, 255, 0.15) !important; min-width: 180px;">
+                        <li class="dropdown-header text-white-50 fw-bold border-bottom border-light border-opacity-10 pb-2 mb-1">Filter by</li>
+                        
+                        <!-- Field Category -->
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item text-white d-flex justify-content-between align-items-center py-2" href="#">
+                                <span>
+                                    <i class="bi bi-tag-fill me-2 text-primary"></i>Field
+                                    <?php if ($field !== ''): ?>
+                                        <span class="badge bg-primary p-1 ms-1 rounded-circle" style="width: 6px; height: 6px; display: inline-block !important; padding: 0 !important; vertical-align: middle;"></span>
+                                    <?php endif; ?>
+                                </span>
+                                <i class="bi bi-chevron-right small text-white-50"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-submenu-menu glass-card p-2 shadow-lg" style="background: rgba(15, 15, 15, 0.95) !important; border: 1px solid rgba(255, 255, 255, 0.15) !important; min-width: 200px; max-height: 300px; overflow-y: auto;">
+                                <li>
+                                    <a class="dropdown-item text-white py-2 <?= $field === '' ? 'active-filter' : '' ?>" href="#" onclick="selectFilter('field', '')">
+                                        All Fields
+                                    </a>
+                                </li>
+                                <?php 
+                                mysqli_data_seek($field_list, 0);
+                                while ($f = mysqli_fetch_assoc($field_list)): 
+                                ?>
+                                    <li>
+                                        <a class="dropdown-item text-white py-2 <?= $field === $f['field'] ? 'active-filter' : '' ?>" href="#" onclick="selectFilter('field', '<?= htmlspecialchars(addslashes($f['field'])) ?>')">
+                                            <?= htmlspecialchars($f['field']) ?>
+                                        </a>
+                                    </li>
+                                <?php endwhile; ?>
+                            </ul>
+                        </li>
+
+                        <!-- Location Category -->
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item text-white d-flex justify-content-between align-items-center py-2" href="#">
+                                <span>
+                                    <i class="bi bi-geo-alt-fill me-2 text-danger"></i>Location
+                                    <?php if ($location !== ''): ?>
+                                        <span class="badge bg-danger p-1 ms-1 rounded-circle" style="width: 6px; height: 6px; display: inline-block !important; padding: 0 !important; vertical-align: middle;"></span>
+                                    <?php endif; ?>
+                                </span>
+                                <i class="bi bi-chevron-right small text-white-50"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-submenu-menu glass-card p-2 shadow-lg" style="background: rgba(15, 15, 15, 0.95) !important; border: 1px solid rgba(255, 255, 255, 0.15) !important; min-width: 200px; max-height: 300px; overflow-y: auto;">
+                                <li>
+                                    <a class="dropdown-item text-white py-2 <?= $location === '' ? 'active-filter' : '' ?>" href="#" onclick="selectFilter('location', '')">
+                                        All Locations
+                                    </a>
+                                </li>
+                                <?php mysqli_data_seek($location_list, 0); ?>
+                                <?php while ($loc = mysqli_fetch_assoc($location_list)): ?>
+                                    <li>
+                                        <a class="dropdown-item text-white py-2 <?= $location === $loc['location'] ? 'active-filter' : '' ?>" href="#" onclick="selectFilter('location', '<?= htmlspecialchars(addslashes($loc['location'])) ?>')">
+                                            <?= htmlspecialchars($loc['location']) ?>
+                                        </a>
+                                    </li>
+                                <?php endwhile; ?>
+                            </ul>
+                        </li>
+
+                        <!-- Min Allowance Category -->
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item text-white d-flex justify-content-between align-items-center py-2" href="#">
+                                <span>
+                                    <i class="bi bi-cash-stack me-2 text-success"></i>Min Allowance
+                                    <?php if ($min_allowance !== ''): ?>
+                                        <span class="badge bg-success p-1 ms-1 rounded-circle" style="width: 6px; height: 6px; display: inline-block !important; padding: 0 !important; vertical-align: middle;"></span>
+                                    <?php endif; ?>
+                                </span>
+                                <i class="bi bi-chevron-right small text-white-50"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-submenu-menu glass-card p-2 shadow-lg" style="background: rgba(15, 15, 15, 0.95) !important; border: 1px solid rgba(255, 255, 255, 0.15) !important; min-width: 200px;">
+                                <li>
+                                    <a class="dropdown-item text-white py-2 <?= $min_allowance === '' ? 'active-filter' : '' ?>" href="#" onclick="selectFilter('min_allowance', '')">
+                                        Any Allowance
+                                    </a>
+                                </li>
+                                <?php 
+                                $allowance_options = [300, 500, 800, 1000, 1500];
+                                foreach ($allowance_options as $opt):
+                                ?>
+                                    <li>
+                                        <a class="dropdown-item text-white py-2 <?= (int)$min_allowance === $opt ? 'active-filter' : '' ?>" href="#" onclick="selectFilter('min_allowance', '<?= $opt ?>')">
+                                            $<?= $opt ?>+
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                                <li class="border-top border-light border-opacity-10 mt-1 pt-1">
+                                    <div class="px-3 py-1">
+                                        <label class="form-label small text-white-50 mb-1 fw-bold">Custom ($)</label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" id="customAllowanceInput" class="form-control glass-input text-white" placeholder="e.g. 600" value="<?= htmlspecialchars($min_allowance) ?>" onchange="selectFilter('min_allowance', this.value)" style="box-shadow: none !important;">
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Hidden filter fields in the form to persist values -->
+                <input type="hidden" name="field" id="filter_field" value="<?= htmlspecialchars($field) ?>">
+                <input type="hidden" name="location" id="filter_location" value="<?= htmlspecialchars($location) ?>">
+                <input type="hidden" name="min_allowance" id="filter_min_allowance" value="<?= htmlspecialchars($min_allowance) ?>">
+
+                <!-- Reset Button -->
+                <a href="browse.php" class="btn btn-glass-white flex-fill text-center fw-bold" style="border-radius: 8px !important; padding: 0.5rem 1.25rem !important;">Reset</a>
             </div>
         </div>
     </form>

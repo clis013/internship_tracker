@@ -122,7 +122,3 @@ if ($role === 'company') {
         <p class="text-white-50 small mt-3 mb-0">Administrator accounts have no additional activity stats.</p>
     <?php endif; ?>
 </div>
-
-<div class="modal-footer border-0 border-top border-secondary border-opacity-25">
-    <button class="btn btn-glass-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
-</div>
