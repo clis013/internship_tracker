@@ -78,14 +78,17 @@ CREATE TABLE `jobs` (
 --  TABLE: applications
 -- ============================================================
 CREATE TABLE `applications` (
-  `id`           int(11)  NOT NULL,
-  `student_id`   int(11)  NOT NULL,
-  `job_id`       int(11)  NOT NULL,
-  `cover_letter` text     DEFAULT NULL,
-  `resume`       varchar(255) DEFAULT NULL,
-  `status`       enum('pending','reviewed','accepted','rejected') DEFAULT 'pending',
-  `notes`        text     DEFAULT NULL,
-  `applied_at`   timestamp NOT NULL DEFAULT current_timestamp()
+  `id`              int(11)  NOT NULL,
+  `student_id`      int(11)  NOT NULL,
+  `job_id`          int(11)  NOT NULL,
+  `cover_letter`    text     DEFAULT NULL,
+  `resume`          varchar(255) DEFAULT NULL,
+  `status`          enum('pending','reviewed','accepted','rejected') DEFAULT 'pending',
+  `interview_date`  varchar(50)  DEFAULT NULL,
+  `interview_time`  varchar(50)  DEFAULT NULL,
+  `interview_venue` varchar(255) DEFAULT NULL,
+  `notes`           text     DEFAULT NULL,
+  `applied_at`      timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ============================================================
