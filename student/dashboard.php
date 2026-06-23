@@ -88,7 +88,7 @@ function status_badge($status) {
     $map = [
         'pending'     => 'secondary',
         'reviewed'    => 'info',
-        'interviewed' => 'primary',
+        'interview'   => 'primary',
         'accepted'    => 'success',
         'rejected'    => 'danger',
     ];

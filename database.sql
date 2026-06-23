@@ -83,7 +83,7 @@ CREATE TABLE `applications` (
   `job_id`          int(11)  NOT NULL,
   `cover_letter`    text     DEFAULT NULL,
   `resume`          varchar(255) DEFAULT NULL,
-  `status`          enum('pending','reviewed','accepted','rejected') DEFAULT 'pending',
+  `status`          enum('pending','reviewed','interview','accepted','rejected') DEFAULT 'pending',
   `interview_date`  varchar(50)  DEFAULT NULL,
   `interview_time`  varchar(50)  DEFAULT NULL,
   `interview_venue` varchar(255) DEFAULT NULL,

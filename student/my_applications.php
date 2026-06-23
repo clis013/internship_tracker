@@ -156,7 +156,7 @@ function status_badge($status) {
     $map = [
         'pending'     => 'secondary',
         'reviewed'    => 'info',
-        'interviewed' => 'primary',
+        'interview'   => 'primary',
         'accepted'    => 'success',
         'rejected'    => 'danger',
     ];
@@ -245,7 +245,7 @@ function status_badge($status) {
                     <option value="">All Statuses</option>
                     <option value="pending" <?= $status === 'pending' ? 'selected' : '' ?>>Pending</option>
                     <option value="reviewed" <?= $status === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
-                    <option value="interviewed" <?= $status === 'interviewed' ? 'selected' : '' ?>>Interviewed</option>
+                    <option value="interview" <?= $status === 'interview' ? 'selected' : '' ?>>Interview</option>
                     <option value="accepted" <?= $status === 'accepted' ? 'selected' : '' ?>>Accepted</option>
                     <option value="rejected" <?= $status === 'rejected' ? 'selected' : '' ?>>Rejected</option>
                 </select>
@@ -307,8 +307,7 @@ function status_badge($status) {
                                         ['label' => 'Resume Screen', 'state' => 'completed'],
                                         ['label' => 'Interview', 'state' => 'completed'],
                                         ['label' => 'Decision', 'state' => 'accepted']
-                                    ];
-                                } elseif ($appStatus === 'interviewed') {
+                                    ];                                } elseif ($appStatus === 'interview') {
                                     $steps = [
                                         ['label' => 'Applied', 'state' => 'completed'],
                                         ['label' => 'Resume Screen', 'state' => 'completed'],
@@ -352,10 +351,10 @@ function status_badge($status) {
                                     </div>
                                 <?php endforeach; ?>
                             </div>
-
-                            <?php if ($app['status'] === 'accepted'): ?>
-                                <div class="alert bg-success bg-opacity-10 border border-success border-opacity-30 text-white p-3 mb-3 rounded-3" style="backdrop-filter: blur(10px);">
-                                    <h6 class="fw-bold text-success mb-2"><i class="bi bi-calendar-check-fill me-2"></i>Interview Scheduled</h6>
+ 
+                            <?php if (in_array($app['status'], ['reviewed', 'interview', 'accepted'])): ?>
+                                 <div class="alert bg-success bg-opacity-10 border border-success border-opacity-30 text-white p-3 mb-3 rounded-3" style="backdrop-filter: blur(10px);">
+                                     <h6 class="fw-bold text-success mb-2"><i class="bi bi-calendar-check-fill me-2"></i>Interview Scheduled</h6>
                                     <div class="row g-2 small text-white-50 mb-2">
                                         <div class="col-sm-4"><strong>Date:</strong> <span class="text-white"><?= htmlspecialchars($app['interview_date'] ?: 'To be announced') ?></span></div>
                                         <div class="col-sm-4"><strong>Time:</strong> <span class="text-white"><?= htmlspecialchars($app['interview_time'] ?: 'To be announced') ?></span></div>

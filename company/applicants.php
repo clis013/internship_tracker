@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $app_id = (int)$_POST['app_id'];
     $new_status = $_POST['status'];
 
-    if (in_array($new_status, ['pending', 'reviewed', 'interviewed', 'accepted', 'rejected'])) {
-        if ($new_status === 'accepted' || $new_status === 'interviewed') {
+    if (in_array($new_status, ['pending', 'reviewed', 'interview', 'accepted', 'rejected'])) {
+        if ($new_status === 'accepted' || $new_status === 'interview') {
             $interview_date  = trim($_POST['interview_date'] ?? '');
             $interview_time  = trim($_POST['interview_time'] ?? '');
             $interview_venue = trim($_POST['interview_venue'] ?? '');
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Optional filters
 $job_id_filter   = isset($_GET['job_id']) ? (int)$_GET['job_id'] : 0;
-$status_filter   = isset($_GET['status']) && in_array($_GET['status'], ['pending','reviewed','interviewed','accepted','rejected'])
+$status_filter   = isset($_GET['status']) && in_array($_GET['status'], ['pending','reviewed','interview','accepted','rejected'])
                    ? $_GET['status'] : '';
 
 // Get this company's jobs for the filter dropdown
@@ -94,7 +94,7 @@ function status_badge($status) {
     $map = [
         'pending'     => 'secondary',
         'reviewed'    => 'info',
-        'interviewed' => 'primary',
+        'interview'   => 'primary',
         'accepted'    => 'success',
         'rejected'    => 'danger',
     ];
@@ -131,7 +131,7 @@ function status_badge($status) {
                 <option value="">All Statuses</option>
                 <option value="pending"     <?= $status_filter === 'pending'     ? 'selected' : '' ?>>Pending Review</option>
                 <option value="reviewed"    <?= $status_filter === 'reviewed'    ? 'selected' : '' ?>>Reviewed</option>
-                <option value="interviewed" <?= $status_filter === 'interviewed' ? 'selected' : '' ?>>Interviewed</option>
+                <option value="interview"   <?= $status_filter === 'interview'   ? 'selected' : '' ?>>Interview</option>
                 <option value="accepted"    <?= $status_filter === 'accepted'    ? 'selected' : '' ?>>Accepted</option>
                 <option value="rejected"    <?= $status_filter === 'rejected'    ? 'selected' : '' ?>>Rejected</option>
             </select>
@@ -191,26 +191,41 @@ function status_badge($status) {
                             <p class="mb-1"><strong>Cover Letter:</strong></p>
                             <p class="text-white-50 small lh-sm"><?= nl2br(htmlspecialchars($app['cover_letter'])) ?></p>
                             <hr class="border-light border-opacity-10 my-3">
-                            <form method="POST" class="mt-3">
-                                <input type="hidden" name="app_id" value="<?= (int)$app['id'] ?>">
-                                
-                                <div class="row g-3 align-items-center mb-3">
-                                    <div class="col-auto">
-                                        <label class="form-label text-white fw-semibold mb-0">Status:</label>
-                                    </div>
-                                    <div class="col-auto">
-                                        <select name="status" id="statusSelect<?= $i ?>" class="form-select form-select-sm glass-select text-white">
-                                            <?php foreach (['pending', 'reviewed', 'interviewed', 'accepted', 'rejected'] as $s): ?>
-                                                <option value="<?= $s ?>" <?= $app['status'] === $s ? 'selected' : '' ?>><?= ucfirst($s) ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                </div>
+                             
+                             <?php if (in_array($app['status'], ['reviewed', 'interview', 'accepted']) && ($app['interview_date'] || $app['interview_time'] || $app['interview_venue'])): ?>
+                                 <div class="alert bg-info bg-opacity-10 border border-info border-opacity-30 text-white p-3 mb-3 rounded-3" style="backdrop-filter: blur(10px);">
+                                     <h6 class="fw-bold text-info mb-2"><i class="bi bi-calendar-check-fill me-2"></i>Scheduled Interview Details</h6>
+                                     <div class="row g-2 small text-white-50">
+                                         <div class="col-sm-4"><strong>Date:</strong> <span class="text-white"><?= htmlspecialchars($app['interview_date'] ?: 'To be announced') ?></span></div>
+                                         <div class="col-sm-4"><strong>Time:</strong> <span class="text-white"><?= htmlspecialchars($app['interview_time'] ?: 'To be announced') ?></span></div>
+                                         <div class="col-sm-4"><strong>Venue:</strong> <span class="text-white"><?= htmlspecialchars($app['interview_venue'] ?: 'To be announced') ?></span></div>
+                                     </div>
+                                 </div>
+                             <?php endif; ?>
 
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-sm btn-glass-white px-4 py-2 mt-2" style="border-radius: 8px !important;">Update Application</button>
-                                </div>
-                            </form>
+                             <form method="POST" class="mt-3">
+                                 <input type="hidden" name="app_id" value="<?= (int)$app['id'] ?>">
+                                 <input type="hidden" name="interview_date" id="interview_date_<?= $i ?>" value="<?= htmlspecialchars($app['interview_date'] ?? '') ?>">
+                                 <input type="hidden" name="interview_time" id="interview_time_<?= $i ?>" value="<?= htmlspecialchars($app['interview_time'] ?? '') ?>">
+                                 <input type="hidden" name="interview_venue" id="interview_venue_<?= $i ?>" value="<?= htmlspecialchars($app['interview_venue'] ?? '') ?>">
+                                 
+                                 <div class="row g-3 align-items-center mb-3">
+                                     <div class="col-auto">
+                                         <label class="form-label text-white fw-semibold mb-0">Status:</label>
+                                     </div>
+                                     <div class="col-auto">
+                                         <select name="status" id="statusSelect<?= $i ?>" class="form-select form-select-sm glass-select text-white" onchange="handleStatusChange(this, <?= $i ?>, '<?= htmlspecialchars($app['status']) ?>')">
+                                             <?php foreach (['pending', 'reviewed', 'interview', 'accepted', 'rejected'] as $s): ?>
+                                                 <option value="<?= $s ?>" <?= $app['status'] === $s ? 'selected' : '' ?>><?= ucfirst($s) ?></option>
+                                             <?php endforeach; ?>
+                                         </select>
+                                     </div>
+                                 </div>
+
+                                 <div class="text-end">
+                                     <button type="submit" class="btn btn-sm btn-glass-white px-4 py-2 mt-2" style="border-radius: 8px !important;">Update Application</button>
+                                 </div>
+                             </form>
                         </div>
                     </div>
                 </div>
@@ -265,5 +280,96 @@ function status_badge($status) {
     <?php endif; ?>
 </div>
 
+<!-- Interview Schedule Modal -->
+<div class="modal fade" id="interviewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="interviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-card text-start" style="cursor: default;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-white" id="interviewModalLabel"><i class="bi bi-calendar-event-fill text-info me-2"></i>Schedule Interview</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="cancelInterviewModal()"></button>
+            </div>
+            <div class="modal-body py-3">
+                <form id="interviewModalForm">
+                    <div class="mb-3">
+                        <label for="modal_interview_date" class="form-label small fw-bold text-white-50">Interview Date</label>
+                        <input type="date" class="form-control glass-input text-white" id="modal_interview_date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modal_interview_time" class="form-label small fw-bold text-white-50">Interview Time</label>
+                        <input type="time" class="form-control glass-input text-white" id="modal_interview_time" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modal_interview_venue" class="form-label small fw-bold text-white-50">Venue / Platform</label>
+                        <input type="text" class="form-control glass-input text-white" id="modal_interview_venue" placeholder="e.g. Google Meet, Boardroom Level 5" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal" onclick="cancelInterviewModal()">Cancel</button>
+                <button type="button" class="btn btn-info text-white px-4" onclick="saveInterviewDetails()">Save & Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentSelectElement = null;
+let currentFormIndex = null;
+let currentOriginalValue = null;
+
+function handleStatusChange(selectElement, formIndex, originalValue) {
+    if (selectElement.value === 'interview') {
+        currentSelectElement = selectElement;
+        currentFormIndex = formIndex;
+        currentOriginalValue = originalValue;
+        
+        // Pre-fill modal fields if they already have values
+        const dateInput = document.getElementById('interview_date_' + formIndex).value;
+        const timeInput = document.getElementById('interview_time_' + formIndex).value;
+        const venueInput = document.getElementById('interview_venue_' + formIndex).value;
+        
+        document.getElementById('modal_interview_date').value = dateInput;
+        document.getElementById('modal_interview_time').value = timeInput;
+        document.getElementById('modal_interview_venue').value = venueInput;
+        
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('interviewModal'));
+        modal.show();
+    }
+}
+
+function cancelInterviewModal() {
+    if (currentSelectElement && currentOriginalValue !== null) {
+        currentSelectElement.value = currentOriginalValue;
+    }
+}
+
+function saveInterviewDetails() {
+    const form = document.getElementById('interviewModalForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    const dateVal = document.getElementById('modal_interview_date').value;
+    const timeVal = document.getElementById('modal_interview_time').value;
+    const venueVal = document.getElementById('modal_interview_venue').value;
+    
+    // Set values into the hidden fields of the corresponding form
+    document.getElementById('interview_date_' + currentFormIndex).value = dateVal;
+    document.getElementById('interview_time_' + currentFormIndex).value = timeVal;
+    document.getElementById('interview_venue_' + currentFormIndex).value = venueVal;
+    
+    // Hide the modal
+    const modalEl = document.getElementById('interviewModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+        modalInstance.hide();
+    }
+    
+    // Submit the parent form of the select element
+    currentSelectElement.form.submit();
+}
+</script>
 
 <?php include '../includes/footer.php'; ?>
