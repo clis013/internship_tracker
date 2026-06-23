@@ -42,11 +42,10 @@ if ($is_valid_token && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Passwords do not match.';
     } else {
         // Hash and update the password
-        $hashed = password_hash($new_password, PASSWORD_DEFAULT);
-        $stmt = mysqli_prepare($conn, "UPDATE users SET password = ? WHERE email = ?");
-        mysqli_stmt_bind_param($stmt, "ss", $hashed, $email);
+        $hashed = md5($new_password);
+        $query = "UPDATE users SET password='$hashed' WHERE email='$email'";
 
-        if (mysqli_stmt_execute($stmt)) {
+        if (mysqli_query($conn, $query)) {
             $success = 'Your password has been successfully reset! You can now log in.';
             // Invalidate the token
             unset($_SESSION['reset_email']);

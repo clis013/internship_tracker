@@ -1,8 +1,8 @@
 <?php
-session_start();
-include '../config/db_connect.php';
-include '../includes/header.php';
-include '../includes/navbar.php';
+session_start();  //start PHP session
+include '../config/db_connect.php'; //connect database
+include '../includes/header.php'; //page header
+include '../includes/navbar.php'; //navigation bar
 ?>
 
 <style>
@@ -15,35 +15,38 @@ include '../includes/navbar.php';
 </style>
 
 <?php
+function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
 $error = '';
+if (isset($_GET['error'])) {
+    $error = $_GET['error'];
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email    = trim($_POST['email']);
-    $password = $_POST['password'];
+    if (isset($_POST['email']) && isset($_POST['password'])) {
+        $email    = test_input($_POST['email']);
+        $password = test_input($_POST['password']);
 
-    if (empty($email) || empty($password)) {
-        $error = 'Please enter your email and password.';
-    } else {
-        $stmt = mysqli_prepare($conn, "SELECT id, name, password, role, approval_status FROM users WHERE email = ?");
-        mysqli_stmt_bind_param($stmt, "s", $email);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $user   = mysqli_fetch_assoc($result);
+        if (empty($email) || empty($password)) {
+            header("Location: login.php?error=" . urlencode('Please enter your email and password.'));
+            exit();
+        } else {
+            $password = md5($password);
+            $query = "SELECT id, name, password, role FROM users WHERE email='$email' AND password='$password'";
+            $result = mysqli_query($conn, $query);
+            $user = mysqli_fetch_assoc($result);
 
-        if ($user && password_verify($password, $user['password'])) {
-            if ($user['role'] === 'company' && $user['approval_status'] !== 'approved') {
-                if ($user['approval_status'] === 'pending') {
-                    $error = 'Your company account is pending administrator approval.';
-                } else {
-                    $error = 'Your company account has been suspended.';
-                }
-            } else {
-                // Password correct — create session
+            if ($user) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['name']    = $user['name'];
                 $_SESSION['role']    = $user['role'];
 
-                // Send each role to their own dashboard
+                //send each role to their own dashboard
                 if ($user['role'] === 'student') {
                     header("Location: /internship_tracker/student/dashboard.php");
                 } elseif ($user['role'] === 'company') {
@@ -52,9 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header("Location: /internship_tracker/admin/dashboard.php");
                 }
                 exit();
+            } else {
+                header("Location: login.php?error=" . urlencode('Incorrect email or password.'));
+                exit();
             }
-        } else {
-            $error = 'Incorrect email or password.';
         }
     }
 }
@@ -71,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="alert bg-transparent border border-danger text-danger"><?= htmlspecialchars($error) ?></div>
           <?php endif; ?>
 
-          <form id="loginForm" method="POST" novalidate>
+          <form id="loginForm" method="POST" novalidate>  
             <div class="mb-3">
               <label class="form-label text-white">Email</label>
               <input type="email" name="email" class="form-control glass-input text-white" required>

@@ -9,16 +9,6 @@ include '../includes/navbar.php';
 $error   = '';
 $success = '';
 
-// ── Handle Approval Action ─────────────────────────────────────────────────
-if (isset($_GET['approve'])) {
-    $comp_id = (int)$_GET['approve'];
-    $stmt = mysqli_prepare($conn, "UPDATE users SET approval_status = 'approved' WHERE id = ? AND role = 'company'");
-    mysqli_stmt_bind_param($stmt, "i", $comp_id);
-    mysqli_stmt_execute($stmt);
-    header("Location: manage_companies.php?action_success=approved");
-    exit();
-}
-
 // ── Handle Delete Action ───────────────────────────────────────────────────
 if (isset($_GET['delete'])) {
     $comp_id = (int)$_GET['delete'];
@@ -30,18 +20,11 @@ if (isset($_GET['delete'])) {
 }
 
 // ── Filters & Search Engine ────────────────────────────────────────────────
-$status_filter = $_GET['status'] ?? '';
 $search        = trim($_GET['search'] ?? '');
 
-$sql = "SELECT id, name, email, approval_status, created_at FROM users WHERE role = 'company'";
+$sql = "SELECT id, name, email, created_at FROM users WHERE role = 'company'";
 $params = [];
 $types  = '';
-
-if (in_array($status_filter, ['approved', 'pending'])) {
-    $sql     .= " AND approval_status = ?";
-    $params[] = $status_filter;
-    $types   .= 's';
-}
 
 if ($search !== '') {
     $sql     .= " AND (name LIKE ? OR email LIKE ?)";
@@ -78,7 +61,7 @@ while ($row = mysqli_fetch_assoc($companies_res)) {
 
     <form method="GET" class="mb-4">
         <div class="row g-2">
-            <div class="col-md-6">
+            <div class="col-md-10">
                 <div class="input-group shadow-sm">
                     <input type="text" name="search" class="form-control glass-input border-end-0 text-white" placeholder="Search by corporate name or email..." value="<?= htmlspecialchars($search) ?>">
                     <button type="submit" class="btn input-group-text glass-input border-start-0 text-white m-0 px-3" style="cursor: pointer;">
@@ -86,29 +69,21 @@ while ($row = mysqli_fetch_assoc($companies_res)) {
                     </button>
                 </div>
             </div>
-            <div class="col-md-4">
-                <select name="status" class="form-select glass-input text-white shadow-sm" onchange="this.form.submit()">
-                    <option value="" class="bg-dark text-white">All Verification Statuses</option>
-                    <option value="pending" class="bg-dark text-white" <?= $status_filter === 'pending' ? 'selected' : '' ?>>Pending Verification</option>
-                    <option value="approved" class="bg-dark text-white" <?= $status_filter === 'approved' ? 'selected' : '' ?>>Approved</option>
-                </select>
-            </div>
             <div class="col-md-2">
                 <a href="manage_companies.php" class="btn btn-glass-white w-100" style="border-radius: 8px !important; padding: 0.45rem 0.75rem !important;">Reset</a>
             </div>
         </div>
     </form>
 
-    <p class="text-white-50 small mb-2"><?= count($company_rows) ?> company verified or pending record(s) found.</p>
+    <p class="text-white-50 small mb-2"><?= count($company_rows) ?> company record(s) found.</p>
 
     <div class="card shadow-sm glass-card mb-5">
         <div class="card-body p-4">
             
             <div class="row glass-table-header d-none d-md-flex mb-2 px-3">
                 <div class="col-md-1">#</div>
-                <div class="col-md-3">Company Name</div>
-                <div class="col-md-3">Corporate Email</div>
-                <div class="col-md-2">Status</div>
+                <div class="col-md-4">Company Name</div>
+                <div class="col-md-4">Corporate Email</div>
                 <div class="col-md-1">Joined</div>
                 <div class="col-md-2 text-end">Actions</div>
             </div>
@@ -125,20 +100,14 @@ while ($row = mysqli_fetch_assoc($companies_res)) {
                             <span class="d-md-none fw-bold me-1">ID:</span><?= (int)$c['id'] ?>
                         </div>
                         
-                        <div class="col-md-3 glass-row-text-primary text-truncate">
+                        <div class="col-md-4 glass-row-text-primary text-truncate">
                             <a href="#" class="view-user-trigger text-decoration-none text-white fw-bold" data-user-id="<?= (int)$c['id'] ?>">
                                 <?= htmlspecialchars($c['name']) ?>
                             </a>
                         </div>
                         
-                        <div class="col-md-3 glass-row-text-secondary text-truncate">
+                        <div class="col-md-4 glass-row-text-secondary text-truncate">
                             <?= htmlspecialchars($c['email']) ?>
-                        </div>
-                        
-                        <div class="col-md-2 my-1 my-md-0">
-                            <span class="badge badge-uniform bg-<?= $c['approval_status'] === 'approved' ? 'success' : 'warning text-dark' ?>">
-                                <?= htmlspecialchars(ucfirst($c['approval_status'])) ?>
-                            </span>
                         </div>
                         
                         <div class="col-md-1 glass-row-text-secondary small">
@@ -146,12 +115,6 @@ while ($row = mysqli_fetch_assoc($companies_res)) {
                         </div>
                         
                         <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
-                            <?php if ($c['approval_status'] === 'pending'): ?>
-                                <a href="manage_companies.php?approve=<?= (int)$c['id'] ?>" 
-                                   class="btn btn-sm btn-glass-primary rounded-pill px-3">
-                                    Approve
-                                </a>
-                            <?php endif; ?>
                             <a href="manage_companies.php?delete=<?= (int)$c['id'] ?>"
                                class="btn btn-sm btn-glass-danger rounded-pill px-3"
                                onclick="return confirm('Completely purge corporate listing registration for <?= htmlspecialchars(addslashes($c['name'])) ?>? This deletes all postings associated with them.')">

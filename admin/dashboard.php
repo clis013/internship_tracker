@@ -10,8 +10,7 @@ include '../includes/navbar.php';
 $users = mysqli_fetch_assoc(mysqli_query($conn,
     "SELECT COUNT(*) AS total,
             SUM(role='student')  AS students,
-            SUM(role='company')  AS companies,
-            SUM(role='company' AND approval_status='pending') AS pending_companies
+            SUM(role='company')  AS companies
      FROM users"));
 
 $jobs = mysqli_fetch_assoc(mysqli_query($conn,
@@ -127,13 +126,13 @@ function app_badge($status) {
         </div>
 
         <div class="col-6 col-md-4 col-lg">
-            <a href="manage_companies.php?status=pending" class="stat-card">
+            <a href="view_applicants.php?status=pending" class="stat-card">
                 <div class="stat-icon">
                     <i class="bi bi-hourglass-split text-warning"></i>
                 </div>
                 <div>
-                    <div class="stat-value text-warning"><?= (int)$users['pending_companies'] ?></div>
-                    <div class="stat-label">Pending Companies</div>
+                    <div class="stat-value text-warning"><?= (int)$apps['pending'] ?></div>
+                    <div class="stat-label">Pending Applications</div>
                 </div>
             </a>
         </div>
