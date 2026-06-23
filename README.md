@@ -17,9 +17,9 @@ Open http://localhost/phpmyadmin/
 ## Test Login Credentials
 | Role    | Email                  | Password  |
 |---------|------------------------|-----------|
-| Admin   | admin@example.com      | admin123  |
-| Company | company@example.com    | company123|
-| Student | student@example.com    | student123|
+| Admin   | admin@example.com      | password  |
+| Company | company@example.com    | password  |
+| Student | student@example.com    | password  |
 
 ## Who is working on what
 - Person 1 (you): auth/, includes/, config/, database
