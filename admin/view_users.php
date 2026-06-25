@@ -170,29 +170,29 @@ function stat_pill(string $label, $value, string $colour = 'secondary'): string 
                 <?php foreach ($user_rows as $i => $u): ?>
                     <div class="row glass-row-item align-items-center py-3 px-3 mx-0">
                         
-                        <div class="col-md-1 glass-row-text-muted small">
+                        <div class="col-12 col-md-1 glass-row-text-muted small">
                             <span class="d-md-none fw-bold me-1">ID:</span><?= (int)$u['id'] ?>
                         </div>
                         
-                        <div class="col-md-2 glass-row-text-primary text-truncate">
-                            <a href="#" class="view-user-trigger text-decoration-none text-white fw-bold" data-user-id="<?= (int)$u['id'] ?>">
+                        <div class="col-12 col-md-2 glass-row-text-primary" style="min-width:0;">
+                            <a href="#" class="view-user-trigger text-decoration-none text-white fw-bold text-truncate d-block" data-user-id="<?= (int)$u['id'] ?>">
                                 <?= htmlspecialchars($u['name']) ?>
                             </a>
                         </div>
                         
-                        <div class="col-md-3 glass-row-text-secondary text-truncate">
-                            <?= htmlspecialchars($u['email']) ?>
+                        <div class="col-12 col-md-3 glass-row-text-secondary" style="min-width:0;">
+                            <span class="text-truncate d-block"><?= htmlspecialchars($u['email']) ?></span>
                         </div>
                         
-                        <div class="col-md-2 my-1 my-md-0">
+                        <div class="col-auto col-md-2 my-1 my-md-0">
                             <?= role_badge($u['role']) ?>
                         </div>
                         
-                        <div class="col-md-2 glass-row-text-secondary small">
+                        <div class="col-12 col-md-2 glass-row-text-secondary small">
                             <?= date('d M Y', strtotime($u['created_at'])) ?>
                         </div>
                         
-                        <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
+                        <div class="col col-md-2 text-md-end d-flex flex-wrap gap-1 justify-content-start justify-content-md-end">
                             <a href="#" class="view-user-trigger btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;" data-user-id="<?= (int)$u['id'] ?>">View</a>
                             <?php if ((int)$u['id'] !== (int)$_SESSION['user_id']): ?>
                                 <a href="view_users.php?delete=<?= (int)$u['id'] ?>"

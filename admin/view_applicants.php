@@ -164,9 +164,9 @@ function get_status_badge_class($status) {
             <div class="row glass-table-header d-none d-md-flex mb-2 px-3">
                 <div class="col-md-1">#</div>
                 <div class="col-md-3">Candidate / Student</div>
-                <div class="col-md-3">Target Opportunity</div>
+                <div class="col-md-2">Target Opportunity</div>
                 <div class="col-md-2">Date Submitted</div>
-                <div class="col-md-1">Status</div>
+                <div class="col-md-2">Status</div>
                 <div class="col-md-2 text-end">Actions</div>
             </div>
 
@@ -178,32 +178,32 @@ function get_status_badge_class($status) {
                 <?php foreach ($app_rows as $a): ?>
                     <div class="row glass-row-item align-items-center py-3 px-3 mx-0">
                         
-                        <div class="col-md-1 glass-row-text-muted small">
+                        <div class="col-12 col-md-1 glass-row-text-muted small">
                             <span class="d-md-none fw-bold me-1">ID:</span><?= (int)$a['id'] ?>
                         </div>
                         
-                        <div class="col-md-3 glass-row-text-primary text-truncate">
-                            <a href="#" class="view-user-trigger text-decoration-none text-white fw-bold" data-user-id="<?= (int)$a['student_id'] ?>">
+                        <div class="col-12 col-md-3 glass-row-text-primary" style="min-width:0;">
+                            <a href="#" class="view-user-trigger text-decoration-none text-white fw-bold text-truncate d-block" data-user-id="<?= (int)$a['student_id'] ?>">
                                 <?= htmlspecialchars($a['student_name']) ?>
                             </a>
                         </div>
                         
-                        <div class="col-md-3 glass-row-text-secondary text-truncate">
-                            <div class="fw-semibold text-white"><?= htmlspecialchars($a['job_title']) ?></div>
-                            <div class="text-muted" style="font-size: 0.75rem;">🏢 <a href="#" class="view-user-trigger text-decoration-none text-white-50" data-user-id="<?= (int)$a['company_id'] ?>"><?= htmlspecialchars($a['company_name']) ?></a></div>
+                        <div class="col-12 col-md-2 glass-row-text-secondary" style="min-width:0;">
+                            <div class="fw-semibold text-white text-truncate"><?= htmlspecialchars($a['job_title']) ?></div>
+                            <div class="text-muted text-truncate" style="font-size: 0.75rem;">🏢 <a href="#" class="view-user-trigger text-decoration-none text-white-50" data-user-id="<?= (int)$a['company_id'] ?>"><?= htmlspecialchars($a['company_name']) ?></a></div>
                         </div>
                         
-                        <div class="col-md-2 glass-row-text-secondary small">
+                        <div class="col-12 col-md-2 glass-row-text-secondary small">
                             <?= date('d M Y, H:i', strtotime($a['applied_at'])) ?>
                         </div>
                         
-                        <div class="col-md-1 my-1 my-md-0">
+                        <div class="col-auto col-md-2 my-1 my-md-0">
                             <span class="badge badge-uniform bg-<?= get_status_badge_class($a['status']) ?>">
                                 <?= htmlspecialchars(ucfirst($a['status'])) ?>
                             </span>
                         </div>
                         
-                        <div class="col-md-2 text-md-end d-flex gap-1 justify-content-start justify-content-md-end mt-2 mt-md-0">
+                        <div class="col col-md-2 text-md-end d-flex flex-wrap gap-1 justify-content-start justify-content-md-end">
                             <a href="view_applicants.php?delete_app=<?= (int)$a['id'] ?><?= $job_id ? '&job_id='.$job_id : '' ?>"
                                class="btn btn-sm btn-glass-danger rounded-pill px-3"
                                onclick="return confirm('Delete this application record?')">

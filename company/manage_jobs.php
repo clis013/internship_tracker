@@ -182,27 +182,27 @@ $jobs = mysqli_stmt_get_result($stmt);
                 <div class="d-flex flex-column">
                     <?php while ($job = mysqli_fetch_assoc($jobs)): ?>
                         <div class="row glass-row-item align-items-center py-3 px-3 mx-0">
-                            <div class="col-md-3 glass-row-text-primary text-truncate fw-semibold">
-                                <?= htmlspecialchars($job['title']) ?>
+                            <div class="col-12 col-md-3 glass-row-text-primary fw-semibold" style="min-width:0;">
+                                <span class="text-truncate d-block"><?= htmlspecialchars($job['title']) ?></span>
                             </div>
-                            <div class="col-md-2 glass-row-text-secondary small text-truncate">
-                                <div class="fw-semibold text-white-50"><?= htmlspecialchars($job['field'] ?? '-') ?></div>
-                                <div class="text-muted" style="font-size: 0.75rem;">📍 <?= htmlspecialchars($job['location'] ?? '-') ?></div>
+                            <div class="col-12 col-md-2 glass-row-text-secondary small" style="min-width:0;">
+                                <div class="fw-semibold text-white-50 text-truncate"><?= htmlspecialchars($job['field'] ?? '-') ?></div>
+                                <div class="text-muted text-truncate" style="font-size: 0.75rem;">📍 <?= htmlspecialchars($job['location'] ?? '-') ?></div>
                             </div>
-                            <div class="col-md-2 glass-row-text-secondary text-white-50">
+                            <div class="col-12 col-md-2 glass-row-text-secondary text-white-50">
                                 <?= htmlspecialchars($job['allowance'] ? 'RM' . $job['allowance'] . '/mo' : '-') ?>
                             </div>
-                            <div class="col-md-1 my-1 my-md-0">
+                            <div class="col-auto col-md-1 my-1 my-md-0">
                                 <span class="badge badge-uniform bg-<?= $job['status'] === 'active' ? 'success' : 'secondary' ?>">
                                     <?= htmlspecialchars(ucfirst($job['status'])) ?>
                                 </span>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-auto col-md-2">
                                 <a href="applicants.php?job_id=<?= (int)$job['id'] ?>" class="text-info fw-bold text-decoration-none"><?= (int)$job['applicant_count'] ?> applicant(s)</a>
                             </div>
-                            <div class="col-md-2 text-md-end text-start mt-2 mt-md-0 d-flex gap-1 justify-content-start justify-content-md-end">
+                            <div class="col col-md-2 text-md-end text-start mt-md-0 d-flex flex-wrap gap-1 justify-content-start justify-content-md-end">
                                 <a href="manage_jobs.php?edit=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-white rounded-pill" style="padding: 0.25rem 0.75rem !important;">Edit</a>
-                                <a href="manage_jobs.php?delete=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-danger rounded-pill"onclick="return confirm('Delete this internship? This will also remove all related applications.')">Delete</a>
+                                <a href="manage_jobs.php?delete=<?= (int)$job['id'] ?>" class="btn btn-sm btn-glass-danger rounded-pill" onclick="return confirm('Delete this internship? This will also remove all related applications.')">Delete</a>
                             </div>
                         </div>
                     <?php endwhile; ?>

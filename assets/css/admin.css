@@ -1,36 +1,40 @@
 /* Section Headers */
-.dash-card .card-head span { 
-    color: #ffffff !important; 
+.dash-card .card-head span {
+    color: #ffffff !important;
     font-size: 0.95rem !important;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    text-shadow: 0 2px 3px rgba(0,0,0,0.6) !important;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6) !important;
 }
 
 /* Recent Activity List Items */
-.act-name { 
-    color: #ffffff !important; 
-    font-weight: 700 !important; 
-    text-shadow: 0 1px 3px rgba(0,0,0,0.7) !important; 
+.act-name {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
 }
-.act-sub { 
-    color: rgba(255, 255, 255, 0.85) !important; /* Brighter */
+
+.act-sub {
+    color: rgba(255, 255, 255, 0.85) !important;
+    /* Brighter */
     font-weight: 500;
 }
-.act-time { 
-    color: rgba(255, 255, 255, 0.7) !important; /* Brighter */
+
+.act-time {
+    color: rgba(255, 255, 255, 0.7) !important;
+    /* Brighter */
 }
 
 /* Progress Bars Labels */
-.prog-label { 
-    color: #ffffff !important; 
+.prog-label {
+    color: #ffffff !important;
     font-weight: 600 !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* All the buttons */
 .btn-glass-white {
-    background: #ffffff !important; 
+    background: #ffffff !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border: 1px solid #ffffff !important;
@@ -46,7 +50,7 @@
     background: #f0f0f0 !important;
     border-color: #f0f0f0 !important;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     color: #000000 !important;
 }
 
@@ -71,6 +75,7 @@
     font-weight: 600;
     transition: all 0.3s ease;
 }
+
 .btn-glass-secondary:hover {
     background: rgba(255, 255, 255, 0.15);
     color: #ffffff;
@@ -97,7 +102,7 @@
     left: -10%;
     width: 60%;
     height: 150%;
-    background: radial-gradient(circle, rgba(180, 160, 100, 0.15) 0%, rgba(0,0,0,0) 70%);
+    background: radial-gradient(circle, rgba(180, 160, 100, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
     z-index: 0;
     pointer-events: none;
 }
@@ -110,11 +115,15 @@
 .hero-puzzle-img {
     width: 250px;
     height: auto;
-    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
+    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.4));
     transition: transform 0.3s ease;
 }
 
-.hero-puzzle-img:hover { transform: scale(1.05); } /* slightly pop effect */
+.hero-puzzle-img:hover {
+    transform: scale(1.05);
+}
+
+/* slightly pop effect */
 
 .hero-title {
     font-size: 3.5rem;
@@ -132,11 +141,13 @@
 
 .hero-stacked-keys {
     max-height: 380px;
-    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
     transition: transform 0.3s ease;
 }
 
-.hero-stacked-keys:hover { transform: scale(1.05); }
+.hero-stacked-keys:hover {
+    transform: scale(1.05);
+}
 
 /* Admin Specific Dashboard Cards */
 
@@ -182,17 +193,17 @@
     font-weight: 700;
     line-height: 1;
     color: #ffffff !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
-    font-weight: 800 !important; 
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 800 !important;
 }
 
 .stat-label {
     font-size: .78rem;
     color: rgba(255, 255, 255, 0.7);
     margin-top: .2rem;
-    color: #ffffff !important; 
+    color: #ffffff !important;
     font-weight: 600 !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* For pop out window's details*/
@@ -213,15 +224,18 @@
     text-align: center;
 }
 
-.metric-chip .mc-val  { 
-    font-size: 1.15rem; font-weight: 700; 
-    color: #ffffff !important; 
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important; 
+.metric-chip .mc-val {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
 }
 
-.metric-chip .mc-lbl  { 
-    font-size: .72rem; color: rgba(255, 255, 255, 0.7); 
-    color: rgba(255, 255, 255, 0.9) !important; /* Much brighter */
+.metric-chip .mc-lbl {
+    font-size: .72rem;
+    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.9) !important;
+    /* Much brighter */
     font-weight: 600;
 }
 
@@ -245,7 +259,11 @@
     background: rgba(255, 255, 255, 0.05) !important;
 }
 
-.dash-card .card-head span { font-weight: 600; font-size: .88rem; color: #ffffff; }
+.dash-card .card-head span {
+    font-weight: 600;
+    font-size: .88rem;
+    color: #ffffff;
+}
 
 /* Recent Activity Part*/
 
@@ -259,40 +277,104 @@
 }
 
 /*Remove the divider line after last item in the list*/
-.act-item:last-child { border-bottom: none; }
+.act-item:last-child {
+    border-bottom: none;
+}
 
-.act-name  { font-size: .85rem; font-weight: 600; color: #ffffff; }
-.act-sub   { font-size: .75rem; color: rgba(255, 255, 255, 0.6); }
-.act-time  { font-size: .7rem; color: rgba(255, 255, 255, 0.4); white-space: nowrap; }
+.act-name {
+    font-size: .85rem;
+    font-weight: 600;
+    color: #ffffff;
+}
 
-.prog-row { margin-bottom: .75rem; }
-.prog-row:last-child { margin-bottom: 0; }
-.prog-label { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .3rem; color: #ffffff;}
-.progress { border-radius: 99px; background-color: rgba(255, 255, 255, 0.1); }
+.act-sub {
+    font-size: .75rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.act-time {
+    font-size: .7rem;
+    color: rgba(255, 255, 255, 0.4);
+    white-space: nowrap;
+}
+
+.prog-row {
+    margin-bottom: .75rem;
+}
+
+.prog-row:last-child {
+    margin-bottom: 0;
+}
+
+.prog-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: .8rem;
+    margin-bottom: .3rem;
+    color: #ffffff;
+}
+
+.progress {
+    border-radius: 99px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
 
 /* Contrast & Text Readability Upgrade (Dark Dashboard) */
-.text-muted, .text-white-50 { color: rgba(255, 255, 255, 0.75) !important; }
-.stat-label { color: rgba(255, 255, 255, 0.85) !important; font-weight: 500; }
-.metric-chip .mc-lbl { color: rgba(255, 255, 255, 0.8) !important; }
-.prog-label span, .prog-label .text-white-50 { color: rgba(255, 255, 255, 0.9) !important; }
-.act-sub { color: rgba(255, 255, 255, 0.8) !important; }
-.act-time { color: rgba(255, 255, 255, 0.55) !important; }
-h6.text-uppercase, .dash-card p.text-uppercase { color: rgba(255, 255, 255, 0.5) !important; font-weight: 600; }
-.dash-card .text-white-50, .act-item.text-white-50 { color: rgba(255, 255, 255, 0.65) !important; }
+.text-muted,
+.text-white-50 {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.stat-label {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-weight: 500;
+}
+
+.metric-chip .mc-lbl {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.prog-label span,
+.prog-label .text-white-50 {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.act-sub {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.act-time {
+    color: rgba(255, 255, 255, 0.55) !important;
+}
+
+h6.text-uppercase,
+.dash-card p.text-uppercase {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-weight: 600;
+}
+
+.dash-card .text-white-50,
+.act-item.text-white-50 {
+    color: rgba(255, 255, 255, 0.65) !important;
+}
 
 /* Form Controls */
-.glass-input, .glass-select, .btn-glass-primary, .btn-glass-secondary {
-    background: rgba(255, 255, 255, 0.15) !important; 
+.glass-input,
+.glass-select,
+.btn-glass-primary,
+.btn-glass-secondary {
+    background: rgba(255, 255, 255, 0.15) !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.25) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
-    border-radius: 8px; 
+    border-radius: 8px;
 }
 
 .glass-input::placeholder {
-    color: rgba(255, 255, 255, 0.7) !important; /* Much brighter placeholder */
+    color: rgba(255, 255, 255, 0.7) !important;
+    /* Much brighter placeholder */
     font-weight: 500;
 }
 
@@ -308,29 +390,32 @@ h6.text-uppercase, .dash-card p.text-uppercase { color: rgba(255, 255, 255, 0.5)
 }
 
 /* Focus state of input */
-.glass-input:focus, .glass-select:focus {
+.glass-input:focus,
+.glass-select:focus {
     background: rgba(255, 255, 255, 0.2) !important;
     border-color: rgba(255, 255, 255, 0.5) !important;
     outline: none;
 }
 
 /* Dropdown Menu */
-/* Use dark grey dropdown box */ 
-.glass-input option, .glass-select option {
-    background-color: #1a1a1a !important; 
+/* Use dark grey dropdown box */
+.glass-input option,
+.glass-select option {
+    background-color: #1a1a1a !important;
     color: #ffffff !important;
 }
 
 /* For select box */
-select.glass-input, select.glass-select {
+select.glass-input,
+select.glass-select {
     background-color: rgba(255, 255, 255, 0.15) !important;
     background-image: var(--bs-form-select-bg-img, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e")) !important;
-    
+
     /* These three lines stop the arrow from duplicating and position it perfectly */
     background-repeat: no-repeat !important;
     background-position: right 0.75rem center !important;
     background-size: 16px 12px !important;
-    
+
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
     border: 1px solid rgba(255, 255, 255, 0.25) !important;
@@ -374,9 +459,22 @@ select.glass-input, select.glass-select {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
 }
 
-.glass-row-text-primary { color: #ffffff !important; font-weight: 600; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8) !important; }
-.glass-row-text-secondary { color: rgba(255, 255, 255, 0.95) !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important; }
-.glass-row-text-muted { color: rgba(255, 255, 255, 0.85) !important; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important; }
+.glass-row-text-primary {
+    color: #ffffff !important;
+    font-weight: 600;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8) !important;
+}
+
+.glass-row-text-secondary {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-weight: 500;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
+}
+
+.glass-row-text-muted {
+    color: rgba(255, 255, 255, 0.85) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
 
 
 .btn-glass-light-secondary {
@@ -386,7 +484,7 @@ select.glass-input, select.glass-select {
     font-weight: 600;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    box-shadow: none !important; 
+    box-shadow: none !important;
     transition: all 0.2s ease-in-out !important;
 }
 
@@ -410,9 +508,9 @@ body.light-theme {
 
 /* Force All Typography to Crisp White with Depth Shadows */
 body.light-theme .text-white,
-body.light-theme h3, 
-body.light-theme h4, 
-body.light-theme h5, 
+body.light-theme h3,
+body.light-theme h4,
+body.light-theme h5,
 body.light-theme .modal-title,
 body.light-theme p.text-white,
 body.light-theme label,
@@ -422,7 +520,7 @@ body.light-theme span:not(.badge) {
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7) !important;
 }
 
-body.light-theme p.text-white-50, 
+body.light-theme p.text-white-50,
 body.light-theme .text-white-50,
 body.light-theme .modal-body {
     color: rgba(255, 255, 255, 0.95) !important;
@@ -438,83 +536,4 @@ body.light-theme .text-muted {
 body.light-theme p.small {
     color: rgba(255, 255, 255, 0.85) !important;
 }
-
-/* Solid white button */
-.btn-glass-white {
-    background: #ffffff !important; 
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: 1px solid #ffffff !important;
-    color: #000000 !important;
-    padding: 10px 25px;
-    font-weight: 600;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    text-shadow: none !important;
-    border-radius: 50rem !important; /* button is in pill shape */
-}
-
-.btn-glass-white:hover {
-    background: #f0f0f0 !important;
-    border-color: #f0f0f0 !important;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    color: #000000 !important;
-}
-
-/* UNIVERSAL SUB-PAGE ACTIVATOR */
-
-body.light-theme {
-    background-image: url('../images/Page_bg.jpg?v=6') !important;
-    background-color: #050505 !important;
-    background-size: cover !important;
-    background-position: center !important;
-}
-
-/* High-contrast text for sub-pages */
-body.light-theme .glass-card, 
-body.light-theme .glass-row-item {
-    color: #ffffff !important;
-}
-
-body.light-theme h1, body.light-theme h2, body.light-theme h3, 
-body.light-theme h4, body.light-theme h5, body.light-theme p, 
-body.light-theme label, body.light-theme span {
-    color: #ffffff !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
-}
-
-.glass-card, 
-.glass-row-item, 
-.glass-card *, 
-.glass-row-item * {
-    text-shadow: none !important;
-    -webkit-font-smoothing: antialiased; /* For Apple device */
-    -moz-osx-font-smoothing: grayscale; /* For Firefox */
-}
-
-.glass-card .table, 
-.glass-card .table tr, 
-.glass-card .table td, 
-.glass-card .table th {
-    background-color: transparent !important;
-    color: #ffffff !important;
-}
-
-/* Red glass button */
-.btn-glass-danger {
-    background: rgba(220, 53, 69, 0.4) !important;
-    border: 1px solid rgba(220, 53, 69, 0.6) !important;
-    color: #ffffff !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15) !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-.btn-glass-danger:hover {
-    background: rgba(220, 53, 69, 0.6) !important;
-    border-color: rgba(220, 53, 69, 0.8) !important;
-    color: #ffffff !important;
-    transform: translateY(-1px) !important;
-    box-shadow: 0 6px 12px rgba(220, 53, 69, 0.3) !important;
-}
+
