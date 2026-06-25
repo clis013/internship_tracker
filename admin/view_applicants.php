@@ -31,9 +31,13 @@ if ($job_id > 0) {
     }
 }
 
-// ── Search Engine & Status Pipeline ────────────────────────────────────────
+// ── Search Engine & Status Pipeline & Sort ──────────────────────────────────
 $status_filter = $_GET['status'] ?? '';
 $search        = trim($_GET['search'] ?? '');
+$sort          = $_GET['sort'] ?? 'asc';
+if ($sort !== 'desc') {
+    $sort = 'asc';
+}
 
 $sql = "SELECT a.id, a.status, a.applied_at, a.student_id, j.company_id, 
                s.name AS student_name, 
@@ -54,7 +58,7 @@ if ($job_id > 0) {
     $types   .= 'i';
 }
 
-if (in_array($status_filter, ['pending', 'reviewed', 'accepted', 'rejected'])) {
+if (in_array($status_filter, ['pending', 'reviewed', 'interview', 'accepted', 'rejected'])) {
     $sql     .= " AND a.status = ?";
     $params[] = $status_filter;
     $types   .= 's';
@@ -68,7 +72,7 @@ if ($search !== '') {
     $params[] = $like;
     $types   .= 'sss';
 }
-$sql .= " ORDER BY a.applied_at DESC";
+$sql .= " ORDER BY a.id " . ($sort === 'asc' ? 'ASC' : 'DESC');
 
 $stmt = mysqli_prepare($conn, $sql);
 if ($params) mysqli_stmt_bind_param($stmt, $types, ...$params);
@@ -82,10 +86,11 @@ while ($row = mysqli_fetch_assoc($apps_res)) {
 
 function get_status_badge_class($status) {
     $map = [
-        'pending'  => 'secondary',
-        'reviewed' => 'info',
-        'accepted' => 'success',
-        'rejected' => 'danger',
+        'pending'   => 'secondary',
+        'reviewed'  => 'info',
+        'interview' => 'primary',
+        'accepted'  => 'success',
+        'rejected'  => 'danger',
     ];
     return $map[$status] ?? 'secondary';
 }
@@ -117,6 +122,10 @@ function get_status_badge_class($status) {
     <?php endif; ?>
 
     <form method="GET" class="mb-4">
+        <input type="hidden" name="sort" value="<?= htmlspecialchars($sort) ?>">
+        <?php if ($job_id > 0): ?>
+            <input type="hidden" name="job_id" value="<?= (int)$job_id ?>">
+        <?php endif; ?>
         <div class="row g-2">
             <div class="col-md-6">
                 <div class="input-group shadow-sm">
@@ -131,6 +140,7 @@ function get_status_badge_class($status) {
                     <option value="" class="bg-dark text-white">All Application Statuses</option>
                     <option value="pending" class="bg-dark text-white" <?= $status_filter === 'pending' ? 'selected' : '' ?>>Pending Review</option>
                     <option value="reviewed" class="bg-dark text-white" <?= $status_filter === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
+                    <option value="interview" class="bg-dark text-white" <?= $status_filter === 'interview' ? 'selected' : '' ?>>Interview</option>
                     <option value="accepted" class="bg-dark text-white" <?= $status_filter === 'accepted' ? 'selected' : '' ?>>Accepted (Offer)</option>
                     <option value="rejected" class="bg-dark text-white" <?= $status_filter === 'rejected' ? 'selected' : '' ?>>Rejected</option>
                 </select>
@@ -141,7 +151,12 @@ function get_status_badge_class($status) {
         </div>
     </form>
 
-    <p class="text-white-50 small mb-2"><?= count($app_rows) ?> active application pipeline tracking record(s) mapped.</p>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <p class="text-white-50 small mb-0"><?= count($app_rows) ?> active application pipeline tracking record(s) mapped.</p>
+        <a href="view_applicants.php?<?= http_build_query(array_merge($_GET, ['sort' => $sort === 'asc' ? 'desc' : 'asc'])) ?>" class="btn btn-sm btn-glass-white py-1 px-2 d-flex align-items-center gap-1" style="border-radius: 6px !important; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.2) !important;">
+            Sort ID <i class="bi <?= $sort === 'asc' ? 'bi-sort-numeric-up' : 'bi-sort-numeric-down' ?>" style="font-size: 0.9rem; line-height: 1;"></i>
+        </a>
+    </div>
 
     <div class="card shadow-sm glass-card mb-5">
         <div class="card-body p-4">

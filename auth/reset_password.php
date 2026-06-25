@@ -59,6 +59,8 @@ if ($is_valid_token && $_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
+
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-5">
@@ -85,20 +87,24 @@ if ($is_valid_token && $_SERVER['REQUEST_METHOD'] === 'POST') {
           <?php if ($is_valid_token): ?>
             <form method="POST" id="resetPasswordForm" novalidate>
               <div class="mb-3">
-                <label class="form-label small fw-bold">New Password</label>
+                <label class="form-label small fw-bold text-white">New Password</label>
                 <div class="input-group">
-                  <input type="password" name="password" id="resetPasswordInput" class="form-control" required placeholder="At least 6 characters">
-                  <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('resetPasswordInput')">Show</button>
+                  <input type="password" name="password" id="resetPasswordInput" class="form-control glass-input border-end-0 text-white" required placeholder="At least 6 characters">
+                  <button class="btn btn-glass-white border-start-0" type="button" 
+                    style="border-radius: 0 8px 8px 0 !important; padding: 0.375rem 0.75rem !important;" 
+                    onclick="togglePassword('resetPasswordInput')">Show</button>
                 </div>
               </div>
               <div class="mb-3">
-                <label class="form-label small fw-bold">Confirm New Password</label>
+                <label class="form-label small fw-bold text-white">Confirm New Password</label>
                 <div class="input-group">
-                  <input type="password" name="confirm_password" id="confirmPasswordInput" class="form-control" required placeholder="Repeat new password">
-                  <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('confirmPasswordInput')">Show</button>
+                  <input type="password" name="confirm_password" id="confirmPasswordInput" class="form-control glass-input border-end-0 text-white" required placeholder="Repeat new password">
+                  <button class="btn btn-glass-white border-start-0" type="button" 
+                    style="border-radius: 0 8px 8px 0 !important; padding: 0.375rem 0.75rem !important;" 
+                    onclick="togglePassword('confirmPasswordInput')">Show</button>
                 </div>
               </div>
-              <button type="submit" class="btn btn-primary w-100 py-2 mt-2">Reset Password</button>
+              <button type="submit" class="btn btn-glass-white w-100 mt-2" style="border-radius: 8px !important; padding: 0.5rem !important;">Reset Password</button>
             </form>
           <?php endif; ?>
 
