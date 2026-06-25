@@ -29,20 +29,20 @@ $latest_jobs = mysqli_query($conn, "SELECT j.title, j.location, j.field, u.name 
 ?>
 
 <style>
-    /* 1. The whole page background (White abstract waves) */
+    /* The whole page background */
     body.homepage {
         background: url('assets/images/Homepage_bg.JPG.jpeg?v=1') no-repeat center center fixed !important;
         background-size: cover !important;
     }
 
-    /* 2. The Hero/Header background (Top of the tree) */
+    /* The Header background */
     .hero-section {
         background: url('assets/images/Hompage_header.JPG.jpeg?v=1') no-repeat center top !important;
         background-size: cover !important;
         box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.4); 
     }
 
-    /* 3. Bottom Section (Bottom of the tree & bench) */
+    /* Bottom Section */
     .bottom-tree-section {
         background: url('assets/images/Hompage_header.JPG.jpeg?v=1') no-repeat center bottom !important;
         background-size: cover !important;
@@ -50,9 +50,9 @@ $latest_jobs = mysqli_query($conn, "SELECT j.title, j.location, j.field, u.name 
         color: #ffffff !important;
     }
 
-    /* 4. DARK Glass for middle content boxes */
+    /* DARK Glass for middle content boxes */
     .dark-glass-card {
-        background: rgba(15, 15, 15, 0.40) !important; /* High opacity so it stays dark over white waves */
+        background: rgba(15, 15, 15, 0.40) !important; /* Slightly higher opacity so it stays dark over white waves */
         backdrop-filter: blur(16px) saturate(120%) !important;
         -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
         border-top: 1px solid rgba(255, 255, 255, 0.25) !important;
@@ -70,9 +70,9 @@ $latest_jobs = mysqli_query($conn, "SELECT j.title, j.location, j.field, u.name 
         background: rgba(15, 15, 15, 0.95) !important; 
     }
 
-    /* 5. LIGHT Glass for "How it Works" section */
+    /* LIGHT Glass for "How it Works" section */
     .light-glass-card {
-        background: rgba(255, 255, 255, 0.15) !important; /* Bright frosty look */
+        background: rgba(255, 255, 255, 0.15) !important;
         backdrop-filter: blur(16px) saturate(120%) !important;
         -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
         border-top: 1px solid rgba(255, 255, 255, 0.6) !important;
@@ -84,13 +84,14 @@ $latest_jobs = mysqli_query($conn, "SELECT j.title, j.location, j.field, u.name 
         color: #ffffff !important;
         transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     }
+
     .light-glass-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4) !important;
         background: rgba(255, 255, 255, 0.25) !important;
     }
 
-    /* Force the footer to be transparent so the tree shows through */
+    /* Force the footer to be transparent so the tree image shows through */
     body.homepage footer, body.homepage footer div {
         background: transparent !important;
         color: #ffffff !important;

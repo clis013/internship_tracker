@@ -8,9 +8,7 @@ body {
     min-height: 100vh;
 }
 
-/* --------------------------------------
-   Hero Section Glassmorphism
---------------------------------------- */
+/* Hero Section Glassmorphism */
 .glass-hero {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(16px);
@@ -41,7 +39,7 @@ body {
 }
 
 .hero-puzzle-img {
-    width: 300px; /* Adjust this number if needed based on our previous sizing */
+    width: 300px;
     height: auto;
     filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
     transition: transform 0.3s ease;
@@ -102,11 +100,7 @@ body {
     color: #ffffff;
 }
 
-/* =========================================================================
-   UNIFIED DARK GLASSMORPHISM (Applied to all sub-pages)
-========================================================================== */
-
-/* ── Form Controls (Search, Select, and Buttons) ── */
+/* Form Controls */
 .glass-input, .glass-select, .btn-glass-primary, .btn-glass-secondary {
     background: rgba(255, 255, 255, 0.15) !important;
     backdrop-filter: blur(12px);
@@ -135,7 +129,7 @@ body {
     outline: none;
 }
 
-/* ── Main Outer 3D Glass Card Container ── */
+/* Outer glass border */
 .glass-card {
     background: rgba(255, 255, 255, 0.18) !important;
     backdrop-filter: blur(20px);
@@ -147,7 +141,7 @@ body {
     color: #ffffff !important;
 }
 
-/* ── Modular Glass Rows ── */
+/* Modular Glass Rows */
 .glass-row-item {
     background: rgba(160, 160, 160, 0.15) !important;
     backdrop-filter: blur(20px);
@@ -165,7 +159,6 @@ body {
     transform: scale(1.002) translateY(-1px);
 }
 
-/* ── Fix for Accordions inside Glass Rows ── */
 .glass-row-item .accordion-button {
     background: transparent !important;
     color: #ffffff !important;
@@ -181,7 +174,7 @@ body {
     filter: invert(1) grayscale(100%) brightness(200%); /* Makes the dropdown arrow white */
 }
 
-/* ── Text Styling & Tables ── */
+/* Text Styling & Tables */
 .glass-table-header {
     font-size: 0.8rem;
     font-weight: 700;
@@ -194,13 +187,12 @@ body {
 .glass-row-text-secondary { color: rgba(255, 255, 255, 0.95) !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important; }
 .glass-row-text-muted, .glass-card .text-muted { color: rgba(255, 255, 255, 0.85) !important; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important; }
 
-/* Fixing Bootstrap tables inside glass cards */
 .table { color: #ffffff; border-color: rgba(255,255,255,0.1); }
 .table-hover tbody tr:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.05); }
 .table thead th { background: rgba(255, 255, 255, 0.1) !important; color: #fff; border-bottom: none; }
 .table td { border-bottom: 1px solid rgba(255,255,255,0.05); color: #fff !important; }
 
-/* ── Button Styles ── */
+/* Button Styles */
 .btn-glass-secondary {
     color: #ffffff !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
@@ -208,7 +200,8 @@ body {
 }
 .btn-glass-secondary:hover { background: rgba(255, 255, 255, 0.15) !important; }
 
-/* ── SUB-PAGE THEME ACTIVATOR ── */
+/* For Sub-page */
+
 body.light-theme {
     background-image: url('../images/Page_bg.jpg?v=6') !important;
     background-color: #050505 !important;
@@ -217,7 +210,6 @@ body.light-theme {
     background-attachment: fixed !important;
 }
 
-/* Force All Typography to Crisp White with Depth Shadows */
 body.light-theme .text-white, body.light-theme h3, body.light-theme h4, 
 body.light-theme h5, body.light-theme .modal-title, body.light-theme p, 
 body.light-theme label, body.light-theme span:not(.badge) {
@@ -225,7 +217,6 @@ body.light-theme label, body.light-theme span:not(.badge) {
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7) !important;
 }
 
-/* Enable crisp font-smoothing and remove text shadow inside glass containers for maximum readability */
 .glass-card, 
 .glass-row-item, 
 .glass-card *, 
@@ -235,7 +226,6 @@ body.light-theme label, body.light-theme span:not(.badge) {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Force Bootstrap tables inside glass cards to be transparent */
 .glass-card .table, 
 .glass-card .table tr, 
 .glass-card .table td, 
@@ -244,7 +234,7 @@ body.light-theme label, body.light-theme span:not(.badge) {
     color: #ffffff !important;
 }
 
-/* Premium red glass button */
+/* Red glass button */
 .btn-glass-danger {
     background: rgba(220, 53, 69, 0.4) !important;
     border: 1px solid rgba(220, 53, 69, 0.6) !important;
@@ -254,6 +244,7 @@ body.light-theme label, body.light-theme span:not(.badge) {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15) !important;
     transition: all 0.2s ease-in-out !important;
 }
+
 .btn-glass-danger:hover {
     background: rgba(220, 53, 69, 0.6) !important;
     border-color: rgba(220, 53, 69, 0.8) !important;

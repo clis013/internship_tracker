@@ -1,13 +1,12 @@
 /*for student module ui styling*/
 
-/* Apply the textured background to the whole page */
+/* Apply the image background to the whole page */
 body {
     background-image: url('../images/IMG_3339.JPG.jpeg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    color: #ffffff;
-    /* Default text color to white for dark theme */
+    color: #ffffff; /* Default text color to white for dark theme */
     min-height: 100vh;
 }
 
@@ -32,9 +31,8 @@ body {
     color: #000000 !important;
 }
 
-/* --------------------------------------
-   Hero Section Glassmorphism
---------------------------------------- */
+/* Hero Section Glassmorphism */
+
 .glass-hero {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(16px);
@@ -67,16 +65,13 @@ body {
 
 .hero-puzzle-img {
     width: 300px;
-    /* Controls the size of the puzzle so it doesn't overpower the keys */
     height: auto;
     filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.4));
-    /* Adds a matching shadow */
     transition: transform 0.3s ease;
 }
 
 .hero-puzzle-img:hover {
-    transform: scale(1.05);
-    /* Slight pop effect when hovered */
+    transform: scale(1.05); 
 }
 
 .hero-title {
@@ -96,16 +91,14 @@ body {
 .hero-stacked-keys {
     max-height: 380px;
     filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
-    transition: transform 0.3s ease;
-    /* Added to make the animation smooth */
+    transition: transform 0.3s ease; 
 }
 
-/* Added to create the enlarge animation on hover */
 .hero-stacked-keys:hover {
     transform: scale(1.05);
 }
 
-/* Custom Buttons matching your design */
+/* Custom Buttons */
 .btn-glass-primary {
     background: #ffffff;
     color: #000000;
@@ -132,11 +125,7 @@ body {
     color: #ffffff;
 }
 
-/* =========================================================================
-   UNIFIED DARK GLASSMORPHISM (Applied to all sub-pages)
-========================================================================== */
-
-/* ── Form Controls (Search, Select, and Buttons) ── */
+/* Form Controls */
 .glass-input,
 .glass-select,
 .btn-glass-primary,
@@ -172,7 +161,7 @@ body {
     outline: none;
 }
 
-/* ── Main Outer 3D Glass Card Container ── */
+/* Outer Glass Border ── */
 .glass-card {
     background: rgba(255, 255, 255, 0.18) !important;
     backdrop-filter: blur(20px);
@@ -184,7 +173,7 @@ body {
     color: #ffffff !important;
 }
 
-/* ── Modular Glass Rows ── */
+/* Modular Glass Rows */
 .glass-row-item {
     background: rgba(160, 160, 160, 0.15) !important;
     backdrop-filter: blur(20px);
@@ -202,7 +191,6 @@ body {
     transform: scale(1.002) translateY(-1px);
 }
 
-/* ── Fix for Accordions inside Glass Rows ── */
 .glass-row-item .accordion-button {
     background: transparent !important;
     color: #ffffff !important;
@@ -214,12 +202,12 @@ body {
     color: #ffffff !important;
 }
 
+  /* Makes the dropdown arrow white */
 .glass-row-item .accordion-button::after {
     filter: invert(1) grayscale(100%) brightness(200%);
-    /* Makes the dropdown arrow white */
 }
 
-/* ── Text Styling & Tables ── */
+/* Text Styling & Tables */
 .glass-table-header {
     font-size: 0.8rem;
     font-weight: 700;
@@ -248,7 +236,6 @@ body {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
 }
 
-/* Fixing Bootstrap tables inside glass cards */
 .table {
     color: #ffffff;
     border-color: rgba(255, 255, 255, 0.1);
@@ -270,7 +257,7 @@ body {
     color: #fff !important;
 }
 
-/* ── Button Styles ── */
+/* Button Styles */
 .btn-glass-secondary {
     color: #ffffff !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
@@ -281,7 +268,7 @@ body {
     background: rgba(255, 255, 255, 0.15) !important;
 }
 
-/* ── SUB-PAGE THEME ACTIVATOR ── */
+/* For sub-page */
 body.light-theme {
     background-image: url('../images/Page_bg.jpg?v=6') !important;
     background-color: #050505 !important;
@@ -290,7 +277,6 @@ body.light-theme {
     background-attachment: fixed !important;
 }
 
-/* Force All Typography to Crisp White with Depth Shadows */
 body.light-theme .text-white,
 body.light-theme h3,
 body.light-theme h4,
@@ -303,7 +289,7 @@ body.light-theme span:not(.badge) {
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7) !important;
 }
 
-/* ── DASHBOARD LIGHT GLASS ── */
+/* To display light glass on dashboard */
 .glass-card-light {
     background: rgba(255, 255, 255, 0.05) !important;
     backdrop-filter: blur(16px);
@@ -327,7 +313,7 @@ body.light-theme span:not(.badge) {
     transform: translateY(-2px);
 }
 
-/* Enable crisp font-smoothing and remove text shadow inside glass containers for maximum readability */
+/* remove text shadow inside glass containers */
 .glass-card,
 .glass-row-item,
 .glass-card *,
@@ -346,7 +332,7 @@ body.light-theme span:not(.badge) {
     color: #ffffff !important;
 }
 
-/* Premium red glass button */
+/* Red glass button */
 .btn-glass-danger {
     background: rgba(220, 53, 69, 0.4) !important;
     border: 1px solid rgba(220, 53, 69, 0.6) !important;

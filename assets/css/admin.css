@@ -1,30 +1,4 @@
-/* --------------------------------------
-   DASHBOARD TEXT READABILITY & CONTRAST
---------------------------------------- */
-
-/* 1. Stat Cards (Students, Companies, etc.) */
-.stat-value {
-    color: #ffffff !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
-    font-weight: 800 !important; /* Bumped from 700 to 800 */
-}
-.stat-label {
-    color: #ffffff !important; /* Was 0.7 opacity, making it solid white */
-    font-weight: 600 !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
-}
-
-/* 2. Internship Status / Metric Strips */
-.metric-chip .mc-val { 
-    color: #ffffff !important; 
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important; 
-}
-.metric-chip .mc-lbl { 
-    color: rgba(255, 255, 255, 0.9) !important; /* Much brighter */
-    font-weight: 600;
-}
-
-/* 3. Section Headers (Internship Status, Recent Activity, etc.) */
+/* Section Headers */
 .dash-card .card-head span { 
     color: #ffffff !important; 
     font-size: 0.95rem !important;
@@ -33,7 +7,7 @@
     text-shadow: 0 2px 3px rgba(0,0,0,0.6) !important;
 }
 
-/* 4. Recent Activity List Items */
+/* Recent Activity List Items */
 .act-name { 
     color: #ffffff !important; 
     font-weight: 700 !important; 
@@ -47,28 +21,23 @@
     color: rgba(255, 255, 255, 0.7) !important; /* Brighter */
 }
 
-/* 5. Progress Bars Labels */
+/* Progress Bars Labels */
 .prog-label { 
     color: #ffffff !important; 
     font-weight: 600 !important;
     text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
 }
 
-/* ── Updated Solid White Button (Pill shape) ── */
+/* All the buttons */
 .btn-glass-white {
-    /* Solid white background with no transparency */
     background: #ffffff !important; 
-    /* Remove blur effects */
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    /* Clean border */
     border: 1px solid #ffffff !important;
-    /* Black text for contrast on solid white */
     color: #000000 !important;
     padding: 10px 25px;
     font-weight: 600;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    /* Remove text shadow as it's not needed on solid white */
     text-shadow: none !important;
 }
 
@@ -81,9 +50,33 @@
     color: #000000 !important;
 }
 
-/* --------------------------------------
-   Hero Section Glassmorphism
---------------------------------------- */
+/* NOT USED */
+.btn-glass-primary {
+    background: #ffffff;
+    color: #000000;
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-glass-primary:hover {
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
+}
+
+.btn-glass-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.btn-glass-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+/* Hero Section Glassmorphism */
 .glass-hero {
     background: rgba(255, 255, 255, 0.18) !important;
     backdrop-filter: blur(20px);
@@ -96,6 +89,7 @@
     overflow: hidden;
 }
 
+/* Invisible box use for positioning */
 .glass-hero::before {
     content: '';
     position: absolute;
@@ -120,7 +114,7 @@
     transition: transform 0.3s ease;
 }
 
-.hero-puzzle-img:hover { transform: scale(1.05); }
+.hero-puzzle-img:hover { transform: scale(1.05); } /* slightly pop effect */
 
 .hero-title {
     font-size: 3.5rem;
@@ -144,34 +138,8 @@
 
 .hero-stacked-keys:hover { transform: scale(1.05); }
 
-/* Custom Buttons (Default Dark Theme) */
-.btn-glass-primary {
-    background: #ffffff;
-    color: #000000;
-    font-weight: 600;
-    border: none;
-    transition: all 0.3s ease;
-}
-.btn-glass-primary:hover {
-    background: rgba(255, 255, 255, 0.8);
-    color: #000;
-}
+/* Admin Specific Dashboard Cards */
 
-.btn-glass-secondary {
-    background: rgba(255, 255, 255, 0.05);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-.btn-glass-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-}
-
-/* --------------------------------------
-   Admin Specific Dashboard Cards
---------------------------------------- */
 .stat-card {
     border: 1px solid rgba(255, 255, 255, 0.25) !important;
     border-radius: 12px;
@@ -187,6 +155,7 @@
     transition: box-shadow .2s ease, transform .2s ease, background .2s ease;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
 }
+
 .stat-card:hover {
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25) !important;
     transform: translateY(-5px);
@@ -194,6 +163,7 @@
     border-color: rgba(255, 255, 255, 0.35) !important;
     color: #ffffff;
 }
+
 .stat-icon {
     width: 48px;
     height: 48px;
@@ -206,22 +176,33 @@
     background: rgba(255, 255, 255, 0.15) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
+
 .stat-value {
     font-size: 1.75rem;
     font-weight: 700;
     line-height: 1;
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
+    font-weight: 800 !important; 
 }
+
 .stat-label {
     font-size: .78rem;
     color: rgba(255, 255, 255, 0.7);
     margin-top: .2rem;
+    color: #ffffff !important; 
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
 }
+
+/* For pop out window's details*/
 
 .metric-strip {
     display: flex;
     gap: .5rem;
     flex-wrap: wrap;
 }
+
 .metric-chip {
     flex: 1;
     min-width: 80px;
@@ -231,8 +212,18 @@
     padding: .55rem .75rem;
     text-align: center;
 }
-.metric-chip .mc-val  { font-size: 1.15rem; font-weight: 700; }
-.metric-chip .mc-lbl  { font-size: .72rem; color: rgba(255, 255, 255, 0.7); }
+
+.metric-chip .mc-val  { 
+    font-size: 1.15rem; font-weight: 700; 
+    color: #ffffff !important; 
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important; 
+}
+
+.metric-chip .mc-lbl  { 
+    font-size: .72rem; color: rgba(255, 255, 255, 0.7); 
+    color: rgba(255, 255, 255, 0.9) !important; /* Much brighter */
+    font-weight: 600;
+}
 
 .dash-card {
     border: 1px solid rgba(255, 255, 255, 0.25) !important;
@@ -244,6 +235,7 @@
     overflow: hidden;
     color: #ffffff;
 }
+
 .dash-card .card-head {
     padding: .75rem 1.1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
@@ -252,7 +244,10 @@
     justify-content: space-between;
     background: rgba(255, 255, 255, 0.05) !important;
 }
+
 .dash-card .card-head span { font-weight: 600; font-size: .88rem; color: #ffffff; }
+
+/* Recent Activity Part*/
 
 .act-item {
     padding: .65rem 1.1rem;
@@ -262,7 +257,10 @@
     justify-content: space-between;
     gap: .5rem;
 }
+
+/*Remove the divider line after last item in the list*/
 .act-item:last-child { border-bottom: none; }
+
 .act-name  { font-size: .85rem; font-weight: 600; color: #ffffff; }
 .act-sub   { font-size: .75rem; color: rgba(255, 255, 255, 0.6); }
 .act-time  { font-size: .7rem; color: rgba(255, 255, 255, 0.4); white-space: nowrap; }
@@ -272,9 +270,7 @@
 .prog-label { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .3rem; color: #ffffff;}
 .progress { border-radius: 99px; background-color: rgba(255, 255, 255, 0.1); }
 
-/* --------------------------------------
-   Contrast & Text Readability Upgrade (Dark Dashboard)
---------------------------------------- */
+/* Contrast & Text Readability Upgrade (Dark Dashboard) */
 .text-muted, .text-white-50 { color: rgba(255, 255, 255, 0.75) !important; }
 .stat-label { color: rgba(255, 255, 255, 0.85) !important; font-weight: 500; }
 .metric-chip .mc-lbl { color: rgba(255, 255, 255, 0.8) !important; }
@@ -284,28 +280,23 @@
 h6.text-uppercase, .dash-card p.text-uppercase { color: rgba(255, 255, 255, 0.5) !important; font-weight: 600; }
 .dash-card .text-white-50, .act-item.text-white-50 { color: rgba(255, 255, 255, 0.65) !important; }
 
-/* =========================================================================
-   UNIFIED DARK GLASSMORPHISM (Applied to all sub-pages)
-========================================================================== */
-
-/* ── Form Controls (Search, Select, and Buttons) ── */
+/* Form Controls */
 .glass-input, .glass-select, .btn-glass-primary, .btn-glass-secondary {
-    background: rgba(255, 255, 255, 0.15) !important; /* Increased opacity for better visibility */
+    background: rgba(255, 255, 255, 0.15) !important; 
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.25) !important; /* Stronger border */
+    border: 1px solid rgba(255, 255, 255, 0.25) !important; 
     color: #ffffff !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
-    border-radius: 8px; /* Smooth corners */
+    border-radius: 8px; 
 }
 
-/* Specific fix for the placeholder text */
 .glass-input::placeholder {
     color: rgba(255, 255, 255, 0.7) !important; /* Much brighter placeholder */
     font-weight: 500;
 }
 
-/* Ensure the Search Button is NOT white */
+/* Glass-like button */
 .btn-glass-primary {
     background: rgba(255, 255, 255, 0.15) !important;
     border: 1px solid rgba(255, 255, 255, 0.25) !important;
@@ -316,21 +307,21 @@ h6.text-uppercase, .dash-card p.text-uppercase { color: rgba(255, 255, 255, 0.5)
     background: rgba(255, 255, 255, 0.25) !important;
 }
 
-/* Focus state for better accessibility */
+/* Focus state of input */
 .glass-input:focus, .glass-select:focus {
     background: rgba(255, 255, 255, 0.2) !important;
     border-color: rgba(255, 255, 255, 0.5) !important;
     outline: none;
 }
 
-/* ── 3. DROPDOWN MENU (OPENED STATE) ── */
-/* Browsers require this to be a solid color. We use dark grey to match the theme. */
+/* Dropdown Menu */
+/* Use dark grey dropdown box */ 
 .glass-input option, .glass-select option {
     background-color: #1a1a1a !important; 
     color: #ffffff !important;
 }
 
-/* ── 2. FIX SELECT BOX (CLOSED STATE) & STOP REPEATING ARROWS ── */
+/* For select box */
 select.glass-input, select.glass-select {
     background-color: rgba(255, 255, 255, 0.15) !important;
     background-image: var(--bs-form-select-bg-img, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e")) !important;
@@ -346,7 +337,7 @@ select.glass-input, select.glass-select {
     color: #ffffff !important;
 }
 
-/* ── Main Outer 3D Glass Card Container ── */
+/* Outer glass border */
 .glass-card {
     background: rgba(255, 255, 255, 0.18) !important;
     backdrop-filter: blur(20px);
@@ -357,7 +348,7 @@ select.glass-input, select.glass-select {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
 }
 
-/* ── Modular Glass Rows ── */
+/* Modular Glass Rows */
 .glass-row-item {
     background: rgba(160, 160, 160, 0.15) !important;
     backdrop-filter: blur(20px);
@@ -368,13 +359,13 @@ select.glass-input, select.glass-select {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
     transition: all 0.2s ease;
 }
+
 .glass-row-item:hover {
     background: rgba(200, 200, 200, 0.22) !important;
     border-color: rgba(255, 255, 255, 0.25) !important;
     transform: scale(1.002) translateY(-1px);
 }
 
-/* ── Text Styling ── */
 .glass-table-header {
     font-size: 0.8rem;
     font-weight: 700;
@@ -387,7 +378,7 @@ select.glass-input, select.glass-select {
 .glass-row-text-secondary { color: rgba(255, 255, 255, 0.95) !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important; }
 .glass-row-text-muted { color: rgba(255, 255, 255, 0.85) !important; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important; }
 
-/* ── RESTORED: Original Lightweight Glass Button Style ── */
+
 .btn-glass-light-secondary {
     background: rgba(255, 255, 255, 0.08) !important;
     color: #ffffff !important;
@@ -395,11 +386,10 @@ select.glass-input, select.glass-select {
     font-weight: 600;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    box-shadow: none !important; /* Removes the heavy bottom shadow */
+    box-shadow: none !important; 
     transition: all 0.2s ease-in-out !important;
 }
 
-/* Snappy flat white color fill on hover */
 .btn-glass-light-secondary:hover {
     background: #ffffff !important;
     color: #000000 !important;
@@ -408,9 +398,8 @@ select.glass-input, select.glass-select {
     transform: none !important;
 }
 
-/* =========================================================================
-   SUB-PAGE THEME ACTIVATOR (Replace your typography section here)
-========================================================================== */
+/* For all the subpages */
+
 body.light-theme {
     background-image: url('../images/Page_bg.JPG.jpeg') !important;
     background-color: #050505 !important;
@@ -450,9 +439,7 @@ body.light-theme p.small {
     color: rgba(255, 255, 255, 0.85) !important;
 }
 
-/* ... (Keep all your existing code above) ... */
-
-/* ── FIX: Ensure Solid White Button is not affected by Glass logic ── */
+/* Solid white button */
 .btn-glass-white {
     background: #ffffff !important; 
     backdrop-filter: none !important;
@@ -463,7 +450,7 @@ body.light-theme p.small {
     font-weight: 600;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     text-shadow: none !important;
-    border-radius: 50rem !important; /* Forces the pill shape */
+    border-radius: 50rem !important; /* button is in pill shape */
 }
 
 .btn-glass-white:hover {
@@ -474,7 +461,8 @@ body.light-theme p.small {
     color: #000000 !important;
 }
 
-/* ── UNIVERSAL SUB-PAGE ACTIVATOR (This handles the Page_bg background) ── */
+/* UNIVERSAL SUB-PAGE ACTIVATOR */
+
 body.light-theme {
     background-image: url('../images/Page_bg.jpg?v=6') !important;
     background-color: #050505 !important;
@@ -482,7 +470,7 @@ body.light-theme {
     background-position: center !important;
 }
 
-/* Force high-contrast text for sub-pages */
+/* High-contrast text for sub-pages */
 body.light-theme .glass-card, 
 body.light-theme .glass-row-item {
     color: #ffffff !important;
@@ -495,17 +483,15 @@ body.light-theme label, body.light-theme span {
     text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important;
 }
 
-/* Enable crisp font-smoothing and remove text shadow inside glass containers for maximum readability */
 .glass-card, 
 .glass-row-item, 
 .glass-card *, 
 .glass-row-item * {
     text-shadow: none !important;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased; /* For Apple device */
+    -moz-osx-font-smoothing: grayscale; /* For Firefox */
 }
 
-/* Force Bootstrap tables inside glass cards to be transparent */
 .glass-card .table, 
 .glass-card .table tr, 
 .glass-card .table td, 
@@ -514,7 +500,7 @@ body.light-theme label, body.light-theme span {
     color: #ffffff !important;
 }
 
-/* Premium red glass button */
+/* Red glass button */
 .btn-glass-danger {
     background: rgba(220, 53, 69, 0.4) !important;
     border: 1px solid rgba(220, 53, 69, 0.6) !important;
@@ -524,6 +510,7 @@ body.light-theme label, body.light-theme span {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15) !important;
     transition: all 0.2s ease-in-out !important;
 }
+
 .btn-glass-danger:hover {
     background: rgba(220, 53, 69, 0.6) !important;
     border-color: rgba(220, 53, 69, 0.8) !important;
