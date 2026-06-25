@@ -62,7 +62,14 @@ if ($min_allowance !== '') {
     $types .= 'i';
 }
 
-$sql .= " ORDER BY j.created_at DESC";
+if ($search !== '') {
+    $sql .= " ORDER BY (CASE WHEN j.title LIKE ? THEN 0 ELSE 1 END) ASC, j.created_at DESC";
+    $like = "%$search%";
+    $params[] = $like;
+    $types .= 's';
+} else {
+    $sql .= " ORDER BY j.created_at DESC";
+}
 
 $stmt = mysqli_prepare($conn, $sql);
 if ($params) {

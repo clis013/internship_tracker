@@ -19,9 +19,13 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
-// ── Filters & search ───────────────────────────────────────────────────────
+// ── Filters & search & sort ────────────────────────────────────────────────
 $status_filter = $_GET['status'] ?? '';
 $search        = trim($_GET['search'] ?? '');
+$sort          = $_GET['sort'] ?? 'asc';
+if ($sort !== 'desc') {
+    $sort = 'asc';
+}
 
 $sql = "SELECT j.id, j.title, j.field, j.location, j.status, j.created_at, u.name AS company_name, u.id AS company_id 
         FROM jobs j 
@@ -45,7 +49,7 @@ if ($search !== '') {
     $params[] = $like;
     $types   .= 'ssss';
 }
-$sql .= " ORDER BY j.created_at DESC";
+$sql .= " ORDER BY j.id " . ($sort === 'asc' ? 'ASC' : 'DESC');
 
 $stmt = mysqli_prepare($conn, $sql);
 if ($params) mysqli_stmt_bind_param($stmt, $types, ...$params);
@@ -72,6 +76,7 @@ while ($row = mysqli_fetch_assoc($internships)) {
     <?php endif; ?>
 
     <form method="GET" class="mb-4">
+        <input type="hidden" name="sort" value="<?= htmlspecialchars($sort) ?>">
         <div class="row g-2">
             <div class="col-md-6">
                 <div class="input-group shadow-sm">
@@ -92,8 +97,13 @@ while ($row = mysqli_fetch_assoc($internships)) {
                 <a href="manage_internships.php" class="btn btn-glass-white w-100" style="border-radius: 8px !important; padding: 0.45rem 0.75rem !important;">Reset</a>
             </div>
         </div> </form>
-
-    <p class="text-white-50 small mb-2"><?= count($job_rows) ?> internship(s) found.</p>
+ 
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <p class="text-white-50 small mb-0"><?= count($job_rows) ?> internship(s) found.</p>
+        <a href="manage_internships.php?<?= http_build_query(array_merge($_GET, ['sort' => $sort === 'asc' ? 'desc' : 'asc'])) ?>" class="btn btn-sm btn-glass-white py-1 px-2 d-flex align-items-center gap-1" style="border-radius: 6px !important; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.2) !important;">
+            Sort ID <i class="bi <?= $sort === 'asc' ? 'bi-sort-numeric-up' : 'bi-sort-numeric-down' ?>" style="font-size: 0.9rem; line-height: 1;"></i>
+        </a>
+    </div>
 
     <div class="card shadow-sm glass-card mb-5">
         <div class="card-body p-4">
