@@ -88,7 +88,7 @@ if ($is_valid_token && $_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" id="resetPasswordForm" novalidate>
               <div class="mb-3">
                 <label class="form-label small fw-bold text-white">New Password</label>
-                <div class="input-group">
+                <div class="input-group password-group">
                   <input type="password" name="password" id="resetPasswordInput" class="form-control glass-input border-end-0 text-white" required placeholder="At least 6 characters">
                   <button class="btn btn-glass-white border-start-0" type="button" 
                     style="border-radius: 0 8px 8px 0 !important; padding: 0.375rem 0.75rem !important;" 
@@ -97,7 +97,7 @@ if ($is_valid_token && $_SERVER['REQUEST_METHOD'] === 'POST') {
               </div>
               <div class="mb-3">
                 <label class="form-label small fw-bold text-white">Confirm New Password</label>
-                <div class="input-group">
+                <div class="input-group password-group">
                   <input type="password" name="confirm_password" id="confirmPasswordInput" class="form-control glass-input border-end-0 text-white" required placeholder="Repeat new password">
                   <button class="btn btn-glass-white border-start-0" type="button" 
                     style="border-radius: 0 8px 8px 0 !important; padding: 0.375rem 0.75rem !important;" 

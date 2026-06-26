@@ -4,13 +4,19 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-lg-5">
   <div class="container-fluid px-0 d-flex align-items-center">
     <!-- Centered Brand & Menu Links Container -->
-    <div class="container d-flex align-items-center p-0">
+    <div class="container d-flex justify-content-between align-items-center p-0">
       <a class="navbar-brand" href="/internship_tracker/">InternTrack</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navMenu" aria-controls="navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
+
+      <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="navMenu" aria-labelledby="navMenuLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="navMenuLabel">Menu</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
 
           <?php if (!isset($_SESSION['role'])): ?>
             <li class="nav-item"><a class="nav-link <?= ($current_page == 'login.php') ? 'active' : '' ?>" href="/internship_tracker/auth/login.php">Login</a></li>
@@ -44,6 +50,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <li class="nav-item"><a class="nav-link text-danger" href="/internship_tracker/auth/logout.php">Logout</a></li>
           </ul>
         <?php endif; ?>
+        </div>
       </div>
     </div>
     

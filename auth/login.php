@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="mb-3">
               <label class="form-label text-white">Password</label>
-              <div class="input-group">
+              <div class="input-group password-group">
                 <input type="password" name="password" id="loginPassword" class="form-control glass-input border-end-0 text-white" required>
                 <button class="btn btn-glass-white border-start-0" type="button" 
                   style="border-radius: 0 8px 8px 0 !important; padding: 0.375rem 0.75rem !important;" 

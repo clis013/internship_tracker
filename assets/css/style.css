@@ -220,12 +220,12 @@ body {
     }
 
     /* Fix the Search Bars on mobile (Make them stack on top of each other) */
-    .input-group {
+    .input-group:not(.password-group) {
         flex-direction: column !important;
         gap: 0.5rem;
     }
     
-    .input-group > * {
+    .input-group:not(.password-group) > * {
         width: 100% !important;
         border-radius: 8px !important;
         margin: 0 !important;
