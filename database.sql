@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2026 at 06:00 PM
+-- Generation Time: Jun 27, 2026 at 06:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,7 +33,7 @@ CREATE TABLE `applications` (
   `job_id` int(11) NOT NULL,
   `cover_letter` text DEFAULT NULL,
   `resume` varchar(255) DEFAULT NULL,
-  `status` enum('pending','reviewed','accepted','rejected') DEFAULT 'pending',
+  `status` enum('pending','reviewed','interview','accepted','rejected') DEFAULT 'pending',
   `interview_date` varchar(50) DEFAULT NULL,
   `interview_time` varchar(50) DEFAULT NULL,
   `interview_venue` varchar(255) DEFAULT NULL,
@@ -47,16 +47,15 @@ CREATE TABLE `applications` (
 
 INSERT INTO `applications` (`id`, `student_id`, `job_id`, `cover_letter`, `resume`, `status`, `interview_date`, `interview_time`, `interview_venue`, `notes`, `applied_at`) VALUES
 (1, 12, 1, 'I am a final-year Computer Science student at UTM with strong PHP and Laravel skills. I have built several web projects and I am eager to contribute to TechCorp real-world systems. I am a fast learner and work well in team environments.', NULL, 'rejected', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20'),
-(2, 12, 3, 'Although my primary field is software development, I have a strong interest in UI/UX and have completed online courses in Figma and user research. I believe I can bridge the gap between design and development effectively.', NULL, 'pending', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20'),
+(2, 12, 3, 'Although my primary field is software development, I have a strong interest in UI/UX and have completed online courses in Figma and user research. I believe I can bridge the gap between design and development effectively.', NULL, 'interview', '2026-06-25', '22:44', 'meet', NULL, '2026-06-23 06:46:20'),
 (3, 14, 2, 'As a Data Science student with hands-on experience in Python and SQL, I am excited to apply my analytical skills at TechCorp. I have completed projects in data visualisation and predictive modelling that I would love to discuss.', NULL, 'accepted', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20'),
-(4, 15, 4, 'I am a graphic design student with a strong portfolio in branding and digital design. Adobe Illustrator and Photoshop are my daily tools, and I would love to bring creative value to the CreativeMinds team.', NULL, '', '', '', '', NULL, '2026-06-23 06:46:20'),
+(4, 15, 4, 'I am a graphic design student with a strong portfolio in branding and digital design. Adobe Illustrator and Photoshop are my daily tools, and I would love to bring creative value to the CreativeMinds team.', NULL, 'interview', '', '', '', NULL, '2026-06-22 22:46:20'),
 (5, 17, 5, 'Social media is my passion. I have managed accounts for two campus organisations and understand what drives engagement. I am confident I can create compelling content strategies for your agency clients.', NULL, 'reviewed', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20'),
 (6, 13, 6, 'With a Finance degree and Bloomberg Terminal experience from university labs, I am well-prepared for the investment intern role at FinanceFirst. I am detail-oriented, analytical, and highly motivated to learn.', NULL, 'accepted', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20'),
 (7, 19, 7, 'As an ACCA part-qualified accounting student, I have a strong foundation in financial reporting and bookkeeping. I am meticulous, reliable, and eager to support the FinanceFirst accounting department.', NULL, 'pending', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20'),
 (8, 18, 14, 'Civil engineering is my calling. I have completed site visit projects during my studies and I am familiar with AutoCAD and MS Project. I am excited to gain hands-on experience with GreenBuild sustainable projects.', NULL, 'reviewed', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20'),
 (9, 21, 16, 'My background in logistics and supply chain management makes me an ideal fit for this role. I have studied freight operations and am proficient in SAP and Excel. I am ready to contribute from day one.', NULL, 'pending', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20'),
-(10, 20, 1, 'As a cybersecurity student, I also have strong programming fundamentals. I am interested in understanding secure software development practices and contributing to TechCorp engineering team as a motivated intern.', NULL, 'rejected', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20'),
-(11, 14, 1, 'i need this', 'uploads/resumes/resume_copy_6a3aa7832ab3d_1782228867.pdf', '', '', '', '', NULL, '2026-06-23 15:34:27');
+(10, 20, 1, 'As a cybersecurity student, I also have strong programming fundamentals. I am interested in understanding secure software development practices and contributing to TechCorp engineering team as a motivated intern.', NULL, 'rejected', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20');
 
 -- --------------------------------------------------------
 
@@ -100,8 +99,7 @@ INSERT INTO `jobs` (`id`, `company_id`, `title`, `description`, `location`, `fie
 (17, 9, 'Supply Chain Analyst Intern', 'Analyse supply chain data to identify bottlenecks and optimise processes. Responsibilities include demand forecasting, supplier performance tracking, and preparing weekly supply chain reports using Excel and SAP.', 'Port Klang, Selangor', 'Logistics', 'active', '2026-06-23 06:46:20', 1000.00),
 (18, 10, 'Journalism & Content Intern', 'Research, write, and edit news articles and feature stories for our online portal. You will attend press conferences, conduct interviews, and work under tight deadlines to deliver accurate and engaging content.', 'Cyberjaya, Selangor', 'Media & Communication', 'active', '2026-06-23 06:46:20', 800.00),
 (19, 10, 'Video Production Intern', 'Assist in the production of video content including shooting, editing, and post-production. Proficiency in Adobe Premiere Pro or Final Cut Pro is required. Experience with motion graphics is an advantage.', 'Cyberjaya, Selangor', 'Media & Communication', 'active', '2026-06-23 06:46:20', 900.00),
-(20, 10, 'Digital Content Strategist Intern', 'Help develop and execute content strategies across our social media platforms and digital channels. You will conduct competitor analysis, plan content calendars, and monitor engagement metrics.', 'Cyberjaya, Selangor', 'Marketing', 'active', '2026-06-23 06:46:20', 850.00),
-(21, 11, 'Agritech Research Intern', 'Assist our R&D team in researching and testing IoT-based smart farming solutions. You will collect field data, analyse crop performance metrics, and help document research findings. Interest in agriculture and technology is required.', 'Putrajaya', 'Agriculture', 'active', '2026-06-23 06:46:20', 900.00);
+(20, 10, 'Digital Content Strategist Intern', 'Help develop and execute content strategies across our social media platforms and digital channels. You will conduct competitor analysis, plan content calendars, and monitor engagement metrics.', 'Cyberjaya, Selangor', 'Marketing', 'active', '2026-06-23 06:46:20', 850.00);
 
 -- --------------------------------------------------------
 
@@ -181,9 +179,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `phone`, `bio`, 
 (18, 'Darren Ong Zi Yang', 'darren.ong@student.taylors.edu.my', '5f4dcc3b5aa765d61d8327deb882cf99', 'student', '011-7890-1234', 'Civil engineering student with strong interest in green infrastructure and sustainable construction.', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20', 'approved', 'Bachelor of Civil Engineering (Hons), Taylor\'s University. CGPA: 3.44. Active member of Engineering Society.', NULL, 'AutoCAD, Civil 3D, STAAD Pro, MS Project, Structural Analysis, BIM'),
 (19, 'Kavitha a/p Krishnan', 'kavitha.krishnan@student.sunway.edu.my', '5f4dcc3b5aa765d61d8327deb882cf99', 'student', '011-8901-2345', 'Accounting student passionate about auditing, taxation, and corporate governance.', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20', 'approved', 'Bachelor of Accounting (Hons), Sunway University. CGPA: 3.91. ACCA part-qualified.', NULL, 'Accounting, Auditing, Taxation, MS Excel, MYOB, SAP, Financial Reporting'),
 (20, 'Muhammad Haziq bin Roslan', 'haziq.roslan@student.iium.edu.my', '5f4dcc3b5aa765d61d8327deb882cf99', 'student', '011-9012-3456', 'IT student specialising in cybersecurity with hands-on experience in penetration testing and network security.', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20', 'approved', 'Bachelor of Information Technology (Information Security), IIUM. CGPA: 3.59.', NULL, 'Network Security, Ethical Hacking, Kali Linux, Wireshark, Python, Cybersecurity'),
-(21, 'Chong Mei Ling', 'chong.meiling@student.newera.edu.my', '5f4dcc3b5aa765d61d8327deb882cf99', 'student', '011-0123-4567', 'Logistics and supply chain student with a passion for operations management and e-commerce fulfilment.', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20', 'approved', 'Bachelor of Business (Logistics & Supply Chain Management), New Era University College. CGPA: 3.38.', NULL, 'Supply Chain Management, Inventory Management, MS Excel, SAP, Logistics Planning'),
-(22, 'Company test', 'companytest@gmail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'company', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-23 15:23:52', 'pending', NULL, NULL, NULL),
-(23, 'Student test', 'studenttest@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'student', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-23 15:24:16', 'pending', NULL, NULL, NULL);
+(21, 'Chong Mei Ling', 'chong.meiling@student.newera.edu.my', '5f4dcc3b5aa765d61d8327deb882cf99', 'student', '011-0123-4567', 'Logistics and supply chain student with a passion for operations management and e-commerce fulfilment.', NULL, NULL, NULL, NULL, '2026-06-23 06:46:20', 'approved', 'Bachelor of Business (Logistics & Supply Chain Management), New Era University College. CGPA: 3.38.', NULL, 'Supply Chain Management, Inventory Management, MS Excel, SAP, Logistics Planning');
 
 --
 -- Indexes for dumped tables
@@ -239,7 +235,7 @@ ALTER TABLE `applications`
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `password_resets`
@@ -257,7 +253,7 @@ ALTER TABLE `reminders`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Constraints for dumped tables
