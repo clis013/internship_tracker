@@ -9,13 +9,13 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link href="/internship_tracker/assets/css/style.css?v=8" rel="stylesheet">
-    <link href="/internship_tracker/assets/css/admin.css?v=8" rel="stylesheet">
+    <link href="/internship_tracker/assets/css/style.css?v=9" rel="stylesheet">
+    <link href="/internship_tracker/assets/css/admin.css?v=9" rel="stylesheet">
     
-    <link href="/internship_tracker/assets/css/student.css?v=8" rel="stylesheet">
+    <link href="/internship_tracker/assets/css/student.css?v=9" rel="stylesheet">
     
     <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'company'): ?>
-        <link href="/internship_tracker/assets/css/company.css?v=8" rel="stylesheet">
+        <link href="/internship_tracker/assets/css/company.css?v=9" rel="stylesheet">
     <?php endif; ?>
 </head>
 <body>

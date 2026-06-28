@@ -79,7 +79,7 @@ if ($role === 'company') {
             <?= stat_pill('Applicants',   $stats['applicant_count'], 'warning') ?>
         </div>
 
-        <table class="table table-sm table-borderless text-white mb-0">
+        <table class="table table-sm table-borderless text-white mb-0" style="table-layout: fixed; word-wrap: break-word;">
             <tr><th style="width:30%" class="text-white-50">ID</th>        <td><?= (int)$u['id'] ?></td></tr>
             <tr><th class="text-white-50">Email</th>      <td><?= htmlspecialchars($u['email']) ?></td></tr>
             <?php if (!empty($u['phone'])): ?>
@@ -107,14 +107,14 @@ if ($role === 'company') {
             <?= stat_pill('Rejected',  $stats['rejected'],   'danger')  ?>
         </div>
 
-        <table class="table table-sm table-borderless text-white mb-0">
+        <table class="table table-sm table-borderless text-white mb-0" style="table-layout: fixed; word-wrap: break-word;">
             <tr><th style="width:30%" class="text-white-50">ID</th>        <td><?= (int)$u['id'] ?></td></tr>
             <tr><th class="text-white-50">Email</th>      <td><?= htmlspecialchars($u['email']) ?></td></tr>
             <tr><th class="text-white-50">Registered</th> <td><?= date('d M Y, H:i', strtotime($u['created_at'])) ?></td></tr>
         </table>
 
     <?php else: ?>
-        <table class="table table-sm table-borderless text-white mb-0">
+        <table class="table table-sm table-borderless text-white mb-0" style="table-layout: fixed; word-wrap: break-word;">
             <tr><th style="width:30%" class="text-white-50">ID</th>        <td><?= (int)$u['id'] ?></td></tr>
             <tr><th class="text-white-50">Email</th>      <td><?= htmlspecialchars($u['email']) ?></td></tr>
             <tr><th class="text-white-50">Registered</th> <td><?= date('d M Y, H:i', strtotime($u['created_at'])) ?></td></tr>

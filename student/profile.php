@@ -29,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($name)) {
             $error = 'Name cannot be empty.';
+        } elseif (!empty($phone) && !preg_match('/^\d{10,11}$/', $phone)) {
+            $error = 'Phone number must be 10 to 11 digits.';
         } else {
             // Handle resume upload (optional)
             $upload = handle_resume_upload('resume', dirname(__DIR__) . '/uploads/resumes');
@@ -272,7 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-white">Phone Number</label>
-                                <input type="text" name="phone" class="form-control glass-input text-white" value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
+                                <input type="text" name="phone" class="form-control glass-input text-white" value="<?= htmlspecialchars($user['phone'] ?? '') ?>" pattern="\d{10,11}" title="Phone number must be 10 to 11 digits" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                         </div>
 

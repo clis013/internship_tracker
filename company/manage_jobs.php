@@ -31,10 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status      = $_POST['status'];
     $job_id      = (int)($_POST['job_id'] ?? 0);
 
-    if (empty($title) || empty($description) || empty($location) || empty($field) || empty($allowance)) {
+    if (empty($title) || empty($description) || empty($location) || empty($field) || $allowance === '') {
         $error = 'All fields (Title, Description, Location, Allowance, and Field) are required.';
-    } elseif (preg_match('/-\s*\d+/', $allowance) || (is_numeric($allowance) && (float)$allowance < 0)) {
-        $error = 'Allowance cannot be a negative value.';
+    } elseif (!is_numeric($allowance) || (float)$allowance <= 0) {
+        $error = 'Allowance must be greater than 0.';
     } elseif (!in_array($status, ['active', 'closed'])) {
         $error = 'Invalid status.';
     } else {
@@ -117,27 +117,27 @@ $jobs = mysqli_stmt_get_result($stmt);
                     <div class="col-md-6">
                         <label class="form-label text-white">Title</label>
                         <input type="text" name="title" class="form-control glass-input text-white" required
-                               value="<?= htmlspecialchars($edit_job['title'] ?? '') ?>">
+                               value="<?= htmlspecialchars($_POST['title'] ?? $edit_job['title'] ?? '') ?>">
                     </div>
                     <div class="col-md-3">
                         <label class="form-label text-white">Location</label>
                         <input type="text" name="location" class="form-control glass-input text-white" required
-                               value="<?= htmlspecialchars($edit_job['location'] ?? '') ?>">
+                               value="<?= htmlspecialchars($_POST['location'] ?? $edit_job['location'] ?? '') ?>">
                     </div>
                     <div class="col-md-3">
                         <label class="form-label text-white">Field</label>
                         <input type="text" name="field" class="form-control glass-input text-white" placeholder="e.g. IT, Marketing" required
-                               value="<?= htmlspecialchars($edit_job['field'] ?? '') ?>">
+                               value="<?= htmlspecialchars($_POST['field'] ?? $edit_job['field'] ?? '') ?>">
                     </div>
                     <div class="col-md-3">
                         <label class="form-label text-white">Allowance (USD/month)</label>
-                        <input type="text" name="allowance" class="form-control glass-input text-white" placeholder="e.g. 500 or Unpaid" required
-                               value="<?= htmlspecialchars($edit_job['allowance'] ?? '') ?>"
-                               oninput="this.setCustomValidity((/-\s*\d+/.test(this.value) || (!isNaN(this.value.trim()) && this.value.trim() !== '' && Number(this.value.trim()) < 0)) ? 'Allowance cannot be a negative value.' : '')">
+                        <input type="number" step="any" min="0.01" name="allowance" class="form-control glass-input text-white" placeholder="e.g. 500" required
+                               value="<?= htmlspecialchars($_POST['allowance'] ?? $edit_job['allowance'] ?? '') ?>"
+                               oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
                     </div>
                     <div class="col-12">
                         <label class="form-label text-white">Description</label>
-                        <textarea name="description" class="form-control glass-input text-white" rows="4" required><?= htmlspecialchars($edit_job['description'] ?? '') ?></textarea>
+                        <textarea name="description" class="form-control glass-input text-white" rows="4" required><?= htmlspecialchars($_POST['description'] ?? $edit_job['description'] ?? '') ?></textarea>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label text-white">Status</label>

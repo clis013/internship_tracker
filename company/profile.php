@@ -28,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($name)) {
             $error = 'Company name cannot be empty.';
+        } elseif (!empty($phone) && !preg_match('/^\d{10,11}$/', $phone)) {
+            $error = 'Phone number must be 10 to 11 digits.';
         } else {
             // Handle profile picture upload (optional)
             $profile_picture_path = $user['profile_picture'];
@@ -222,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-white">Phone Number</label>
-                                <input type="text" name="phone" class="form-control glass-input text-white" value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
+                                <input type="text" name="phone" class="form-control glass-input text-white" value="<?= htmlspecialchars($user['phone'] ?? '') ?>" pattern="\d{10,11}" title="Phone number must be 10 to 11 digits" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                         </div>
 
