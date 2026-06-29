@@ -506,7 +506,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <!-- Withdraw Confirmation Modal -->
 <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass-card text-start" style="transform: none !important; cursor: default !important; background: rgba(15, 15, 15, 0.85) !important;">
+        <div class="modal-content glass-card text-start" style="transform: none !important; cursor: default !important;">
             <div class="modal-header border-0 pb-0">
                 <h5 class="modal-title text-danger fw-bold" id="withdrawModalLabel"><i class="bi bi-exclamation-triangle-fill me-2"></i>Withdraw Application</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>

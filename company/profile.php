@@ -90,27 +90,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } elseif ($form === 'password') {
-        $current = $_POST['current_password'];
-        $new     = $_POST['new_password'];
-        $confirm = $_POST['confirm_password'];
+        $current = $_POST['current_password'] ?? '';
+        $new     = $_POST['new_password'] ?? '';
+        $confirm = $_POST['confirm_password'] ?? '';
 
+        //Fetch current password hash from DB
         $stmt = mysqli_prepare($conn, "SELECT password FROM users WHERE id = ?");
         mysqli_stmt_bind_param($stmt, "i", $user_id);
         mysqli_stmt_execute($stmt);
         $row = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+        mysqli_stmt_close($stmt);
 
-        if (!password_verify($current, $row['password'])) {
+        $db_password = $row['password'] ?? '';
+
+        //MD5 Verification
+        if (!$row || md5($current) !== $db_password) {
             $error = 'Current password is incorrect.';
         } elseif (strlen($new) < 6) {
             $error = 'New password must be at least 6 characters.';
         } elseif ($new !== $confirm) {
             $error = 'New passwords do not match.';
+        } elseif ($current === $new) {
+            $error = 'New password cannot be the same as your current password.';
         } else {
-            $hashed = password_hash($new, PASSWORD_DEFAULT);
+            //MD5 Encryption for Update
+            $hashed = md5($new);
+            
             $stmt = mysqli_prepare($conn, "UPDATE users SET password = ? WHERE id = ?");
             mysqli_stmt_bind_param($stmt, "si", $hashed, $user_id);
-            mysqli_stmt_execute($stmt);
-            $success = 'Password changed successfully.';
+            
+            if (mysqli_stmt_execute($stmt)) {
+                $success = 'Password changed successfully.';
+            } else {
+                $error = 'Failed to update password in database.';
+            }
+            mysqli_stmt_close($stmt);
         }
     } elseif ($form === 'delete_profile_picture') {
         if (!empty($user['profile_picture'])) {

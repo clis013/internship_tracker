@@ -131,7 +131,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$already_applied) {
 
                     <?php if ($already_applied): ?>
                         <div class="alert bg-transparent border border-info text-info mb-0">You have already applied for this internship.</div>
-                        <a href="my_applications.php" class="btn btn-glass-secondary mt-3">View My Applications</a>
+                        <div class="mt-3 text-end">
+                            <a href="my_applications.php" class="btn btn-light fw-semibold">View My Applications</a>
+                        </div>
                     <?php else: ?>
                         <form method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="job_id" value="<?= (int)$job_id ?>">
@@ -155,9 +157,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$already_applied) {
                                 </div>
                                 <input type="file" name="resume" id="appResumeInput" style="display: none;" accept=".pdf" onchange="showAppSelectedResumeName(this)">
                             </div>
-                            <div class="mt-4">
-                                <button type="submit" class="btn btn-glass-primary px-4 py-2">Submit Application</button>
-                                <a href="browse.php" class="btn btn-glass-secondary px-4 py-2 ms-2">Cancel</a>
+                            <div class="mt-4 d-flex justify-content-end gap-2">
+                                <a href="browse.php" class="btn btn-glass-secondary px-4 py-2">Cancel</a>
+                                <button type="submit" class="btn btn-light px-4 py-2 fw-semibold">Submit Application</button>
                             </div>
                         </form>
                     <?php endif; ?>

@@ -233,7 +233,7 @@ function status_badge($status) {
                 <!-- Applicant Profile Modal -->
                 <div class="modal fade" id="studentProfileModal<?= $i ?>" tabindex="-1" aria-labelledby="studentProfileModalLabel<?= $i ?>" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content glass-card text-start" style="background: rgba(15, 15, 15, 0.9) !important; cursor: default;">
+                        <div class="modal-content glass-card text-start" style="cursor: default;">
                             <div class="modal-header border-0 pb-0">
                                 <h5 class="modal-title text-white fw-bold" id="studentProfileModalLabel<?= $i ?>"><i class="bi bi-person-fill text-info me-2"></i>Applicant Profile</h5>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -306,7 +306,7 @@ function status_badge($status) {
             </div>
             <div class="modal-footer border-0 pt-0">
                 <button type="button" class="btn btn-glass-secondary" data-bs-dismiss="modal" onclick="cancelInterviewModal()">Cancel</button>
-                <button type="button" class="btn btn-info text-white px-4" onclick="saveInterviewDetails()">Save & Update</button>
+                <button type="button" class="btn btn-light fw-semibold px-4" onclick="saveInterviewDetails()">Save & Update</button>
             </div>
         </div>
     </div>
