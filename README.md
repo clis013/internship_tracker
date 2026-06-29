@@ -206,5 +206,7 @@ Stores uploaded files such as student resumes.
 ## Team
 
 Team Name: The Chaos Club
+
 Project Name: InternTrack
+
 Last Updated: 29 June 2026
