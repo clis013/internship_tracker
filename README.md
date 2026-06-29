@@ -155,6 +155,16 @@ Open the system in your browser:
 http://localhost/internship_tracker/
 ```
 
+## Default Login Accounts
+
+The system provides sample login accounts for testing each user role. After importing `database.sql`, users can log in using the accounts below.
+
+| Role    | Email                        | Password   | Access                                                                                                 |
+| ------- | ---------------------------- | ---------- | ------------------------------------------------------------------------------------------------------ |
+| Admin   | `admin@interntrack.com`      | `password` | Admin dashboard, user management, internship monitoring, and application monitoring                    |
+| Student | `ahmad.faris@student.utm.my` | `password` | Student dashboard, internship browsing, application submission, resume upload, and reminder management |
+| Company | `hr@techcorp.com.my`         | `password` | Company dashboard, internship posting management, applicant viewing, and application status updates    |
+
 ### Login Steps
 
 1. Open the system in the browser:
