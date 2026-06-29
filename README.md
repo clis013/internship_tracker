@@ -1,38 +1,14 @@
 # InternTrack
 
-InternTrack is a web-based Internship Application Tracking System developed for students, companies, and administrators. It allows students to browse internships and submit applications, companies to post internships and manage applicants, and administrators to monitor system records. The system is developed for academic purpose as a project learning of SECV2223 Web Programming Course.
+InternTrack is a web-based Internship Application Tracking System developed for students, companies, and administrators. It allows students to browse internships and submit applications, companies to post internships and manage applicants, and administrators to monitor system records. The system is developed for academic purpose as a project of SECV2223 Web Programming Course.
 
 ## Features
 
-### Student
-
-* Register and log in
-* Manage profile information
-* Upload and replace resume
-* Browse and search internship postings
-* Apply for internships
-* Track application status
-* Withdraw applications
-* Create and manage reminders
-
-### Company
-
-* Register and log in
-* Manage company profile
-* Create, edit, and delete internship postings
-* View applicants
-* Download applicant resumes
-* Update application status and interview details
-
-### Admin
-
-* Log in to admin dashboard
-* View system statistics
-* Manage user records
-* Monitor company accounts
-* View internship postings
-* View application records
-* Delete invalid or unnecessary records
+| User Role | Features                                                                                                                                                                                                                |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Student   | Register and log in, manage profile information, upload and replace resume, browse and search internship postings, apply for internships, track application status, withdraw applications, and create/manage reminders. |
+| Company   | Register and log in, manage company profile, create/edit/delete internship postings, view applicants, download applicant resumes, and update application status and interview details.                                  |
+| Admin     | Log in to admin dashboard, view system statistics, manage user records, monitor company accounts, view internship postings, view application records, and delete invalid or unnecessary records.                        |
 
 ## Technologies Used
 
@@ -72,7 +48,34 @@ internship_tracker/
 
 Download and install XAMPP. Start **Apache** and **MySQL** from the XAMPP Control Panel.
 
-### 2. Move Project Folder
+### 2. Download the Project from GitHub
+
+Open the GitHub repository for the project.
+
+You can download the project in either of the following ways:
+
+#### Option 1: Download ZIP
+
+1. Open the project repository on GitHub.
+2. Click the **Code** button.
+3. Select **Download ZIP**.
+4. Extract the downloaded ZIP file.
+
+#### Option 2: Clone using Git
+
+Open Command Prompt or terminal and run:
+
+```bash
+git clone <your-github-repository-link>
+```
+
+Example:
+
+```bash
+git clone https://github.com/username/internship_tracker.git
+```
+
+### 3. Move Project Folder
 
 Place the project folder inside the XAMPP `htdocs` directory.
 
@@ -82,27 +85,48 @@ Example:
 C:/xampp/htdocs/internship_tracker/
 ```
 
-### 3. Create Database
+Make sure the final folder path is similar to:
 
-Open phpMyAdmin and create a new database:
+```text
+C:/xampp/htdocs/internship_tracker/index.php
+```
+
+### 4. Create Database in phpMyAdmin
+
+1. Open XAMPP Control Panel.
+2. Start **Apache** and **MySQL**.
+3. Open your browser.
+4. Go to:
+
+```text
+http://localhost/phpmyadmin/
+```
+
+5. Click **New** on the left side.
+6. Enter the database name:
 
 ```sql
 internship_tracker
 ```
 
-### 4. Import Database
+7. Click **Create**.
 
-Import the provided `database.sql` file into the newly created database using phpMyAdmin.
+### 5. Import Database
+
+Import the provided `database.sql` file into the newly created database.
 
 Steps:
 
-1. Open phpMyAdmin.
-2. Select the `internship_tracker` database.
-3. Click the **Import** tab.
-4. Choose the `database.sql` file.
+1. In phpMyAdmin, select the `internship_tracker` database.
+2. Click the **Import** tab.
+3. Click **Choose File**.
+4. Select the `database.sql` file from the project folder.
 5. Click **Go**.
+6. Wait until phpMyAdmin shows a successful import message.
 
-### 5. Configure Database Connection
+After importing, you should be able to see the database tables in phpMyAdmin, such as `users`, `jobs`, `applications`, `reminders`, and `password_resets`.
+
+### 6. Configure Database Connection
 
 Open:
 
@@ -110,7 +134,7 @@ Open:
 config/db_connect.php
 ```
 
-Check that the database connection settings match your local environment.
+Check that the database connection settings match your local XAMPP environment.
 
 Example:
 
@@ -121,7 +145,9 @@ $password = "";
 $database = "internship_tracker";
 ```
 
-### 6. Run the System
+For a default XAMPP installation, the username is usually `root` and the password is usually empty.
+
+### 7. Run the System
 
 Open the system in your browser:
 
@@ -153,37 +179,18 @@ Note: If the login details do not work, check the sample user records in `databa
 
 ## Main Folder Description
 
-### `admin/`
-
-Contains pages used by administrators to manage and monitor the system, including users, companies, internship postings, and application records.
-
-### `auth/`
-
-Contains authentication pages such as registration, login, logout, forgot password, and reset password.
-
-### `student/`
-
-Contains pages used by students to browse internships, apply for internships, manage profiles, upload resumes, track applications, and manage reminders.
-
-### `company/`
-
-Contains pages used by companies to manage company profiles, create internship postings, view applicants, download resumes, and update application statuses.
-
-### `assets/`
-
-Contains front-end resources such as CSS files, JavaScript files, images, and design elements.
-
-### `config/`
-
-Contains system configuration files. The `db_connect.php` file is used to connect the PHP system to the MySQL database.
-
-### `includes/`
-
-Contains reusable PHP files such as the header, navigation bar, footer, session checking function, and resume upload function.
-
-### `uploads/`
-
-Stores uploaded files such as student resumes.
+| Folder / File  | Description                                                                                                                                                  |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `admin/`       | Contains pages used by administrators to manage and monitor the system, including users, companies, internship postings, and application records.            |
+| `auth/`        | Contains authentication pages such as registration, login, logout, forgot password, and reset password.                                                      |
+| `student/`     | Contains pages used by students to browse internships, apply for internships, manage profiles, upload resumes, track applications, and manage reminders.     |
+| `company/`     | Contains pages used by companies to manage company profiles, create internship postings, view applicants, download resumes, and update application statuses. |
+| `assets/`      | Contains front-end resources such as CSS files, JavaScript files, images, and design elements.                                                               |
+| `config/`      | Contains system configuration files. The `db_connect.php` file is used to connect the PHP system to the MySQL database.                                      |
+| `includes/`    | Contains reusable PHP files such as the header, navigation bar, footer, session checking function, and resume upload function.                               |
+| `uploads/`     | Stores uploaded files such as student resumes.                                                                                                               |
+| `database.sql` | Contains SQL statements used to create the database tables and insert sample data.                                                                           |
+| `index.php`    | The public landing page of the system.                                                                                                                       |
 
 ## Important Notes
 
