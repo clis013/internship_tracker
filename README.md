@@ -1,6 +1,6 @@
 # InternTrack
 
-InternTrack is a web-based Internship Application Tracking System developed for students, companies, and administrators. It allows students to browse internships and submit applications, companies to post internships and manage applicants, and administrators to monitor system records.
+InternTrack is a web-based Internship Application Tracking System developed for students, companies, and administrators. It allows students to browse internships and submit applications, companies to post internships and manage applicants, and administrators to monitor system records. The system is developed for academic purpose as a project learning of SECV2223 Web Programming Course.
 
 ## Features
 
@@ -205,8 +205,10 @@ Stores uploaded files such as student resumes.
 
 ## Team
 
-Team Name: The Chaos Club
+**Team Name:** The Chaos Club
 
-Project Name: InternTrack
+**Members:** Nicole Lee, Sam Wei Leng, Tan Jian Xin, Crystal Yap Wen Jing
 
-Last Updated: 29 June 2026
+**Project Name:** InternTrack
+
+**Last Updated:** 29 June 2026
